@@ -1,0 +1,22 @@
+body {
+  background: radial-gradient(
+    circle at top left,
+    #031f29 0%,
+    #021923 20%,
+    #01131c 45%,
+    #000d15 70%,
+    #00050c 100%
+  );
+}
+
+@media (max-width: 768px) {
+  body {
+    background: radial-gradient(
+      circle at top left,
+      #031f29 0%,
+      #021923 10%,
+      #01131c 30%,
+      #00050c 100%
+    );
+  }
+}

@@ -1,10 +1,11 @@
 import { useState } from "react";
-import '../style/header.jsx';
+import MenuIcon from '@mui/icons-material/Menu';
+import "../style/Header.css"
 
 function Header() {
     return (
-        <div className="Hedar-main">
-
+        <div className="header-main">
+            <MenuIcon style={{color:"white", fontSize:35}}/>
         </div>
     )
 }
