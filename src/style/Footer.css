@@ -1,0 +1,24 @@
+.Footer-body {
+  height: 40vh;
+  background-color: #011117;
+  border-top: rgba(13, 156, 233, 0.222) 1px solid;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  z-index: 5;
+  width: 100%;
+}
+
+.Footer-body {
+  color: white !important;
+  font-size: 20px;
+}
+
+.Footer-body div {
+  display: flex;
+  align-items: center;
+  margin-left: 7vw;
+}
+
+ul {
+  list-style-type: circle;
+}
