@@ -30,7 +30,12 @@
   justify-items: center;
 }
 
-.Footer-card > div .ulist {
+.Footer-card .ulist {
+  display: flex;
+  flex-direction: column; /* Keeps the list stack vertical */
+  justify-content: center; /* Centers the list vertically */
+}
+.Footer-card .form {
   display: flex;
   flex-direction: column; /* Keeps the list stack vertical */
   justify-content: center; /* Centers the list vertically */
