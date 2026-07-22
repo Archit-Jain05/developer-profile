@@ -18,8 +18,8 @@ function Header() {
             <div style={{display:"flex",justifyContent:"end", gap:"30px", marginRight:"5%"}}>
                 <a href="mailto:architjain2005@gmail.com"><EmailOutlinedIcon className="icons"/></a>
                 <a href="tel:+91 7710990629"><LocalPhoneOutlinedIcon className="icons"/></a>
-                <a href="/"><LinkedInIcon className="icons" /></a>
-                <a href="/"><GitHubIcon className="icons"/></a>
+                <a href="http://www.linkedin.com/in/archit-jain-6021711aa" target="_blank"><LinkedInIcon className="icons" /></a>
+                <a href="https://github.com/Archit-Jain05" target="_blank"><GitHubIcon className="icons"/></a>
             </div>
         </div>
     )
