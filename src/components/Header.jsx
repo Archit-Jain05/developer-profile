@@ -16,8 +16,8 @@ function Header() {
                 <h2 className="montserrat-h1">RCHIT JAIN</h2>
                 </div>
             <div style={{display:"flex",justifyContent:"end", gap:"30px", marginRight:"5%"}}>
-                <a href="/"><EmailOutlinedIcon className="icons"/></a>
-                <a href="/"><LocalPhoneOutlinedIcon className="icons"/></a>
+                <a href="mailto:architjain2005@gmail.com"><EmailOutlinedIcon className="icons"/></a>
+                <a href="tel:+91 7710990629"><LocalPhoneOutlinedIcon className="icons"/></a>
                 <a href="/"><LinkedInIcon className="icons" /></a>
                 <a href="/"><GitHubIcon className="icons"/></a>
             </div>

@@ -21,7 +21,7 @@
   overflow: hidden;
 }
 
-.edu-card div {
+.edu-card .edu-img {
   width: 100%;
   height: 30%;
   background-color: white;
@@ -42,6 +42,21 @@
   display: block;
 }
 
+.edu-name {
+  height: 10vh;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+.edu-name ul {
+  list-style: none;
+  padding: 0;
+  height: auto;
+  justify-self: center;
+  align-self: center;
+}
+
 .montserrat-h1 {
   font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;
@@ -49,6 +64,38 @@
   color: white;
 }
 
+.montserrat-li {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-size: large;
+  color: white;
+}
+
+.montserrat-h1-edu {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-size: large;
+  color: white;
+  text-align: center;
+}
+
+.montserrat-s {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: small;
+  color: white;
+}
+
+.montserrat-m {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: medium;
+  color: white;
+}
 @media (max-width: 768px) {
   .edu-container {
     display: grid;
