@@ -2,23 +2,78 @@
   height: 40vh;
   background-color: #011117;
   border-top: rgba(13, 156, 233, 0.222) 1px solid;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  z-index: 5;
-  width: 100%;
-}
-
-.Footer-body {
-  color: white !important;
-  font-size: 20px;
-}
-
-.Footer-body div {
   display: flex;
   align-items: center;
-  margin-left: 7vw;
+}
+
+.Footer-card {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr auto;
+  z-index: 5;
+  width: 100%;
+  color: white !important;
+  font-size: 20px;
+  height: 80%;
+  place-items: center;
+}
+
+.form {
+  width: 30vw;
+  border-left: rgba(13, 156, 233, 0.222) 1px solid;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+.Footer-card > div {
+  display: flex;
+  flex-direction: column; /* Keeps the list stack vertical */
+  justify-content: center; /* Centers the list vertically */
+}
+
+.img-holder {
+  margin-left: 3vw;
 }
 
 ul {
-  list-style-type: circle;
+  list-style-type: none;
+}
+
+ul li {
+  padding-bottom: 1vw;
+}
+
+.montserrat-li {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-size: large;
+}
+
+.montserrat-h1-form {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-size: x-large;
+}
+
+.form div {
+  display: grid;
+  margin-left: 3vw;
+  width: 70%;
+}
+
+input {
+  background-color: #011117;
+  box-shadow: none;
+  border: rgba(13, 156, 233, 0.222) 1px solid;
+  /* width: 80%; */
+}
+
+.form div button {
+  /* width: 80%; */
+  height: 5vh;
+  background-color: rgba(13, 156, 233, 0.222);
+  border: none;
 }
