@@ -1,0 +1,96 @@
+.exp-con-holder {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border: rgba(13, 156, 233, 0.222) 1px solid;
+  margin: 0 5%;
+  /* height: 80vh; */
+  border-radius: 20px;
+  /* padding: 3%; */
+  text-align: center;
+}
+
+.company {
+  border: rgba(13, 156, 233, 0.222) 1px solid;
+  display: grid;
+  grid-template-columns: 15vw auto;
+  place-items: center;
+  border-radius: 20px;
+  overflow: hidden;
+  gap: 5%;
+  /* height: 30vh; */
+  margin: 0 5%;
+}
+
+.company-logo {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.company-logo img {
+  /* max-height: 40%; */
+  width: 60%;
+}
+
+.company-content {
+  height: 80%;
+  display: grid;
+  grid-template-rows: repeat(5, auto);
+  place-self: start;
+  justify-items: start;
+  color: white;
+  width: 90%;
+  text-align: left;
+}
+
+.montserrat-li-exp {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-size: medium;
+  color: white;
+}
+
+.montserrat-m-exp {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-size: x-large;
+  color: white;
+}
+
+.company-content button {
+  border: none;
+  cursor: pointer;
+  border-radius: 20px;
+  margin-bottom: 3vh;
+  width: 30%;
+  background-color: #011117;
+  border: rgba(13, 156, 233, 0.222) 1px solid;
+  justify-self: center;
+  place-self: center;
+  margin-top: 5%;
+}
+.company-content button:hover {
+  border: none;
+  cursor: pointer;
+  border-radius: 20px;
+  margin-bottom: 3vh;
+  width: 30%;
+  background-color: rgba(13, 156, 233, 0.222);
+  border: white 1px solid;
+  justify-self: center;
+  place-self: center;
+}
+
+@media (max-width: 786px) {
+  .company {
+    border: rgba(13, 156, 233, 0.222) 1px solid;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}

@@ -30,6 +30,10 @@ h2 {
   margin-left: 3%;
 }
 
+.icons:hover {
+  color: rgba(13, 156, 233, 0.222);
+}
+
 .montserrat-h1 {
   font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;

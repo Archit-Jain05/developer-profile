@@ -1,5 +1,6 @@
 import '../style/Footer.css'
 import PFP from '../assets/pfp.svg'
+import Resume from "../assets/resume.pdf"
 
 function Footer() {
     return(
@@ -20,7 +21,7 @@ function Footer() {
             <ul className='montserrat-li'>
                 <li><a href="">Projects</a></li>
                 <li><a href="">Services</a></li>
-                <li><a href="">Resume</a></li>
+                <li><a href={Resume} target="_blank" rel="noopener noreferrer">Resume</a></li>
                 <li><a href=""></a></li>
                 </ul>
         </div>
@@ -34,7 +35,7 @@ function Footer() {
              </div>
 
              <div>
-                <textarea id="message" name="message" className='montserrat-m' style={{height:"15vh",alignContent:"center"}} placeholder='Type your content'></textarea>
+                <textarea id="message" name="message" className='montserrat-m' style={{height:"15vh"}} placeholder='Type your content'></textarea>
              </div>
 
             <button><p className='montserrat-s'>Send</p></button>

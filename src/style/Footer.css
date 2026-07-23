@@ -1,4 +1,5 @@
 .Footer-body {
+  margin-top: 5%;
   height: 50vh;
   /* background-color: #011117; */
   border-top: rgba(13, 156, 233, 0.222) 1px solid;
@@ -13,7 +14,7 @@
   grid-template-columns: auto 1fr 1fr auto;
   z-index: 5;
   width: 100%;
-  color: white !important;
+  color: white;
   font-size: 20px;
   place-items: center;
   height: 90%;
@@ -60,6 +61,13 @@
   font-size: large;
   color: white;
 }
+.montserrat-li:hover {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-size: large;
+  color: green;
+}
 
 .montserrat-h1-form {
   font-family: "Montserrat", sans-serif;
@@ -96,8 +104,13 @@ textarea {
   box-shadow: none;
   border: rgba(13, 156, 233, 0.222) 1px solid;
   padding-left: 1vw;
+  align-content: center;
 }
 
+textarea:focus {
+  align-content: normal;
+  padding-top: 10px;
+}
 .form button {
   border: none;
   cursor: pointer;
@@ -106,6 +119,18 @@ textarea {
   width: 30%;
   background-color: #011117;
   border: rgba(13, 156, 233, 0.222) 1px solid;
+  justify-self: center;
+  place-self: center;
+  translate: -1.5vw 0;
+}
+.form button:hover {
+  border: none;
+  cursor: pointer;
+  border-radius: 20px;
+  margin-bottom: 3vh;
+  width: 30%;
+  background-color: rgba(13, 156, 233, 0.222);
+  border: white 1px solid;
   justify-self: center;
   place-self: center;
   translate: -1.5vw 0;
@@ -121,6 +146,11 @@ textarea {
 a:visited,
 a {
   color: white;
+  text-decoration: none;
+}
+a:visited:hover,
+a:hover {
+  color: rgba(13, 156, 233, 0.222);
   text-decoration: none;
 }
 
