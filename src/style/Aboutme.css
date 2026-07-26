@@ -1,0 +1,35 @@
+.about-body {
+  border: rgba(13, 156, 233, 0.222) 1px solid;
+  border-radius: 20px;
+  margin: 0 5%;
+  margin-top: 2%;
+}
+
+.abt-con {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  /* height: 100%; */
+  place-items: center;
+  margin: 5%;
+}
+
+.abt-img-holder img {
+  object-fit: cover;
+  height: 30vh;
+  border-radius: 50%;
+  outline: 2px solid #fff;
+  border: 2px solid rgba(13, 156, 233, 0.222);
+  outline-offset: 5px; /* Moves the outline inside */
+}
+
+@media (max-width: 786px) {
+  .abt-con {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    /* height: 100%; */
+    place-items: center;
+    gap: 2%;
+    margin: 5%;
+  }
+}

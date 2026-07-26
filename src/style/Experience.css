@@ -80,7 +80,7 @@
   cursor: pointer;
   border-radius: 20px;
   margin-bottom: 3vh;
-  width: 30%;
+  /* width: 30%; */
   background-color: rgba(13, 156, 233, 0.222);
   border: white 1px solid;
   justify-self: center;
@@ -92,5 +92,32 @@
     border: rgba(13, 156, 233, 0.222) 1px solid;
     display: grid;
     grid-template-columns: 1fr;
+    margin-bottom: 5%;
+  }
+
+  .company-content {
+    height: 80%;
+    display: grid;
+    grid-template-rows: repeat(5, auto);
+    place-self: start;
+    justify-items: start;
+    color: white;
+    width: 90%;
+    text-align: left;
+    margin-left: 5%;
+    margin-bottom: 10%;
+  }
+
+  .company-content button {
+    border: none;
+    cursor: pointer;
+    border-radius: 20px;
+    margin-bottom: 3vh;
+    width: 50%;
+    background-color: #011117;
+    border: rgba(13, 156, 233, 0.222) 1px solid;
+    justify-self: center;
+    place-self: center;
+    margin-top: 5%;
   }
 }
