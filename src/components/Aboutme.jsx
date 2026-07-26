@@ -10,7 +10,7 @@ function Aboutme() {
                 <div className="abt-img-holder">
                     <img src={Archit} />
                 </div>
-                <div><p className="montserrat-li-exp">
+                <div className="abt-text"><p className="montserrat-li-exp">
                      Hi, I’m Archit Jain
 
 👀 I’m interested in the new trending technology and trends such as Artificial Intelligence and Deep Learning using Machine Learning. I am looking forward to integrate such technologies and create my own applications and software for platforms such as android and wiindows. I have a keen interest when it comes to software development and I work as a freelancer for creating applications.
