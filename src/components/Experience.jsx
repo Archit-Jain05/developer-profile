@@ -19,7 +19,8 @@ function Experience() {
                     <h3 className='montserrat-li-exp'>Aug 2023 - Aug 2024</h3>
                     <h3 className='montserrat-li-exp'>Web Developer Intern</h3>
                     <h3 className='montserrat-li-exp'>My job role in hophead was to create and maintain e-commerce websites for the 
-                        brand and drive in customers using a unique and creative ui/ux design.
+                        brand and drive in customers using a unique and creative ui/ux design. The website was developed using shopify and React.js
+                        with modern UI that hooks online shoppers onto the website.
                     </h3>
                     <button  onClick={() => {
                             window.open("https://hophead.co.in/", "_blank");
@@ -35,7 +36,7 @@ function Experience() {
                     <h3  className='montserrat-m-exp'>Dcyber Techlabs Pvt.Ltd</h3>
                     <h3 className='montserrat-li-exp'>Aug 2022 - Sep 2022</h3>
                     <h3 className='montserrat-li-exp'>Web Developer Intern</h3>
-                    <h3 className='montserrat-li-exp'>Worked as a web developer intern to develop a working website for the DCYBER Africa region website.</h3>
+                    <h3 className='montserrat-li-exp'>In DCYBER I Worked as a web developer intern to develop a website for the DCYBER Africa region using React.js.</h3>
                     <button  onClick={() => {
                             window.open("https://dcyber.in/", "_blank");
                         }}>
