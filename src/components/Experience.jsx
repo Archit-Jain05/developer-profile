@@ -2,6 +2,7 @@ import {useState} from 'react'
 import '../style/Experience.css'
 import HOPHEAD from "../assets/hophead.jpg"
 import DCYBER from "../assets/dcyber.png"
+import ZOOTECHX from "../assets/zootechx.png"
 
 function Experience() {
 
@@ -37,6 +38,23 @@ function Experience() {
                     <h3 className='montserrat-li-exp'>Worked as a web developer intern to develop a working website for the DCYBER Africa region website.</h3>
                     <button  onClick={() => {
                             window.open("https://dcyber.in/", "_blank");
+                        }}>
+                    <h3 className='montserrat-li-exp'>Visit Website</h3></button>
+                </div>
+            </div>
+            <div className='company'>
+                <div className='company-logo'>
+                    <img src={ZOOTECHX} />
+                </div>
+                <div className='company-content'>
+                    <h3  className='montserrat-m-exp'>ZootechX</h3>
+                    <h3 className='montserrat-li-exp'>Aug 2026 - Ongoing</h3>
+                    <h3 className='montserrat-li-exp'>Software Developer</h3>
+                    <h3 className='montserrat-li-exp'>I am working here as a software developer intern with my day to day responsibilities ranging from handling coding
+                        as well as cordinating with clients personally to know about their requirements and help serve them better.
+                    </h3>
+                    <button  onClick={() => {
+                            window.open("https://www.zootechx.com/", "_blank");
                         }}>
                     <h3 className='montserrat-li-exp'>Visit Website</h3></button>
                 </div>
