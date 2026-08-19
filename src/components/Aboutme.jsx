@@ -1,6 +1,6 @@
 import React from "react";
 import "../style/Aboutme.css"
-import Archit from "../assets/archit.jpg"
+import Archit from "../assets/archit.png"
 
 function Aboutme() {
     return (
