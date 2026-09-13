@@ -1,0 +1,5 @@
+.site-skeleton {
+  display: grid;
+  gap: var(--s-4);
+  padding-block: var(--s-8);
+}

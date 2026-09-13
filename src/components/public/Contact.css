@@ -1,0 +1,158 @@
+.contact {
+  padding-top: var(--s-8);
+  background:
+    radial-gradient(ellipse 50% 60% at 50% 100%, rgba(13, 156, 233, 0.08), transparent 70%),
+    var(--bg);
+  border-top: 1px solid var(--border);
+}
+
+.contact__grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr 0.8fr;
+  gap: var(--s-6);
+  align-items: start;
+}
+
+.contact__intro {
+  display: grid;
+  gap: var(--s-3);
+}
+
+.contact__form-card {
+  padding: var(--s-5);
+}
+
+.contact-form {
+  display: grid;
+  gap: var(--s-4);
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.2s;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.field [aria-invalid="true"] {
+  border-color: var(--danger);
+}
+
+.field__error {
+  font-size: 0.8rem;
+  color: var(--danger);
+}
+
+.contact-form .btn {
+  justify-self: start;
+}
+
+.contact-form__status {
+  min-height: 1.4em;
+  font-size: 0.9rem;
+}
+
+.is-success {
+  color: var(--success);
+}
+
+.is-error {
+  color: var(--danger);
+}
+
+.is-error a {
+  text-decoration: underline;
+}
+
+.contact__links {
+  display: grid;
+  gap: var(--s-4);
+}
+
+.socials {
+  display: flex;
+  gap: var(--s-3);
+}
+
+.socials a {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  font-size: 1.2rem;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.socials a:hover {
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+.contact__details {
+  display: grid;
+  gap: var(--s-3);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.contact__details li {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  overflow-wrap: anywhere;
+}
+
+.contact__details svg {
+  color: var(--accent);
+  flex: none;
+}
+
+.contact__details a:hover {
+  color: var(--accent-strong);
+}
+
+.contact__credit {
+  margin-top: var(--s-7);
+  padding-block: var(--s-4);
+  border-top: 1px solid var(--border);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+@media (max-width: 959px) {
+  .contact__grid {
+    grid-template-columns: 1fr;
+  }
+}
