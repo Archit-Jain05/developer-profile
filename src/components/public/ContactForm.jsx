@@ -6,11 +6,16 @@ import { validateContact } from "../../lib/validation.js";
 const EMPTY = { name: "", email: "", message: "", website: "" };
 const COOLDOWN_MS = 30_000;
 
-export default function ContactForm({ fallbackEmail }) {
+/**
+ * Contact form. With `topics`, it shows a topic chooser and a character count,
+ * and sends the chosen topic as the first line of the message.
+ */
+export default function ContactForm({ fallbackEmail, topics }) {
   const [values, setValues] = useState(EMPTY);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle"); // idle | sending | success | error
   const [coolingDown, setCoolingDown] = useState(false);
+  const [topic, setTopic] = useState(topics?.[0] ?? "");
 
   useEffect(() => {
     if (!coolingDown) return;
@@ -38,7 +43,7 @@ export default function ContactForm({ fallbackEmail }) {
 
     setStatus("sending");
     try {
-      await sendMessage(values);
+      await sendMessage(topic ? { ...values, message: `${topic}\n\n${values.message}` } : values);
       setStatus("success");
       setValues(EMPTY);
       setCoolingDown(true);
@@ -50,6 +55,26 @@ export default function ContactForm({ fallbackEmail }) {
 
   return (
     <form className="contact-form" onSubmit={handleSubmit} noValidate>
+      {topics && (
+        <fieldset className="topic-picker">
+          <legend>What's this about?</legend>
+          <div className="topic-picker__options">
+            {topics.map((option) => (
+              <label key={option} className={`topic-chip ${topic === option ? "is-selected" : ""}`}>
+                <input
+                  type="radio"
+                  name="cf-topic"
+                  value={option}
+                  checked={topic === option}
+                  onChange={() => setTopic(option)}
+                />
+                <span>{option}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      )}
+
       <div className="field">
         <label htmlFor="cf-name">Name</label>
         <input
@@ -88,6 +113,11 @@ export default function ContactForm({ fallbackEmail }) {
           aria-invalid={Boolean(errors.message)}
           aria-describedby={errors.message ? "cf-message-err" : undefined}
         />
+        {topics && (
+          <span className="field__count" aria-hidden="true">
+            {values.message.length} / 2000
+          </span>
+        )}
         {errors.message && (
           <span id="cf-message-err" className="field__error">{errors.message}</span>
         )}

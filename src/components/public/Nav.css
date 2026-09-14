@@ -2,120 +2,253 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(2, 13, 20, 0.85);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border);
+  padding: 14px var(--s-5) 0;
+  transition: padding 0.3s;
 }
 
-.nav__inner {
-  height: 68px;
+/* Before the page scrolls the bar is transparent, so this keeps the links
+   legible against whatever the hero puts behind them. */
+.nav::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 132px;
+  background: linear-gradient(180deg, rgba(8, 8, 10, 0.82), rgba(8, 8, 10, 0));
+  opacity: 1;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+
+.nav.is-scrolled::before {
+  opacity: 0;
+}
+
+.nav__bar {
+  position: relative;
+  /* Wider than the page content, so the bar frames the site rather than sitting inside it. */
+  max-width: min(1460px, 100%);
+  margin-inline: auto;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--s-5);
+  padding: 0 10px 0 20px;
+  border-radius: 999px;
+  transition: box-shadow 0.4s, background 0.4s;
+}
+
+/* At the top: no bar at all. */
+.nav:not(.is-scrolled) .nav__bar {
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+.nav:not(.is-scrolled) .nav__bar::before {
+  opacity: 0;
+}
+
+.nav__bar::before {
+  transition: opacity 0.4s;
+}
+
+/* Once scrolled: the accent sweep from the hero name, at low strength. */
+.nav.is-scrolled .nav__bar {
+  background:
+    linear-gradient(180deg, rgba(200, 161, 90, 0.1), rgba(200, 161, 90, 0) 70%),
+    linear-gradient(0deg, rgba(16, 16, 20, 0.88), rgba(16, 16, 20, 0.88));
 }
 
 .nav__brand {
   display: flex;
-  align-items: center;
-  gap: var(--s-2);
-  font-weight: 600;
-  font-size: 1.1rem;
-  letter-spacing: 0.02em;
+  align-items: baseline;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.44rem;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+}
+
+/* The mark is the A: it sits on the text baseline at cap height. */
+.nav__mark {
+  width: auto;
+  height: 0.88em;
+  margin-right: 0.05em;
+  translate: 0 0.03em;
+}
+
+.nav__brand--spaced .nav__mark {
+  margin-right: 0.4em;
+}
+
+.nav__brand:hover .nav__wordmark {
+  color: var(--accent-strong);
+}
+
+.nav__wordmark {
+  transition: color 0.2s;
 }
 
 .nav__menu {
   display: flex;
   align-items: center;
-  gap: var(--s-6);
+  gap: var(--s-5);
 }
 
 .nav__menu ul {
   display: flex;
-  gap: var(--s-5);
+  gap: 4px;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .nav__menu ul a {
-  position: relative;
-  font-size: 0.92rem;
-  color: var(--text-muted);
-  transition: color 0.2s;
+  display: block;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 0.94rem;
+  font-weight: 500;
+  color: #ded9d0;
+  transition: color 0.2s, background 0.2s;
 }
 
 .nav__menu ul a:hover {
-  color: var(--text);
-}
-
-.nav__menu ul a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -6px;
-  height: 2px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transition: transform 0.2s;
-}
-
-.nav__menu ul a:hover::after {
-  transform: scaleX(1);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .nav__toggle {
   display: none;
-  background: none;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
   width: 42px;
   height: 42px;
   align-items: center;
   justify-content: center;
-  font-size: 1.3rem;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 1.25rem;
   cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
 }
 
-@media (max-width: 959px) {
+.nav__toggle:hover {
+  border-color: var(--border-strong);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.nav__toggle:active {
+  transform: scale(0.92);
+}
+
+.nav__toggle svg {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav__toggle[aria-expanded="true"] svg {
+  transform: rotate(90deg);
+}
+
+@media (max-width: 1023px) {
+  .nav {
+    padding-inline: var(--s-5);
+  }
+
   .nav__toggle {
     display: inline-flex;
   }
 
   .nav__menu {
     position: absolute;
-    top: 68px;
+    z-index: 4;
+    top: calc(100% + 12px);
     left: 0;
     right: 0;
+    display: flex;
     flex-direction: column;
+    transform-origin: top center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px) scale(0.97);
+    transition: opacity 0.24s ease, transform 0.34s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0.34s;
     align-items: stretch;
-    gap: var(--s-4);
-    padding: var(--s-4) var(--s-4) var(--s-5);
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    display: none;
+    gap: var(--s-3);
+    padding: var(--s-3);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(160deg, #1d1d22, #0c0c0f);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border-strong);
+    box-shadow: var(--glass-shadow);
   }
 
   .nav__menu.is-open {
-    display: flex;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: opacity 0.28s ease, transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s;
   }
+
+  /* The items arrive just behind the panel, so opening reads as one movement. */
+  .nav__menu li,
+  .nav__resume {
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.24s ease, transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .nav__menu.is-open li,
+  .nav__menu.is-open .nav__resume {
+    opacity: 1;
+    transform: none;
+  }
+
+  .nav__menu.is-open li:nth-child(1) { transition-delay: 0.04s; }
+  .nav__menu.is-open li:nth-child(2) { transition-delay: 0.07s; }
+  .nav__menu.is-open li:nth-child(3) { transition-delay: 0.1s; }
+  .nav__menu.is-open li:nth-child(4) { transition-delay: 0.13s; }
+  .nav__menu.is-open li:nth-child(5) { transition-delay: 0.16s; }
+  .nav__menu.is-open li:nth-child(6) { transition-delay: 0.19s; }
+  .nav__menu.is-open .nav__resume { transition-delay: 0.22s; }
 
   .nav__menu ul {
     flex-direction: column;
-    gap: 0;
   }
 
   .nav__menu ul a {
-    display: block;
-    padding: var(--s-3) var(--s-2);
+    padding: 12px 16px;
     font-size: 1rem;
     color: var(--text);
-    border-bottom: 1px solid rgba(13, 156, 233, 0.08);
+    border-radius: var(--radius-sm);
   }
+}
 
-  .nav__menu ul a::after {
-    display: none;
-  }
+.nav__socials {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding-right: var(--s-2);
+  border-right: 1px solid var(--border);
+}
+
+.nav__socials a {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1.05rem;
+  color: #ded9d0;
+  transition: color 0.2s, background 0.2s, transform 0.2s;
+}
+
+.nav__socials a:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav__socials a:active {
+  transform: scale(0.92);
 }

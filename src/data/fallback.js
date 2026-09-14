@@ -86,6 +86,8 @@ export const fallbackContent = {
       score: "9.18 / 10 CGPA",
       start_year: 2024,
       end_year: 2027,
+      description: null,
+      highlights: [],
       sort_order: 1,
     },
     {
@@ -96,6 +98,8 @@ export const fallbackContent = {
       score: "89.0%",
       start_year: 2021,
       end_year: 2024,
+      description: null,
+      highlights: [],
       sort_order: 2,
     },
     {
@@ -106,6 +110,8 @@ export const fallbackContent = {
       score: "93.5%",
       start_year: 2011,
       end_year: 2021,
+      description: null,
+      highlights: [],
       sort_order: 3,
     },
   ],
@@ -118,6 +124,7 @@ export const fallbackContent = {
       tech: ["Shopify", "Liquid", "JavaScript"],
       github_url: "https://github.com/Archit-Jain05/drinkasmaan",
       live_url: "https://xhp0ym-sn.myshopify.com/?pb=0",
+      experience_id: null,
       sort_order: 1,
     },
     {
@@ -128,6 +135,7 @@ export const fallbackContent = {
       tech: ["Flutter", "Dart"],
       github_url: "https://github.com/Archit-Jain05/MoneyMind",
       live_url: null,
+      experience_id: null,
       sort_order: 2,
     },
     {
@@ -138,6 +146,7 @@ export const fallbackContent = {
       tech: ["Next.js", "TypeScript"],
       github_url: "https://github.com/Archit-Jain05/Velora",
       live_url: "https://velora-ashen-psi.vercel.app",
+      experience_id: null,
       sort_order: 3,
     },
     {
@@ -148,6 +157,7 @@ export const fallbackContent = {
       tech: ["Next.js", "TypeScript"],
       github_url: "https://github.com/Archit-Jain05/bb3",
       live_url: "https://bb3-teal.vercel.app",
+      experience_id: null,
       sort_order: 4,
     },
   ],

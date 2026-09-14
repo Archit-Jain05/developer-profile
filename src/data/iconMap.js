@@ -57,7 +57,7 @@ export const SKILL_ICONS = {
   SiJest: { icon: SiJest, label: "Jest", color: "#c21325" },
 };
 
-export const FALLBACK_SKILL_ICON = { icon: FiLayers, label: "Other", color: "#0d9ce9" };
+export const FALLBACK_SKILL_ICON = { icon: FiLayers, label: "Other", color: "#c8a15a" };
 
 export function getSkillIcon(key) {
   return SKILL_ICONS[key] ?? FALLBACK_SKILL_ICON;

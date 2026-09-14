@@ -9,7 +9,7 @@ const PROFILE_FIELDS = [
   { name: "eyebrow", label: "Title (e.g. Software Developer)", type: "text" },
   { name: "tagline", label: "Hero tagline", type: "text" },
   { name: "intro", label: "Hero intro", type: "textarea" },
-  { name: "hero_image_url", label: "Hero photo", type: "image", folder: "profile" },
+  { name: "hero_image_url", label: "Profile photo (shown in About)", type: "image", folder: "profile" },
   { name: "resume_url", label: "Résumé (PDF)", type: "pdf", folder: "resume" },
   { name: "about_heading", label: "About heading", type: "text" },
   { name: "about_body", label: "About text (blank line between paragraphs)", type: "textarea" },

@@ -25,10 +25,10 @@ insert into public.experience (company, role, logo_url, start_date, end_date, de
   ('Hophead.co', 'Web Developer Intern', '/seed/hophead.jpg', '2023-08-01', '2024-08-01', 'Built and maintained the brand''s e-commerce websites with Shopify and React.js, using creative UI/UX to bring in and keep online shoppers.', 'https://hophead.co.in/', 2),
   ('Dcyber Techlabs Pvt. Ltd', 'Web Developer Intern', '/seed/dcyber.png', '2022-08-01', '2022-09-01', 'Developed a website for the DCYBER Africa region using React.js.', 'https://dcyber.in/', 3);
 
-insert into public.education (institution, course, logo_url, score, start_year, end_year, sort_order) values
-  ('SVKM''s Dwarkadas J. Sanghvi College of Engineering', 'Bachelor of Technology', '/seed/djsce.jpg', '9.18 / 10 CGPA', 2024, 2027, 1),
-  ('SVKM''s Shri Bhagubhai Mafatlal Polytechnic', 'Diploma in Information Technology', '/seed/sbmp.jpg', '89.0%', 2021, 2024, 2),
-  ('Utpal Sanghvi Global School', 'X Standard IGCSE', '/seed/utpal.avif', '93.5%', 2011, 2021, 3);
+insert into public.education (institution, course, logo_url, score, start_year, end_year, description, highlights, sort_order) values
+  ('SVKM''s Dwarkadas J. Sanghvi College of Engineering', 'Bachelor of Technology', '/seed/djsce.jpg', '9.18 / 10 CGPA', 2024, 2027, null, array[]::text[], 1),
+  ('SVKM''s Shri Bhagubhai Mafatlal Polytechnic', 'Diploma in Information Technology', '/seed/sbmp.jpg', '89.0%', 2021, 2024, null, array[]::text[], 2),
+  ('Utpal Sanghvi Global School', 'X Standard IGCSE', '/seed/utpal.avif', '93.5%', 2011, 2021, null, array[]::text[], 3);
 
 insert into public.projects (title, description, image_url, tech, github_url, live_url, sort_order) values
   ('ASMAAN', 'Immersive 3D Shopify storefront for India''s first botanical focus drink.', '/placeholder-project.svg', array['Shopify', 'Liquid', 'JavaScript']::text[], 'https://github.com/Archit-Jain05/drinkasmaan', 'https://xhp0ym-sn.myshopify.com/?pb=0', 1),

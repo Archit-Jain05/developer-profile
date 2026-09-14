@@ -2,6 +2,7 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { FiTrash2, FiUpload, FiX } from "react-icons/fi";
 import { SKILL_ICONS, getSkillIcon } from "../../data/iconMap.js";
 import { acceptFor, validateFile } from "../../lib/storage.js";
+import { supabase } from "../../lib/supabase.js";
 
 /**
  * Renders one form field. File fields keep the chosen File in `pendingFiles`
@@ -62,6 +63,9 @@ export function Field({ field, value, error, onChange, pendingFile, onPickFile }
       break;
     case "icon":
       control = <IconPicker {...common} value={value} onChange={onChange} />;
+      break;
+    case "select":
+      control = <SourceSelect {...common} source={field.source} value={value} onChange={onChange} />;
       break;
     case "image":
     case "pdf":
@@ -142,6 +146,41 @@ function TagsInput({ value, onChange, ...rest }) {
         onBlur={add}
       />
     </div>
+  );
+}
+
+function SourceSelect({ source, value, onChange, ...rest }) {
+  const [options, setOptions] = useState(null);
+  const [problem, setProblem] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+    supabase
+      .from(source.table)
+      .select("*")
+      .order("sort_order", { ascending: true })
+      .then(({ data, error }) => {
+        if (cancelled) return;
+        if (error) setProblem(error.message);
+        else setOptions(data);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [source.table]);
+
+  return (
+    <>
+      <select {...rest} value={value} disabled={!options} onChange={(e) => onChange(e.target.value)}>
+        <option value="">{options ? source.emptyLabel : "Loading…"}</option>
+        {options?.map((row) => (
+          <option key={row.id} value={row.id}>
+            {source.label(row)}
+          </option>
+        ))}
+      </select>
+      {problem && <span className="field__error">Couldn't load the list: {problem}</span>}
+    </>
   );
 }
 

@@ -7,12 +7,13 @@ import ProfileTab from "./ProfileTab.jsx";
 import CrudTab from "./CrudTab.jsx";
 import MessagesTab from "./MessagesTab.jsx";
 import { ENTITY_CONFIGS } from "./config.js";
+import Backdrop from "../public/Backdrop.jsx";
 import "./Admin.css";
 
 function Centered({ children }) {
   return (
     <div className="admin-center">
-      <div className="card admin-center__card">{children}</div>
+      <div className="glass admin-center__card">{children}</div>
     </div>
   );
 }
@@ -33,8 +34,12 @@ function NotConfigured() {
 }
 
 export default function AdminApp() {
-  if (!isSupabaseConfigured) return <NotConfigured />;
-  return <ConnectedAdmin />;
+  return (
+    <>
+      <Backdrop />
+      {isSupabaseConfigured ? <ConnectedAdmin /> : <NotConfigured />}
+    </>
+  );
 }
 
 function ConnectedAdmin() {

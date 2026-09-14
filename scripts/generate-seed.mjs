@@ -32,7 +32,7 @@ insert into public.profile (id, ${profileColumns.join(", ")}, stats) values
 
 ${insert("skills", skills, ["name", "icon", "percent", "show_in_hero", "sort_order"])}
 ${insert("experience", experience, ["company", "role", "logo_url", "start_date", "end_date", "description", "website_url", "sort_order"])}
-${insert("education", education, ["institution", "course", "logo_url", "score", "start_year", "end_year", "sort_order"])}
+${insert("education", education, ["institution", "course", "logo_url", "score", "start_year", "end_year", "description", "highlights", "sort_order"])}
 ${insert("projects", projects, ["title", "description", "image_url", "tech", "github_url", "live_url", "sort_order"])}`;
 
 const out = fileURLToPath(new URL("../supabase/seed.sql", import.meta.url));

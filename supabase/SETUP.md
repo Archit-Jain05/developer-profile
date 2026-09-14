@@ -15,6 +15,7 @@ content from `src/data/fallback.js`, and `/admin` shows a "not connected" notice
 
 1. Open **SQL Editor → New query**.
 2. Paste the whole of `supabase/migrations/20260913000000_portfolio_schema.sql` and click **Run**.
+   Then run each later file in `supabase/migrations/` the same way, oldest first.
 3. Open another new query, paste `supabase/seed.sql`, and click **Run**. This fills in your current
    experience, education and projects plus clearly marked `[Placeholder]` content.
 

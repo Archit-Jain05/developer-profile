@@ -27,6 +27,27 @@ export function toParagraphs(text) {
     .filter(Boolean);
 }
 
+const RELATIVE_UNITS = [
+  ["year", 365 * 24 * 3600],
+  ["month", 30 * 24 * 3600],
+  ["week", 7 * 24 * 3600],
+  ["day", 24 * 3600],
+  ["hour", 3600],
+  ["minute", 60],
+];
+
+/** "3 days ago", "just now". `now` is injectable for tests. */
+export function timeAgo(isoDate, now = Date.now()) {
+  const seconds = Math.round((now - new Date(isoDate).getTime()) / 1000);
+  if (!Number.isFinite(seconds)) return "";
+  if (seconds < 60) return "just now";
+  for (const [unit, size] of RELATIVE_UNITS) {
+    const value = Math.floor(seconds / size);
+    if (value >= 1) return `${value} ${unit}${value === 1 ? "" : "s"} ago`;
+  }
+  return "just now";
+}
+
 export function firstName(fullName) {
   return (fullName || "").trim().split(/\s+/)[0] || "";
 }

@@ -5,8 +5,10 @@
 }
 
 html {
+  /* Dark only: no light theme is defined, so pin the UA theme too. */
+  color-scheme: dark;
   scroll-behavior: smooth;
-  scroll-padding-top: 80px;
+  scroll-padding-top: 96px;
 }
 
 body {
@@ -14,10 +16,27 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font);
-  font-size: 16px;
+  font-size: var(--step-0);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+}
+
+/* Text is not selectable, so the arrow cursor stays put instead of turning
+   into an I-beam. Fields people type in stay selectable. */
+body {
+  cursor: default;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+input,
+textarea,
+select,
+[contenteditable] {
+  cursor: auto;
+  -webkit-user-select: text;
+  user-select: text;
 }
 
 img {
@@ -39,8 +58,13 @@ select {
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--accent-strong);
   outline-offset: 3px;
+}
+
+::selection {
+  background: rgba(200, 161, 90, 0.3);
+  color: var(--bone);
 }
 
 h1,
@@ -51,6 +75,14 @@ p {
   margin: 0;
 }
 
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  letter-spacing: -0.018em;
+}
+
 .container {
   width: 100%;
   max-width: var(--max-width);
@@ -59,58 +91,128 @@ p {
 }
 
 .section {
-  padding-block: var(--s-8);
-}
-
-.section--alt {
-  background: var(--bg-alt);
-  border-block: 1px solid rgba(13, 156, 233, 0.08);
+  position: relative;
+  padding-block: var(--s-7);
 }
 
 .section-head {
-  text-align: center;
+  display: grid;
+  gap: var(--s-2);
+  max-width: 62ch;
   margin-bottom: var(--s-6);
 }
 
-.eyebrow {
-  display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: var(--s-2);
-}
-
-.eyebrow--pill {
-  padding: var(--s-1) var(--s-3);
-  border-radius: 6px;
-  background: var(--accent-soft);
-}
-
 .section-title {
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
-  font-weight: 600;
-  line-height: 1.25;
+  font-size: var(--step-3);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* Headings stay plain; only the patch of text under the pointer takes the
+   accent colours. The lit radius grows from nothing on hover, and
+   useSpotlightTitles keeps --mx/--my pointed at the cursor. */
+@property --spot {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+.section-title,
+.contact__title,
+.contact-page__title {
+  /* Only as wide as the words, so the light responds where the text actually is. */
+  width: fit-content;
+  --mx: 50%;
+  --my: 50%;
+  background-image: radial-gradient(
+    circle var(--spot) at var(--mx) var(--my),
+    var(--accent-strong) 0%,
+    var(--brass) 52%,
+    var(--bone) 100%
+  );
+  background-color: var(--bone);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transition: --spot 0.4s ease;
+}
+
+@media (hover: hover) {
+  .section-title:hover,
+  .contact__title:hover,
+  .contact-page__title:hover {
+    --spot: 190px;
+  }
+}
+
+.section-lede {
+  color: var(--text-muted);
+  font-size: 1.05rem;
 }
 
 .muted {
   color: var(--text-muted);
 }
 
+/* ---------- Glass ---------- */
+.glass {
+  position: relative;
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-highlight), var(--glass-shadow);
+  isolation: isolate;
+}
+
+/* Light-catching edge: a gradient border drawn with a mask */
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  padding: 1px;
+  border-radius: inherit;
+  background: var(--grad-edge);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  pointer-events: none;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background: var(--glass-fill-solid);
+  }
+}
+
+/* Admin and other plain surfaces */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--glass-highlight);
+}
+
+/* ---------- Buttons ---------- */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--s-2);
-  padding: 12px 22px;
-  border-radius: var(--radius-sm);
+  padding: 13px 24px;
+  border-radius: 999px;
   border: 1px solid transparent;
   font-size: 0.95rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s, border-color 0.2s, color 0.2s;
   white-space: nowrap;
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.97);
+  transition-duration: 0.08s;
 }
 
 .btn:disabled {
@@ -119,44 +221,41 @@ p {
 }
 
 .btn--primary {
-  background: var(--accent);
-  color: #001019;
+  background: var(--grad-primary);
+  color: #17140c;
+  box-shadow: 0 8px 24px -14px rgba(200, 161, 90, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .btn--primary:hover:not(:disabled) {
-  background: var(--accent-strong);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px -14px rgba(200, 161, 90, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.34);
 }
 
 .btn--ghost {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.05);
   border-color: var(--border-strong);
   color: var(--text);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
 }
 
 .btn--ghost:hover:not(:disabled) {
-  border-color: var(--accent);
-  color: var(--accent-strong);
+  border-color: rgba(224, 189, 128, 0.7);
+  background: rgba(200, 161, 90, 0.12);
 }
 
 .btn--sm {
-  padding: 8px 14px;
+  padding: 8px 16px;
   font-size: 0.85rem;
-}
-
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
 }
 
 .link-arrow {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  color: var(--accent);
-  font-size: 0.85rem;
-  font-weight: 500;
+  gap: 5px;
+  color: var(--accent-strong);
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .link-arrow:hover {
@@ -164,7 +263,7 @@ p {
 }
 
 .skeleton {
-  background: linear-gradient(90deg, var(--surface) 0%, var(--surface-2) 50%, var(--surface) 100%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.04) 100%);
   background-size: 200% 100%;
   animation: shimmer 1.4s infinite;
   border-radius: var(--radius-sm);
@@ -193,15 +292,24 @@ p {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }
 
 @media (max-width: 767px) {
   .section {
-    padding-block: var(--s-7);
+    padding-block: var(--s-6);
   }
   .container {
-    padding-inline: var(--s-4);
+    padding-inline: var(--s-5);
+  }
+  .glass {
+    border-radius: var(--radius);
+  }
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.01em;
   }
 }

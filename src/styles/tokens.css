@@ -1,24 +1,45 @@
 :root {
-  --bg: #020d14;
-  --bg-alt: #04151f;
-  --surface: #071c28;
-  --surface-2: #0a2433;
-  --border: rgba(13, 156, 233, 0.22);
-  --border-strong: rgba(13, 156, 233, 0.45);
+  /* Palette: "graphite & brass" — machined metal, one warm accent, no washes */
+  --ink: #0b0b0d;
+  --slate: #141418;
+  --bone: #ece8e0;
+  --ash: #9a968e;
+  --brass: #c8a15a;
+  --patina: #7fa892;
 
-  --accent: #0d9ce9;
-  --accent-strong: #3fb6f5;
-  --accent-soft: rgba(13, 156, 233, 0.14);
-  --accent-glow: rgba(13, 156, 233, 0.35);
+  --bg: var(--ink);
+  --bg-alt: #101013;
+  --surface: rgba(22, 22, 26, 0.72);
+  --surface-2: rgba(34, 34, 39, 0.6);
+  --text: var(--bone);
+  --text-muted: var(--ash);
+  --danger: #d98276;
+  --success: var(--patina);
 
-  --text: #e8f4fa;
-  --text-muted: #8aa4b3;
-  --danger: #f06c6c;
-  --success: #4fd1a1;
+  --accent: var(--brass);
+  --accent-strong: #e0bd80;
+  --accent-soft: rgba(200, 161, 90, 0.14);
+  --accent-glow: rgba(200, 161, 90, 0.3);
+  --border: rgba(236, 232, 224, 0.12);
+  --border-strong: rgba(236, 232, 224, 0.26);
 
-  --radius: 14px;
-  --radius-sm: 8px;
-  --max-width: 1200px;
+  /* Flat, not gradient: the accent reads as a material, not a wash. */
+  --grad-primary: var(--brass);
+  --grad-name: linear-gradient(var(--bone), var(--bone));
+  --grad-edge: linear-gradient(140deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.03) 45%, rgba(200, 161, 90, 0.16));
+
+  /* Glass */
+  --glass-fill: linear-gradient(155deg, rgba(58, 58, 66, 0.3), rgba(18, 18, 22, 0.24));
+  --glass-fill-solid: rgba(22, 22, 27, 0.94);
+  --glass-blur: blur(22px) saturate(120%);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --glass-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.85), 0 8px 30px -12px rgba(0, 0, 0, 0.5);
+
+  /* Shape: larger radii for bigger surfaces, not one radius for everything */
+  --radius-lg: 28px;
+  --radius: 18px;
+  --radius-sm: 10px;
+  --max-width: 1300px;
 
   --s-1: 4px;
   --s-2: 8px;
@@ -27,8 +48,18 @@
   --s-5: 24px;
   --s-6: 40px;
   --s-7: 64px;
-  --s-8: 96px;
+  --s-8: 112px;
 
-  --font: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Type */
+  /* SF Pro on Apple devices (system font); Inter everywhere else. */
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", "Segoe UI Variable Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI Variable Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+
+  --step--1: 0.875rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.625rem;
+  --step-3: clamp(2rem, 3.6vw, 2.75rem);
+  --step-4: clamp(2.6rem, 6vw, 5.4rem);
 }

@@ -1,17 +1,21 @@
-export default function CodeCard({ profile, skills }) {
-  const names = skills.slice(0, 4).map((s) => `"${s.name}"`);
+export default function CodeCard({ skills }) {
+  const names = skills.slice(0, 3).map((s) => `"${s.name}"`);
 
   return (
-    <div className="code-card" aria-hidden="true">
+    <div className="code-card glass" aria-hidden="true">
       <div className="code-card__bar">
-        <span>&lt;/&gt; developer.js</span>
-        <span className="code-card__dot" />
+        <span className="code-card__dots">
+          <i />
+          <i />
+          <i />
+        </span>
+        <span>developer.js</span>
       </div>
       <pre>
-        <span className="tok-kw">const</span> developer = {"{"}
-        {"\n  "}name: <span className="tok-str">"{profile.full_name}"</span>,
-        {"\n  "}skills: [<span className="tok-str">{names.join(", ")}</span>],
-        {"\n  "}passion: <span className="tok-str">"{profile.tagline}"</span>
+        <span className="tok-kw">const</span> <span className="tok-var">archit</span> = {"{"}
+        {"\n  "}builds: [<span className="tok-str">"web"</span>, <span className="tok-str">"mobile"</span>],
+        {"\n  "}stack: [<span className="tok-str">{names.join(", ")}</span>],
+        {"\n  "}alwaysLearning: <span className="tok-bool">true</span>,
         {"\n"}
         {"};"}
       </pre>

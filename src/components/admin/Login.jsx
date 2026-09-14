@@ -26,7 +26,7 @@ export default function Login() {
 
   return (
     <div className="admin-center">
-      <form className="card admin-center__card login" onSubmit={handleSubmit}>
+      <form className="glass admin-center__card login" onSubmit={handleSubmit}>
         <img src={logo} alt="" width="40" height="40" />
         <h1>Admin sign in</h1>
         <div className="field">

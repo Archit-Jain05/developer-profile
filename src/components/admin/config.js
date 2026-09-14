@@ -2,7 +2,8 @@ import { getSkillIcon } from "../../data/iconMap.js";
 import { formatDateRange, formatYearRange } from "../../lib/format.js";
 
 /**
- * Field types: text, textarea, url, number, month, checkbox, image, tags, icon.
+ * Field types: text, textarea, url, number, month, checkbox, image, tags, icon, select.
+ * A select field reads its options from `source.table`.
  * `summary(item)` returns what the list shows for each row.
  */
 export const ENTITY_CONFIGS = [
@@ -56,6 +57,8 @@ export const ENTITY_CONFIGS = [
       { name: "score", label: "Score (e.g. 93.5% or 9.18 / 10 CGPA)", type: "text" },
       { name: "start_year", label: "Start year", type: "number", min: 1950, max: 2100 },
       { name: "end_year", label: "End year", type: "number", min: 1950, max: 2100 },
+      { name: "description", label: "About this course (shown when the card is opened)", type: "textarea" },
+      { name: "highlights", label: "Highlights (subjects, awards, activities)", type: "tags" },
     ],
     validate: (data) =>
       data.start_year && data.end_year && data.end_year < data.start_year
@@ -78,6 +81,16 @@ export const ENTITY_CONFIGS = [
       { name: "tech", label: "Tech tags", type: "tags" },
       { name: "github_url", label: "GitHub URL", type: "url" },
       { name: "live_url", label: "Live URL", type: "url" },
+      {
+        name: "experience_id",
+        label: "Built at (shows under that experience)",
+        type: "select",
+        source: {
+          table: "experience",
+          label: (row) => `${row.company} (${row.role})`,
+          emptyLabel: "Personal project",
+        },
+      },
     ],
     summary: (item) => ({
       title: item.title,

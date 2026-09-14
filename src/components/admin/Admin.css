@@ -64,7 +64,9 @@
   flex-direction: column;
   gap: var(--s-5);
   padding: var(--s-5) var(--s-4);
-  background: var(--bg-alt);
+  background: rgba(16, 16, 20, 0.72);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   border-right: 1px solid var(--border);
 }
 
@@ -116,7 +118,7 @@
   padding: 1px 7px;
   border-radius: 99px;
   background: var(--accent);
-  color: #001019;
+  color: #17140c;
   font-size: 0.75rem;
   font-weight: 700;
   text-align: center;
@@ -426,7 +428,7 @@
   overflow: hidden;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #04151f;
+  color: #17140c;
 }
 
 .admin-row__thumb:has(svg) {
@@ -526,7 +528,7 @@
   display: grid;
   place-items: center;
   padding: var(--s-4);
-  background: rgba(0, 5, 10, 0.7);
+  background: rgba(4, 4, 5, 0.7);
 }
 
 .dialog {
@@ -611,4 +613,8 @@
     width: 100%;
     justify-content: flex-end;
   }
+}
+
+.field select {
+  color-scheme: dark;
 }
