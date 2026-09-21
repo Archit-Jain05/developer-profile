@@ -99,44 +99,27 @@
 }
 
 /* ---------- Portrait ----------
-   A plate, not a card: no rotation, no float loop, no blurred glow behind it.
-   It bleeds off the right edge of the container, which breaks the 1300px box
-   the rest of the page sits in — templates never break their own container.
-
-   The grade knocks the pale blue studio backdrop toward the page's own hue so
-   the photograph sits in the same room as the site instead of being pasted on
-   it. Replacing the source with a background-removed cut-out would let the
-   figure bleed straight onto the ground and this grade could come off. */
-/* A mounted print, not a floating card: the photograph is inset into a solid
-   mount with a visible mat, the way a framed print sits behind board. The
-   frame catches the page's single key light on its top and right edges and
-   drops its shadow down-and-left, which is what makes it read as a real
-   object sitting on the page rather than an image pasted onto it. */
+   Full colour, softly edged, sitting in its own pool of light. The heavy mount
+   and machined emboss that were here before read as a framed print rather than
+   as something minimal, and the photograph was desaturated to sit in the
+   palette — both are gone. The photo keeps its own colour and the page makes
+   room for it instead. */
 .hero__portrait {
   position: relative;
   margin: 0;
-  padding: 14px;
-  background: var(--surface);
-  border: 1px solid var(--bevel);
-  border-radius: var(--radius-sm);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.07),
-    -14px 26px 50px -18px rgba(0, 0, 0, 0.9),
-    -4px 8px 18px -8px rgba(0, 0, 0, 0.6);
+  border-radius: var(--radius-plate);
+  isolation: isolate;
 }
 
-/* The specular: a hairline brightest at the top-right corner, dying to
-   nothing at the bottom-left, drawn as a masked gradient border. */
+/* A soft ambient pool behind the image rather than a frame around it. */
 .hero__portrait::before {
   content: "";
   position: absolute;
-  inset: 0;
-  padding: 1px;
-  border-radius: inherit;
-  background: var(--specular);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  inset: -12% -8% -6%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 62% 30%, rgba(255, 255, 255, 0.09), transparent 62%);
+  filter: blur(40px);
   pointer-events: none;
 }
 
@@ -144,14 +127,24 @@
   width: 100%;
   height: auto;
   aspect-ratio: 4 / 5;
-  max-height: min(64vh, 580px);
+  max-height: min(66vh, 600px);
   object-fit: cover;
   object-position: 50% 16%;
   border-radius: var(--radius-plate);
-  /* Graded toward the page's own values so the pale studio backdrop stops
-     reading as a cut-out. A background-removed source would let this come
-     off entirely. */
-  filter: grayscale(0.78) contrast(1.1) brightness(0.9);
+  border: 1px solid var(--hairline);
+  box-shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.9);
+}
+
+/* The lowest few percent fades into the page so the image has no hard bottom
+   line. Nothing touches its colour. */
+.hero__portrait::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 22%;
+  border-radius: 0 0 var(--radius-plate) var(--radius-plate);
+  background: linear-gradient(to bottom, transparent, rgba(8, 9, 10, 0.55));
+  pointer-events: none;
 }
 
 @media (max-width: 959px) {

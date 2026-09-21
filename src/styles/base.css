@@ -113,14 +113,14 @@ h3 {
    .well   a recess cut INTO the page — screens, inputs, calendars
    (a third role, bare content separated by rules, needs no class)
 
-   Depth is the emboss plus one directional shadow: every shadow on the site
-   carries a negative x-offset so it falls down-and-left, away from the single
-   key light at upper-right. Nothing here is translucent or blurred. */
+   Depth is one hairline of light along the top edge and a soft shadow beneath
+   — enough to lift a surface off the page without the heavy machined emboss
+   that reads as material rather than as minimal. */
 .plate,
 .glass {
   position: relative;
   background: var(--plate-fill);
-  border: 1px solid var(--bevel);
+  border: 1px solid var(--hairline);
   border-radius: var(--radius);
   box-shadow: var(--plate-emboss), var(--plate-shadow);
   isolation: isolate;
@@ -128,15 +128,15 @@ h3 {
 
 .well {
   background: var(--well-fill);
-  border: 1px solid var(--bevel);
-  border-radius: var(--radius-plate);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
   box-shadow: var(--well-emboss);
 }
 
 /* Admin and other plain surfaces */
 .card {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--hairline);
   border-radius: var(--radius);
   box-shadow: var(--plate-emboss);
 }
@@ -150,7 +150,7 @@ h3 {
   /* 44px minimum target. */
   min-height: 44px;
   padding: 11px 22px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-pill);
   border: 1px solid transparent;
   font-size: var(--step--1);
   font-weight: 600;

@@ -52,24 +52,29 @@
      falling down-and-left with a negative x-offset.
      --------------------------------------------------------------------- */
   --plate-fill: var(--surface);
-  --plate-emboss: inset 0 1px 0 rgba(255, 255, 255, 0.06), inset 0 -1px 0 rgba(0, 0, 0, 0.65);
-  --plate-shadow: -6px 12px 26px -10px rgba(0, 0, 0, 0.72);
+  /* A single hairline of light along the top edge, and nothing else. The
+     heavier emboss-and-shade treatment read as material rather than minimal. */
+  --plate-emboss: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  --plate-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.8);
   --well-fill: var(--void);
-  --well-emboss: inset 0 1px 2px rgba(0, 0, 0, 0.8);
-  --specular: linear-gradient(225deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.03) 42%, rgba(0, 0, 0, 0.4));
+  --well-emboss: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+  --hairline: rgba(255, 255, 255, 0.09);
+  --hairline-strong: rgba(255, 255, 255, 0.16);
 
   /* Blur is kept only where it means something: the sticky nav over moving
      content, and the modal scrim. */
   --glass-blur: blur(20px) saturate(115%);
 
   /* ---------------------------------------------------------------------
-     Shape: four intentional radii, not one 28px on everything. A
-     photographic plate is a cut print; a card is machined, not pillowy.
+     Shape. Generous and soft, but still a system rather than one radius on
+     everything: the scale tracks the size of the surface, so a large panel is
+     rounder than a tag and a control is rounder than a panel.
      --------------------------------------------------------------------- */
-  --radius-plate: 2px;
-  --radius-lg: 8px;
-  --radius: 6px;
-  --radius-sm: 4px;
+  --radius-plate: 20px;  /* photography and large media */
+  --radius-lg: 22px;     /* full panels */
+  --radius: 16px;        /* cards */
+  --radius-sm: 10px;     /* controls, tags, inputs */
+  --radius-pill: 999px;  /* only where a shape is genuinely circular */
   --max-width: 1240px;
 
   --s-1: 4px;
