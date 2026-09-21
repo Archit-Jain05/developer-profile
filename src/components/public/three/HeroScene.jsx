@@ -12,15 +12,15 @@ import {
 import { AdditiveBlending, MathUtils, Object3D } from "three";
 import { createGlowTexture, createScreenTexture } from "./screenTexture.js";
 
-const GLASS_TINT = "#f2ece0";
+const GLASS_TINT = "#eeeff2";
 
 function GlassMaterial({ lite }) {
   if (lite) {
     return (
       // Cheap tinted glass for phones: no transmission render pass.
       <meshPhysicalMaterial
-        color="#cbb894"
-        emissive="#c8a15a"
+        color="#c4c6cc"
+        emissive="#d6d8de"
         emissiveIntensity={0.25}
         transparent
         opacity={0.42}
@@ -43,7 +43,7 @@ function GlassMaterial({ lite }) {
       roughness={0.07}
       ior={1.22}
       chromaticAberration={0.07}
-      attenuationColor="#e6d7b8"
+      attenuationColor="#dfe1e6"
       attenuationDistance={2.5}
       anisotropy={0.15}
       distortion={0.12}
@@ -117,9 +117,9 @@ function Keys({ lite }) {
       <boxGeometry args={[KEY_W, 0.026, KEY_D]} />
       {/* Opaque: transparent keys let the rows behind show through, which reads as a second keyboard. */}
       <meshStandardMaterial
-        color="#6e6a62"
-        emissive="#c8a15a"
-        emissiveIntensity={lite ? 0.3 : 0.18}
+        color="#55565c"
+        emissive="#d6d8de"
+        emissiveIntensity={lite ? 0.12 : 0.06}
         roughness={0.38}
         metalness={0.08}
       />
@@ -138,7 +138,7 @@ function Laptop({ screen, lite }) {
       {[-1.585, 1.585].map((x) => (
         <mesh key={x} position={[x, -0.95, 0]} rotation={[Math.PI / 2, 0, 0]}>
           <planeGeometry args={[2.02, 0.02]} />
-          <meshBasicMaterial color="#e0bd80" transparent opacity={0.5} toneMapped={false} />
+          <meshBasicMaterial color="#f4f4f6" transparent opacity={0.5} toneMapped={false} />
         </mesh>
       ))}
       {/* Rubber feet */}
@@ -166,13 +166,13 @@ function Laptop({ screen, lite }) {
       </mesh>
       <mesh position={[0, -0.892, 0.62]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[0.98, 0.54]} />
-        <meshBasicMaterial color="#e0bd80" transparent opacity={0.16} toneMapped={false} />
+        <meshBasicMaterial color="#f4f4f6" transparent opacity={0.16} toneMapped={false} />
       </mesh>
 
       {/* Hinge barrel */}
       <mesh position={[0, -0.9, -1.0]} rotation={[0, 0, Math.PI / 2]}>
         <cylinderGeometry args={[0.055, 0.055, 3.1, 20]} />
-        <meshStandardMaterial color="#b9b3a6" metalness={0.85} roughness={0.25} />
+        <meshStandardMaterial color="#b4b6bc" metalness={0.85} roughness={0.25} />
       </mesh>
       {/* Lid hinged at the back edge */}
       <group position={[0, -0.9, -1.02]} rotation={[-0.26, 0, 0]}>
@@ -186,7 +186,7 @@ function Laptop({ screen, lite }) {
         </mesh>
         <mesh position={[0, 1.98, 0.042]}>
           <circleGeometry args={[0.022, 16]} />
-          <meshBasicMaterial color="#8d8a82" toneMapped={false} />
+          <meshBasicMaterial color="#8a8b92" toneMapped={false} />
         </mesh>
         <Screen texture={screen} width={3.0} height={1.86} position={[0, 1.0, 0.042]} />
       </group>
@@ -315,9 +315,9 @@ export default function HeroScene({ projects = [], onReady }) {
         onCreated={() => performance.mark?.("hero-canvas-created")}
       >
         <ambientLight intensity={0.35} />
-        <directionalLight position={[4, 6, 5]} intensity={1.4} color="#fff4e2" />
-        <pointLight position={[-4, 1, 3]} intensity={18} color="#c8a15a" />
-        <pointLight position={[4, -1, 2]} intensity={14} color="#8fa9b5" />
+        <directionalLight position={[4, 6, 5]} intensity={1.4} color="#ffffff" />
+        <pointLight position={[-4, 1, 3]} intensity={18} color="#d6d8de" />
+        <pointLight position={[4, -1, 2]} intensity={14} color="#a4a8b0" />
         <Glow />
         <ScrollRig reducedMotion={reducedMotion}>
           <group rotation={[0.12, -0.38, 0]}>
@@ -340,9 +340,9 @@ export default function HeroScene({ projects = [], onReady }) {
         <ContactShadows position={[0, -1.75, 0]} opacity={0.45} scale={9} blur={2.6} far={3} color="#050506" />
         <Environment resolution={256} frames={1}>
           <Lightformer form="rect" intensity={3} color="#ffffff" position={[0, 4, -2]} scale={[8, 2, 1]} />
-          <Lightformer form="rect" intensity={2.5} color="#c8a15a" position={[-5, 0, 2]} rotation-y={Math.PI / 2} scale={[6, 3, 1]} />
-          <Lightformer form="rect" intensity={2} color="#8fa9b5" position={[5, 1, 0]} rotation-y={-Math.PI / 2} scale={[6, 3, 1]} />
-          <Lightformer form="ring" intensity={2} color="#8fa9b5" position={[0, -3, 3]} scale={3} />
+          <Lightformer form="rect" intensity={2.5} color="#d6d8de" position={[-5, 0, 2]} rotation-y={Math.PI / 2} scale={[6, 3, 1]} />
+          <Lightformer form="rect" intensity={2} color="#a4a8b0" position={[5, 1, 0]} rotation-y={-Math.PI / 2} scale={[6, 3, 1]} />
+          <Lightformer form="ring" intensity={2} color="#a4a8b0" position={[0, -3, 3]} scale={3} />
         </Environment>
         <ReadySignal ready={Boolean(screens.laptop)} onReady={onReady} />
       </Canvas>

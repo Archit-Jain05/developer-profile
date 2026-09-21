@@ -3,20 +3,20 @@
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#1a1a1f"/>
       <stop offset="0.55" stop-color="#121216"/>
-      <stop offset="1" stop-color="#231d16"/>
+      <stop offset="1" stop-color="#18181c"/>
     </linearGradient>
     <radialGradient id="glow" cx="0.72" cy="0.18" r="0.7">
-      <stop offset="0" stop-color="#c8a15a" stop-opacity="0.3"/>
-      <stop offset="1" stop-color="#c8a15a" stop-opacity="0"/>
+      <stop offset="0" stop-color="#d6d8de" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#d6d8de" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="pane" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#ffffff" stop-opacity="0.2"/>
       <stop offset="1" stop-color="#ffffff" stop-opacity="0.05"/>
     </linearGradient>
     <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#c8a15a"/>
-      <stop offset="0.55" stop-color="#d6b478"/>
-      <stop offset="1" stop-color="#e0bd80"/>
+      <stop offset="0" stop-color="#d6d8de"/>
+      <stop offset="0.55" stop-color="#e4e5ea"/>
+      <stop offset="1" stop-color="#f4f4f6"/>
     </linearGradient>
   </defs>
   <rect width="960" height="540" fill="url(#bg)"/>
@@ -24,15 +24,15 @@
   <g transform="translate(150 95)">
     <rect width="660" height="350" rx="22" fill="url(#pane)" stroke="#ffffff" stroke-opacity="0.28"/>
     <circle cx="34" cy="32" r="7" fill="#d98276"/>
-    <circle cx="58" cy="32" r="7" fill="#d9b06b"/>
+    <circle cx="58" cy="32" r="7" fill="#5b5b63"/>
     <circle cx="82" cy="32" r="7" fill="#7fa892"/>
     <rect x="34" y="78" width="250" height="18" rx="9" fill="url(#bar)"/>
-    <rect x="34" y="112" width="380" height="10" rx="5" fill="#ece8e0" fill-opacity="0.3"/>
-    <rect x="34" y="132" width="300" height="10" rx="5" fill="#ece8e0" fill-opacity="0.2"/>
+    <rect x="34" y="112" width="380" height="10" rx="5" fill="#ededf0" fill-opacity="0.3"/>
+    <rect x="34" y="132" width="300" height="10" rx="5" fill="#ededf0" fill-opacity="0.2"/>
     <rect x="34" y="176" width="186" height="136" rx="16" fill="#ffffff" fill-opacity="0.08"/>
     <rect x="237" y="176" width="186" height="136" rx="16" fill="#ffffff" fill-opacity="0.08"/>
     <rect x="440" y="176" width="186" height="136" rx="16" fill="#ffffff" fill-opacity="0.08"/>
-    <path d="M110 232 l-22 18 l22 18 M150 232 l22 18 l-22 18" fill="none" stroke="#c8a15a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M110 232 l-22 18 l22 18 M150 232 l22 18 l-22 18" fill="none" stroke="#d6d8de" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
-  <text x="480" y="500" text-anchor="middle" font-family="Onest, Segoe UI, Arial, sans-serif" font-size="20" fill="#9a968e">Screenshot coming soon</text>
+  <text x="480" y="500" text-anchor="middle" font-family="Onest, Segoe UI, Arial, sans-serif" font-size="20" fill="#9b9ba3">Screenshot coming soon</text>
 </svg>

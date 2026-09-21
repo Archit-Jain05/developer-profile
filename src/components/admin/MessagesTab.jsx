@@ -86,7 +86,7 @@ export default function MessagesTab() {
             <div className="message__head">
               <div>
                 <strong>{m.name}</strong>{" "}
-                <a className="link-arrow" href={`mailto:${m.email}`}>
+                <a className="link-in" href={`mailto:${m.email}`}>
                   <FiMail aria-hidden="true" /> {m.email}
                 </a>
               </div>

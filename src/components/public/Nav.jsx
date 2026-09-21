@@ -71,7 +71,7 @@ export default function Nav({ resumeUrl, name = "Archit Jain", githubUrl, linked
 
           {resumeUrl && (
             <a
-              className="btn btn--primary btn--sm nav__resume"
+              className="btn btn--ghost btn--sm nav__resume"
               href={resumeUrl}
               target="_blank"
               rel="noopener noreferrer"

@@ -16,7 +16,7 @@ function Contributions({ calendar, githubUrl }) {
     <figure className="contrib">
       <figcaption className="contrib__head">
         <span>{calendar.total.toLocaleString()} contributions in the last year</span>
-        <a className="link-arrow" href={githubUrl} target="_blank" rel="noopener noreferrer">
+        <a className="link-out" href={githubUrl} target="_blank" rel="noopener noreferrer">
           See the profile <FiArrowUpRight aria-hidden="true" />
         </a>
       </figcaption>
@@ -122,7 +122,7 @@ export default function GitHubActivity({ githubUrl }) {
           {status === "error" && (
             <p className="github__error">
               GitHub isn't responding right now.{" "}
-              <a className="link-arrow" href={githubUrl} target="_blank" rel="noopener noreferrer">
+              <a className="link-out" href={githubUrl} target="_blank" rel="noopener noreferrer">
                 See my profile on GitHub <FiArrowUpRight aria-hidden="true" />
               </a>
             </p>

@@ -1,45 +1,76 @@
 :root {
-  /* Palette: "graphite & brass" — machined metal, one warm accent, no washes */
-  --ink: #0b0b0d;
-  --slate: #141418;
-  --bone: #ece8e0;
-  --ash: #9a968e;
-  --brass: #c8a15a;
-  --patina: #7fa892;
+  /* ---------------------------------------------------------------------
+     Palette: neutral graphite, properly lit.
 
-  --bg: var(--ink);
-  --bg-alt: #101013;
-  --surface: rgba(22, 22, 26, 0.72);
-  --surface-2: rgba(34, 34, 39, 0.6);
-  --text: var(--bone);
+     The scheme this replaces failed for a measurable reason, and it was not
+     the absence of colour: the whole page lived inside 5.6 L* (ground 2.8,
+     the bottom of every card 3.4) and contained no true black, so nothing
+     could read as sitting on anything. This ladder spans 26 L* and is
+     anchored on #000000, which is what gives a dark interface depth.
+
+     There is no invented accent hue. The only chroma on the site comes from
+     the technology logos and GitHub's own contribution greens — real colour,
+     sourced from the work rather than picked from a swatch.
+     --------------------------------------------------------------------- */
+  --void: #000000;      /* L*  0.0 — wells only: screen recesses, inputs */
+  --ground: #08090a;    /* L*  2.4 — the page */
+  --plinth: #0f1113;    /* L*  4.4 — alternating full-bleed bands */
+  --surface: #16181b;   /* L*  6.5 — panels and cards */
+  --riser: #1e2126;     /* L*  9.3 — tags, tiles, things raised inside a card */
+  --bevel: #3a3f46;     /* L* 26.4 — lit edges and hairline rules */
+
+  --chalk: #edeff2;     /* 17.3:1 on ground — primary text, and the button fill */
+  --ash: #a6acb4;       /*  8.7:1 — secondary text */
+  --slate-text: #7c848d; /* 5.0:1 — dates, counts, metadata only */
+
+  /* Semantic, not decorative: errors need to be distinguishable at a glance.
+     Orange-red rather than a true red so it survives deuteranopia. */
+  --danger: #f2764c;
+
+  /* ---------------------------------------------------------------------
+     Aliases. Admin.css and the older public CSS consume these names.
+     --------------------------------------------------------------------- */
+  --bg: var(--ground);
+  --bg-alt: var(--plinth);
+  --surface-2: var(--riser);
+  --text: var(--chalk);
   --text-muted: var(--ash);
-  --danger: #d98276;
-  --success: var(--patina);
+  --text-dim: var(--slate-text);
+  --success: var(--chalk);
 
-  --accent: var(--brass);
-  --accent-strong: #e0bd80;
-  --accent-soft: rgba(200, 161, 90, 0.14);
-  --accent-glow: rgba(200, 161, 90, 0.3);
-  --border: rgba(236, 232, 224, 0.12);
-  --border-strong: rgba(236, 232, 224, 0.26);
+  /* No accent hue. "Accent" resolves to the top of the value ladder, so a
+     call site that asks for emphasis gets contrast instead of colour. */
+  --accent: var(--chalk);
+  --accent-strong: var(--chalk);
+  --accent-soft: rgba(237, 239, 242, 0.1);
+  --border: var(--bevel);
+  --border-strong: #565e6b;
 
-  /* Flat, not gradient: the accent reads as a material, not a wash. */
-  --grad-primary: var(--brass);
-  --grad-name: linear-gradient(var(--bone), var(--bone));
-  --grad-edge: linear-gradient(140deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.03) 45%, rgba(200, 161, 90, 0.16));
+  /* ---------------------------------------------------------------------
+     Light. One source, fixed at upper-right, and everything on the page is
+     derived from it: speculars brightest at the top-right corner, shadows
+     falling down-and-left with a negative x-offset.
+     --------------------------------------------------------------------- */
+  --plate-fill: var(--surface);
+  --plate-emboss: inset 0 1px 0 rgba(255, 255, 255, 0.06), inset 0 -1px 0 rgba(0, 0, 0, 0.65);
+  --plate-shadow: -6px 12px 26px -10px rgba(0, 0, 0, 0.72);
+  --well-fill: var(--void);
+  --well-emboss: inset 0 1px 2px rgba(0, 0, 0, 0.8);
+  --specular: linear-gradient(225deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.03) 42%, rgba(0, 0, 0, 0.4));
 
-  /* Glass */
-  --glass-fill: linear-gradient(155deg, rgba(58, 58, 66, 0.3), rgba(18, 18, 22, 0.24));
-  --glass-fill-solid: rgba(22, 22, 27, 0.94);
-  --glass-blur: blur(22px) saturate(120%);
-  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  --glass-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.85), 0 8px 30px -12px rgba(0, 0, 0, 0.5);
+  /* Blur is kept only where it means something: the sticky nav over moving
+     content, and the modal scrim. */
+  --glass-blur: blur(20px) saturate(115%);
 
-  /* Shape: larger radii for bigger surfaces, not one radius for everything */
-  --radius-lg: 28px;
-  --radius: 18px;
-  --radius-sm: 10px;
-  --max-width: 1300px;
+  /* ---------------------------------------------------------------------
+     Shape: four intentional radii, not one 28px on everything. A
+     photographic plate is a cut print; a card is machined, not pillowy.
+     --------------------------------------------------------------------- */
+  --radius-plate: 2px;
+  --radius-lg: 8px;
+  --radius: 6px;
+  --radius-sm: 4px;
+  --max-width: 1240px;
 
   --s-1: 4px;
   --s-2: 8px;
@@ -50,16 +81,29 @@
   --s-7: 64px;
   --s-8: 112px;
 
-  /* Type */
-  /* SF Pro on Apple devices (system font); Inter everywhere else. */
-  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", "Segoe UI Variable Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI Variable Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* ---------------------------------------------------------------------
+     Type. One superfamily, three widths. Archivo expanded (wdth 112) carries
+     display, normal width carries prose and UI, and narrowed (wdth 78) with
+     tabular figures makes the dense data register. Width does the work two
+     extra typefaces would otherwise be hired for, and expanded grotesque
+     headings read as formal signage rather than as a default.
+     --------------------------------------------------------------------- */
+  --font: "Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
 
-  --step--1: 0.875rem;
-  --step-0: 1rem;
-  --step-1: 1.25rem;
-  --step-2: 1.625rem;
-  --step-3: clamp(2rem, 3.6vw, 2.75rem);
-  --step-4: clamp(2.6rem, 6vw, 5.4rem);
+  /* Deliberately bimodal: one very loud register, one dense one, and a gap in
+     the middle. The interval between them is the composition. */
+  --step--2: 0.8125rem;
+  --step--1: 0.9375rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.1875rem;
+  --step-2: 1.5rem;
+  --step-3: clamp(1.9rem, 3vw, 2.5rem);
+  --step-4: clamp(2.75rem, 7vw, 5.5rem);
+
+  /* Tracking. Display type is set wide and open, never tightened — the
+     previous condensed setting read as cramped. */
+  --track-display: 0.005em;
+  --track-body: 0.004em;
 }

@@ -1,15 +1,11 @@
 import { FiArrowUpRight, FiGithub } from "react-icons/fi";
-import { useTilt } from "../../hooks/useTilt.js";
 import "./Sections.css";
 
 function ProjectCard({ project, company }) {
-  const tilt = useTilt(7);
-
   return (
-    <li className="project-tilt" {...tilt}>
-      <article className="project glass">
-        <span className="project__sheen" aria-hidden="true" />
-        <div className="project__media">
+    <li>
+      <article className="project plate">
+        <div className="project__media well">
           {project.image_url && (
             <img src={project.image_url} alt={`${project.title} screenshot`} loading="lazy" />
           )}
@@ -27,12 +23,12 @@ function ProjectCard({ project, company }) {
           )}
           <div className="project__links">
             {project.live_url && (
-              <a className="link-arrow" href={project.live_url} target="_blank" rel="noopener noreferrer">
+              <a className="link-out" href={project.live_url} target="_blank" rel="noopener noreferrer">
                 Open live site <FiArrowUpRight aria-hidden="true" />
               </a>
             )}
             {project.github_url && (
-              <a className="link-arrow project__code" href={project.github_url} target="_blank" rel="noopener noreferrer">
+              <a className="link-out project__code" href={project.github_url} target="_blank" rel="noopener noreferrer">
                 <FiGithub aria-hidden="true" /> Source
               </a>
             )}

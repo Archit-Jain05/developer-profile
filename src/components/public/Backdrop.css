@@ -1,3 +1,8 @@
+/* One light, fixed. The two blurred blobs that used to drift across this
+   layer on 26s and 32s loops are gone: ambient motion nobody triggered, and
+   a moving light source meant nothing on the page could cast a consistent
+   shadow. What remains models a single key at upper-right, which every
+   specular edge and every shadow direction on the site is derived from. */
 .backdrop {
   position: fixed;
   inset: 0;
@@ -5,66 +10,15 @@
   overflow: hidden;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 90% 60% at 72% -12%, rgba(200, 161, 90, 0.16), transparent 62%),
-    var(--ink);
+    radial-gradient(ellipse 78% 54% at 74% -10%, rgba(245, 239, 234, 0.055), transparent 64%),
+    var(--ground);
 }
 
-.backdrop__glow {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
-  will-change: transform;
-}
-
-/* Key light: warm, high and to the right, where the devices sit. */
-.backdrop__glow--key {
-  width: 44vw;
-  height: 44vw;
-  top: -10vw;
-  right: 4vw;
-  background: radial-gradient(circle, rgba(200, 161, 90, 0.3), transparent 66%);
-  animation: drift-a 26s ease-in-out infinite alternate;
-}
-
-/* Fill: near-neutral, low and left, just enough to keep the page from going flat. */
-.backdrop__glow--fill {
-  width: 40vw;
-  height: 40vw;
-  top: 46vh;
-  left: -14vw;
-  background: radial-gradient(circle, rgba(180, 186, 196, 0.12), transparent 66%);
-  animation: drift-b 32s ease-in-out infinite alternate;
-}
-
+/* Paper fibre. Sits over the flat darks so large areas have tooth instead of
+   banding on cheap panels. */
 .backdrop__grain {
   position: absolute;
-  inset: -50%;
-  opacity: 0.07;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-@keyframes drift-a {
-  to {
-    transform: translate3d(-6vw, 5vh, 0) scale(1.08);
-  }
-}
-
-@keyframes drift-b {
-  to {
-    transform: translate3d(8vw, -6vh, 0) scale(0.94);
-  }
-}
-
-@media (max-width: 767px) {
-  .backdrop__glow {
-    filter: blur(60px);
-  }
-  .backdrop__glow--key {
-    width: 90vw;
-    height: 90vw;
-  }
-  .backdrop__glow--fill {
-    width: 80vw;
-    height: 80vw;
-  }
+  inset: 0;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }

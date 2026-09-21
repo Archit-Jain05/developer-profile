@@ -17,27 +17,14 @@ body {
   color: var(--text);
   font-family: var(--font);
   font-size: var(--step-0);
-  line-height: 1.6;
+  line-height: 1.65;
+  letter-spacing: var(--track-body);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
-/* Text is not selectable, so the arrow cursor stays put instead of turning
-   into an I-beam. Fields people type in stay selectable. */
-body {
-  cursor: default;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-input,
-textarea,
-select,
-[contenteditable] {
-  cursor: auto;
-  -webkit-user-select: text;
-  user-select: text;
-}
+/* Text stays selectable. The whole point of the site is being contacted, and
+   an unselectable body means nobody can copy the email or phone number. */
 
 img {
   max-width: 100%;
@@ -58,13 +45,13 @@ select {
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent-strong);
+  outline: 2px solid var(--chalk);
   outline-offset: 3px;
 }
 
 ::selection {
-  background: rgba(200, 161, 90, 0.3);
-  color: var(--bone);
+  background: var(--chalk);
+  color: var(--ground);
 }
 
 h1,
@@ -79,8 +66,9 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  font-optical-sizing: auto;
-  letter-spacing: -0.018em;
+  font-variation-settings: "wdth" 112;
+  font-weight: 600;
+  letter-spacing: var(--track-display);
 }
 
 .container {
@@ -104,45 +92,8 @@ h3 {
 
 .section-title {
   font-size: var(--step-3);
-  font-weight: 700;
-  line-height: 1.1;
-}
-
-/* Headings stay plain; only the patch of text under the pointer takes the
-   accent colours. The lit radius grows from nothing on hover, and
-   useSpotlightTitles keeps --mx/--my pointed at the cursor. */
-@property --spot {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 0px;
-}
-
-.section-title,
-.contact__title,
-.contact-page__title {
-  /* Only as wide as the words, so the light responds where the text actually is. */
-  width: fit-content;
-  --mx: 50%;
-  --my: 50%;
-  background-image: radial-gradient(
-    circle var(--spot) at var(--mx) var(--my),
-    var(--accent-strong) 0%,
-    var(--brass) 52%,
-    var(--bone) 100%
-  );
-  background-color: var(--bone);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  transition: --spot 0.4s ease;
-}
-
-@media (hover: hover) {
-  .section-title:hover,
-  .contact__title:hover,
-  .contact-page__title:hover {
-    --spot: 190px;
-  }
+  font-weight: 600;
+  line-height: 1.25;
 }
 
 .section-lede {
@@ -154,36 +105,32 @@ h3 {
   color: var(--text-muted);
 }
 
-/* ---------- Glass ---------- */
+/* ---------- Surfaces ----------
+   Three roles, each recognisable at a glance, replacing the one translucent
+   recipe that used to be worn by nine different content types at once.
+
+   .plate  a solid panel sitting ON the page
+   .well   a recess cut INTO the page — screens, inputs, calendars
+   (a third role, bare content separated by rules, needs no class)
+
+   Depth is the emboss plus one directional shadow: every shadow on the site
+   carries a negative x-offset so it falls down-and-left, away from the single
+   key light at upper-right. Nothing here is translucent or blurred. */
+.plate,
 .glass {
   position: relative;
-  background: var(--glass-fill);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--glass-highlight), var(--glass-shadow);
+  background: var(--plate-fill);
+  border: 1px solid var(--bevel);
+  border-radius: var(--radius);
+  box-shadow: var(--plate-emboss), var(--plate-shadow);
   isolation: isolate;
 }
 
-/* Light-catching edge: a gradient border drawn with a mask */
-.glass::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  padding: 1px;
-  border-radius: inherit;
-  background: var(--grad-edge);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
-  pointer-events: none;
-}
-
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .glass {
-    background: var(--glass-fill-solid);
-  }
+.well {
+  background: var(--well-fill);
+  border: 1px solid var(--bevel);
+  border-radius: var(--radius-plate);
+  box-shadow: var(--well-emboss);
 }
 
 /* Admin and other plain surfaces */
@@ -191,7 +138,7 @@ h3 {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  box-shadow: var(--glass-highlight);
+  box-shadow: var(--plate-emboss);
 }
 
 /* ---------- Buttons ---------- */
@@ -200,13 +147,15 @@ h3 {
   align-items: center;
   justify-content: center;
   gap: var(--s-2);
-  padding: 13px 24px;
-  border-radius: 999px;
+  /* 44px minimum target. */
+  min-height: 44px;
+  padding: 11px 22px;
+  border-radius: var(--radius-sm);
   border: 1px solid transparent;
-  font-size: 0.95rem;
+  font-size: var(--step--1);
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s, background 0.2s, border-color 0.2s, color 0.2s;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
   white-space: nowrap;
 }
 
@@ -220,53 +169,86 @@ h3 {
   cursor: not-allowed;
 }
 
+/* There is no accent hue, so emphasis is inversion: the brightest value on
+   the page, filled, with the page's own ground as the label. 17.3:1. */
 .btn--primary {
-  background: var(--grad-primary);
-  color: #17140c;
-  box-shadow: 0 8px 24px -14px rgba(200, 161, 90, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  background: var(--chalk);
+  color: var(--ground);
 }
 
 .btn--primary:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 30px -14px rgba(200, 161, 90, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.34);
+  background: #ffffff;
 }
 
 .btn--ghost {
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   border-color: var(--border-strong);
   color: var(--text);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
 }
 
 .btn--ghost:hover:not(:disabled) {
-  border-color: rgba(224, 189, 128, 0.7);
-  background: rgba(200, 161, 90, 0.12);
+  border-color: var(--chalk);
+  color: var(--chalk);
 }
 
 .btn--sm {
-  padding: 8px 16px;
-  font-size: 0.85rem;
+  min-height: 36px;
+  padding: 7px 14px;
+  font-size: var(--step--2);
 }
 
-.link-arrow {
+/* Reserved for links that genuinely leave the site, where the arrow means
+   "opens in a new tab". Everything internal is a plain underlined link. */
+.link-out {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  color: var(--accent-strong);
-  font-size: 0.9rem;
+  color: var(--text);
+  font-size: var(--step--1);
   font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--border-strong);
+  transition: text-decoration-color 0.18s, color 0.18s;
 }
 
-.link-arrow:hover {
-  color: var(--accent-strong);
+.link-out:hover {
+  color: var(--chalk);
+  text-decoration-color: var(--chalk);
+}
+
+/* Internal navigation: no arrow. */
+.link-in {
+  color: var(--text);
+  font-size: var(--step--1);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--border-strong);
+  transition: text-decoration-color 0.18s, color 0.18s;
+}
+
+.link-in:hover {
+  color: var(--chalk);
+  text-decoration-color: var(--chalk);
 }
 
 .skeleton {
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.04) 100%);
+  background: linear-gradient(90deg, var(--plinth) 0%, var(--surface) 50%, var(--plinth) 100%);
   background-size: 200% 100%;
   animation: shimmer 1.4s infinite;
   border-radius: var(--radius-sm);
+}
+
+/* The dense register: dates, counts, scores. Archivo narrowed rather than a
+   third monospace family, so numbers still line up in columns without the
+   tracked-out mono label that reads as template chrome. */
+.data {
+  font-variation-settings: "wdth" 78;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--step--2);
+  color: var(--slate-text);
+  letter-spacing: 0.01em;
 }
 
 @keyframes shimmer {
@@ -302,14 +284,11 @@ h3 {
     padding-block: var(--s-6);
   }
   .container {
-    padding-inline: var(--s-5);
-  }
-  .glass {
-    border-radius: var(--radius);
+    padding-inline: var(--s-4);
   }
   h1,
   h2,
   h3 {
-    letter-spacing: -0.01em;
+    font-variation-settings: "wdth" 104;
   }
 }

@@ -1,4 +1,3 @@
-import { FiArrowRight } from "react-icons/fi";
 import { toParagraphs } from "../../lib/format.js";
 import "./Sections.css";
 
@@ -16,8 +15,8 @@ export default function About({ profile }) {
                 <p key={i}>{p}</p>
               ))}
             </div>
-            <a href="#contact" className="link-arrow">
-              Start a conversation <FiArrowRight aria-hidden="true" />
+            <a href="#contact" className="link-in">
+              Start a conversation
             </a>
           </div>
 

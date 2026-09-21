@@ -52,7 +52,7 @@ function ExperienceDetail({ job, projects }) {
       )}
 
       {job.website_url && (
-        <a className="link-arrow" href={job.website_url} target="_blank" rel="noopener noreferrer">
+        <a className="link-out" href={job.website_url} target="_blank" rel="noopener noreferrer">
           Visit {job.company} <FiArrowUpRight aria-hidden="true" />
         </a>
       )}
@@ -79,12 +79,12 @@ function ExperienceDetail({ job, projects }) {
                 )}
                 <div className="project__links">
                   {project.live_url && (
-                    <a className="link-arrow" href={project.live_url} target="_blank" rel="noopener noreferrer">
+                    <a className="link-out" href={project.live_url} target="_blank" rel="noopener noreferrer">
                       Open live site <FiArrowUpRight aria-hidden="true" />
                     </a>
                   )}
                   {project.github_url && (
-                    <a className="link-arrow project__code" href={project.github_url} target="_blank" rel="noopener noreferrer">
+                    <a className="link-out project__code" href={project.github_url} target="_blank" rel="noopener noreferrer">
                       <FiGithub aria-hidden="true" /> Source
                     </a>
                   )}

@@ -1,53 +1,38 @@
-import { lazy, Suspense, useEffect, useState } from "react";
-import { FiArrowDown, FiDownload } from "react-icons/fi";
+import { FiDownload } from "react-icons/fi";
 import { getSkillIcon } from "../../data/iconMap.js";
-import CodeCard from "./CodeCard.jsx";
-import SceneBoundary from "./SceneBoundary.jsx";
 import "./Hero.css";
 
-const HeroScene = lazy(() => import("./three/HeroScene.jsx"));
-
-function supportsWebGL() {
-  try {
-    const canvas = document.createElement("canvas");
-    return Boolean(canvas.getContext("webgl2") || canvas.getContext("webgl"));
-  } catch {
-    return false;
-  }
-}
-
-/** Static glass devices shown while the 3D scene loads, or when WebGL is unavailable. */
-function HeroFallback() {
-  return (
-    <div className="hero-fallback" aria-hidden="true">
-      <div className="hero-fallback__laptop" />
-      <div className="hero-fallback__phone" />
-    </div>
-  );
-}
-
-export default function Hero({ profile, skills, projects, onSceneReady }) {
+/**
+ * The hero. His photograph is the primary visual and owns the right column
+ * outright — the WebGL laptop that used to sit here crowded it out, and the
+ * floating code card beside it made three objects compete at the same
+ * apparent distance, which read as a collage rather than a composition.
+ *
+ * The 3D moves to the work pages, where a device showing a real screenshot
+ * demonstrates the product instead of decorating the name.
+ */
+export default function Hero({ profile, skills, experience = [] }) {
   const heroSkills = skills.filter((s) => s.show_in_hero);
-  const [webgl, setWebgl] = useState(null);
-
-  useEffect(() => {
-    const ok = supportsWebGL();
-    setWebgl(ok);
-    if (!ok) onSceneReady?.();
-  }, [onSceneReady]);
+  const current = experience.find((job) => !job.end_date);
 
   return (
     <section id="home" className="hero">
       <div className="container hero__inner">
         <div className="hero__text">
-          <p className="hero__hello">Hi, I'm</p>
+          {current && (
+            <p className="hero__status">
+              <span className="hero__live" aria-hidden="true" />
+              Building at {current.company}
+            </p>
+          )}
+
           <h1 className="hero__name">{profile.full_name}</h1>
           <p className="hero__tagline">{profile.tagline}</p>
           {profile.intro && <p className="hero__intro">{profile.intro}</p>}
 
           <div className="hero__actions">
             <a href="#projects" className="btn btn--primary">
-              View my work <FiArrowDown aria-hidden="true" />
+              See the work
             </a>
             {profile.resume_url && (
               <a href={profile.resume_url} className="btn btn--ghost" target="_blank" rel="noopener noreferrer">
@@ -57,13 +42,13 @@ export default function Hero({ profile, skills, projects, onSceneReady }) {
           </div>
 
           {heroSkills.length > 0 && (
-            <ul className="hero__tech glass" aria-label="Technologies I work with">
+            <ul className="hero__tech" aria-label="Technologies I work with">
               {heroSkills.map((skill) => {
                 const { icon: Icon, color } = getSkillIcon(skill.icon);
                 return (
-                  <li key={skill.id} title={skill.name}>
+                  <li key={skill.id}>
                     <Icon style={{ color }} aria-hidden="true" />
-                    <span className="visually-hidden">{skill.name}</span>
+                    <span className="hero__tech-name">{skill.name}</span>
                   </li>
                 );
               })}
@@ -71,23 +56,17 @@ export default function Hero({ profile, skills, projects, onSceneReady }) {
           )}
         </div>
 
-        <div className="hero__visual">
-          {profile.hero_image_url && (
-            <figure className="hero-portrait glass">
-              <img src={profile.hero_image_url} alt={profile.full_name} width="320" height="400" />
-            </figure>
-          )}
-          {webgl ? (
-            <SceneBoundary fallback={<HeroFallback />} onError={onSceneReady}>
-              <Suspense fallback={<HeroFallback />}>
-                <HeroScene projects={projects} onReady={onSceneReady} />
-              </Suspense>
-            </SceneBoundary>
-          ) : (
-            <HeroFallback />
-          )}
-          <CodeCard skills={skills} />
-        </div>
+        {profile.hero_image_url && (
+          <figure className="hero__portrait">
+            <img
+              src={profile.hero_image_url}
+              alt={profile.full_name}
+              width="560"
+              height="700"
+              fetchPriority="high"
+            />
+          </figure>
+        )}
       </div>
     </section>
   );

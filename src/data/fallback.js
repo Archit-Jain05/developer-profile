@@ -9,7 +9,7 @@ export const fallbackContent = {
     eyebrow: "Software Developer",
     tagline: "I build apps for web and mobile.",
     intro:
-      "[Placeholder] A two-line intro about what you build and the kind of work you are looking for.",
+      "I'm an IT student in Mumbai who freelances and interns as a developer. Most of what I ship is client-facing: Shopify storefronts, Next.js sites and a Flutter app.",
     about_heading: "I'm passionate about building useful software",
     about_body:
       "I'm an Information Technology student who loves turning ideas into real products. I'm especially interested in Artificial Intelligence and Machine Learning, and I want to bring them into apps I build for Android, Windows and the web. I also work as a freelance developer.\n\nRight now I'm learning cross-platform development with Flutter. I'm always happy to collaborate on challenging projects built with the latest technology, so feel free to reach out by email or on LinkedIn.",
@@ -141,7 +141,7 @@ export const fallbackContent = {
     {
       id: "p3",
       title: "Velora",
-      description: "[Placeholder] One-line description of Velora.",
+      description: "A TypeScript and Next.js project.",
       image_url: PROJECT_PLACEHOLDER,
       tech: ["Next.js", "TypeScript"],
       github_url: "https://github.com/Archit-Jain05/Velora",
@@ -152,7 +152,7 @@ export const fallbackContent = {
     {
       id: "p4",
       title: "bb3",
-      description: "[Placeholder] One-line description of bb3.",
+      description: "A TypeScript and Next.js project.",
       image_url: PROJECT_PLACEHOLDER,
       tech: ["Next.js", "TypeScript"],
       github_url: "https://github.com/Archit-Jain05/bb3",

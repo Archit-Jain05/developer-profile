@@ -1,53 +1,75 @@
 import { getSkillIcon } from "../../data/iconMap.js";
-import { useInView } from "../../hooks/useInView.js";
 import "./Sections.css";
 
-function SkillBar({ skill, animate, index }) {
+/** Case-insensitive match between a skill name and a project's tech row. */
+function usedIn(skill, projects) {
+  const name = skill.name.trim().toLowerCase();
+  return projects.filter((p) => (p.tech ?? []).some((t) => t.trim().toLowerCase() === name));
+}
+
+function SkillRow({ skill, projects }) {
   const { icon: Icon, color } = getSkillIcon(skill.icon);
-  const percent = Math.max(0, Math.min(100, Number(skill.percent) || 0));
 
   return (
     <li className="skill">
-      <div className="skill__head">
-        <span className="skill__icon" style={{ color }}>
-          <Icon aria-hidden="true" />
+      <span className="skill__icon" style={{ color }}>
+        <Icon aria-hidden="true" />
+      </span>
+      <span className="skill__name">{skill.name}</span>
+      {projects.length > 0 && (
+        <span className="skill__where">
+          {projects.map((p) => p.title).join(", ")}
         </span>
-        <span className="skill__name">{skill.name}</span>
-        <span className="skill__percent">{percent}%</span>
-      </div>
-      <div
-        className="skill__track"
-        role="progressbar"
-        aria-label={skill.name}
-        aria-valuenow={percent}
-        aria-valuemin={0}
-        aria-valuemax={100}
-      >
-        <div
-          className="skill__fill"
-          style={{ width: animate ? `${percent}%` : 0, transitionDelay: `${index * 60}ms` }}
-        />
-      </div>
+      )}
     </li>
   );
 }
 
-export default function Skills({ skills }) {
-  const [ref, inView] = useInView();
+/**
+ * Skills grouped by whether they have actually shipped, derived from the tech
+ * rows on the projects themselves. This replaces nine progress meters that
+ * were all set to the same 80% — a number that told a reader nothing and
+ * invited the question "80% of what?". What a recruiter wants to know is
+ * where a skill was used, so that is what this says.
+ */
+export default function Skills({ skills, projects = [] }) {
+  const shipped = [];
+  const working = [];
+
+  for (const skill of skills) {
+    const used = usedIn(skill, projects);
+    (used.length > 0 ? shipped : working).push({ skill, used });
+  }
 
   return (
     <section id="skills" className="section">
       <div className="container">
-        <div className="skills-panel glass">
-          <div className="section-head">
-            <h2 className="section-title">Tools I reach for</h2>
-            <p className="section-lede">The languages and frameworks I use most, and how comfortable I am with each.</p>
-          </div>
-          <ul ref={ref} className="skills">
-            {skills.map((skill, i) => (
-              <SkillBar key={skill.id} skill={skill} animate={inView} index={i} />
-            ))}
-          </ul>
+        <div className="section-head">
+          <h2 className="section-title">Tools I reach for</h2>
+        </div>
+
+        <div className="skills-groups">
+          {shipped.length > 0 && (
+            <div className="skills-group">
+              <h3 className="skills-group__title">Shipped with</h3>
+              <ul className="skills">
+                {shipped.map(({ skill, used }) => (
+                  <SkillRow key={skill.id} skill={skill} projects={used} />
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {working.length > 0 && (
+            <div className="skills-group">
+              <h3 className="skills-group__title">Working with</h3>
+              <ul className="skills">
+                {working.map(({ skill }) => (
+                  <SkillRow key={skill.id} skill={skill} projects={[]} />
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </section>

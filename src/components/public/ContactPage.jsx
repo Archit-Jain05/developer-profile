@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { FiGithub, FiLinkedin, FiMail, FiPhone } from "react-icons/fi";
 import { useContent } from "../../hooks/useContent.js";
-import { useSpotlightTitles } from "../../hooks/useSpotlightTitles.js";
 import Backdrop from "./Backdrop.jsx";
 import ContactForm from "./ContactForm.jsx";
 import FooterBar from "./FooterBar.jsx";
@@ -13,7 +12,6 @@ const TOPICS = ["A job opportunity", "Freelance work", "A collaboration", "Somet
 
 export default function ContactPage() {
   const { content } = useContent();
-  useSpotlightTitles();
   const profile = content?.profile;
 
   useEffect(() => {

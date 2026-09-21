@@ -57,7 +57,7 @@
 /* Once scrolled: the accent sweep from the hero name, at low strength. */
 .nav.is-scrolled .nav__bar {
   background:
-    linear-gradient(180deg, rgba(200, 161, 90, 0.1), rgba(200, 161, 90, 0) 70%),
+    linear-gradient(180deg, rgba(214, 216, 222, 0.1), rgba(214, 216, 222, 0) 70%),
     linear-gradient(0deg, rgba(16, 16, 20, 0.88), rgba(16, 16, 20, 0.88));
 }
 
@@ -111,7 +111,7 @@
   border-radius: 999px;
   font-size: 0.94rem;
   font-weight: 500;
-  color: #ded9d0;
+  color: #dcdce0;
   transition: color 0.2s, background 0.2s;
 }
 
@@ -181,7 +181,7 @@
     -webkit-backdrop-filter: var(--glass-blur);
     backdrop-filter: var(--glass-blur);
     border: 1px solid var(--border-strong);
-    box-shadow: var(--glass-shadow);
+    box-shadow: var(--plate-emboss);
   }
 
   .nav__menu.is-open {
@@ -240,7 +240,7 @@
   height: 36px;
   border-radius: 50%;
   font-size: 1.05rem;
-  color: #ded9d0;
+  color: #dcdce0;
   transition: color 0.2s, background 0.2s, transform 0.2s;
 }
 

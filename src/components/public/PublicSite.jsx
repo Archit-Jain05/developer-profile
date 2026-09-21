@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useContent } from "../../hooks/useContent.js";
-import { useSpotlightTitles } from "../../hooks/useSpotlightTitles.js";
 import Backdrop from "./Backdrop.jsx";
 import Loader from "./Loader.jsx";
 import Nav from "./Nav.jsx";
@@ -27,13 +26,7 @@ function LoadingSkeleton() {
 
 export default function PublicSite() {
   const { status, content } = useContent();
-  useSpotlightTitles();
   const profile = content?.profile;
-  const [sceneReady, setSceneReady] = useState(false);
-  const markSceneReady = useCallback(() => {
-    performance.mark?.("hero-scene-ready");
-    setSceneReady(true);
-  }, []);
 
   useEffect(() => {
     if (profile?.full_name) {
@@ -44,7 +37,10 @@ export default function PublicSite() {
   return (
     <>
       <Backdrop />
-      <Loader ready={status !== "loading" && sceneReady} />
+      {/* The loader used to wait on the hero's 3D textures as well as the
+          content, which held first paint behind WebGL for no reason. It now
+          tracks the content only; the scene fades in when it is ready. */}
+      <Loader ready={status !== "loading"} />
       <Nav
         resumeUrl={profile?.resume_url}
         name={profile?.full_name}
@@ -55,17 +51,12 @@ export default function PublicSite() {
         <LoadingSkeleton />
       ) : (
         <main>
-          <Hero
-            profile={profile}
-            skills={content.skills}
-            projects={content.projects}
-            onSceneReady={markSceneReady}
-          />
+          <Hero profile={profile} skills={content.skills} experience={content.experience} />
           <About profile={profile} />
           <Education items={content.education} />
           <Experience items={content.experience} projects={content.projects} />
           <Projects items={content.projects} experience={content.experience} />
-          <Skills skills={content.skills} />
+          <Skills skills={content.skills} projects={content.projects} />
           <GitHubActivity githubUrl={profile.github_url} />
           <Contact profile={profile} />
         </main>

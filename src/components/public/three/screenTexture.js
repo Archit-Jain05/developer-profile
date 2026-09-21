@@ -17,20 +17,20 @@ function drawMockScreen(ctx, w, h, portrait) {
   const bg = ctx.createLinearGradient(0, 0, w, h);
   bg.addColorStop(0, "#1a1a1f");
   bg.addColorStop(0.55, "#121216");
-  bg.addColorStop(1, "#231d16");
+  bg.addColorStop(1, "#18181c");
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, w, h);
 
   const glow = ctx.createRadialGradient(w * 0.75, h * 0.2, 0, w * 0.75, h * 0.2, w * 0.7);
-  glow.addColorStop(0, "rgba(200,161,90,0.3)");
-  glow.addColorStop(1, "rgba(200,161,90,0)");
+  glow.addColorStop(0, "rgba(214,216,222,0.3)");
+  glow.addColorStop(1, "rgba(214,216,222,0)");
   ctx.fillStyle = glow;
   ctx.fillRect(0, 0, w, h);
 
   const pad = portrait ? w * 0.08 : w * 0.05;
 
   if (!portrait) {
-    ["#d98276", "#d9b06b", "#7fa892"].forEach((c, i) => {
+    ["#d98276", "#5b5b63", "#7fa892"].forEach((c, i) => {
       ctx.fillStyle = c;
       ctx.beginPath();
       ctx.arc(pad + i * 26, pad, 8, 0, Math.PI * 2);
@@ -41,13 +41,13 @@ function drawMockScreen(ctx, w, h, portrait) {
   // Masthead: a bright bar with a muted one under it, standing in for a title.
   const titleH = portrait ? h * 0.045 : h * 0.055;
   const title = ctx.createLinearGradient(pad, 0, pad + w * 0.5, 0);
-  title.addColorStop(0, "rgba(240,236,228,0.92)");
-  title.addColorStop(1, "rgba(224,189,128,0.8)");
+  title.addColorStop(0, "rgba(240,240,244,0.92)");
+  title.addColorStop(1, "rgba(255,255,255,0.8)");
   ctx.fillStyle = title;
   roundRect(ctx, pad, portrait ? h * 0.1 : h * 0.19, w * (portrait ? 0.62 : 0.34), titleH, titleH / 2);
   ctx.fill();
 
-  ctx.fillStyle = "rgba(236,232,224,0.38)";
+  ctx.fillStyle = "rgba(236,236,240,0.38)";
   roundRect(ctx, pad, portrait ? h * 0.165 : h * 0.28, w * (portrait ? 0.4 : 0.2), titleH * 0.5, titleH * 0.25);
   ctx.fill();
 
@@ -68,10 +68,10 @@ function drawMockScreen(ctx, w, h, portrait) {
       ctx.fillStyle = card;
       roundRect(ctx, x, y, bw, bh, 16);
       ctx.fill();
-      ctx.fillStyle = (r + c) % 2 ? "rgba(143,168,146,0.75)" : "rgba(200,161,90,0.85)";
+      ctx.fillStyle = (r + c) % 2 ? "rgba(150,152,160,0.75)" : "rgba(214,216,222,0.85)";
       roundRect(ctx, x + 18, y + 18, bw * 0.45, 12, 6);
       ctx.fill();
-      ctx.fillStyle = "rgba(236,232,224,0.26)";
+      ctx.fillStyle = "rgba(236,236,240,0.26)";
       roundRect(ctx, x + 18, y + 44, bw * 0.7, 9, 5);
       ctx.fill();
       roundRect(ctx, x + 18, y + 64, bw * 0.55, 9, 5);
@@ -138,10 +138,10 @@ export function createGlowTexture() {
   canvas.height = size;
   const ctx = canvas.getContext("2d");
   const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
-  g.addColorStop(0, "rgba(240,222,186,0.85)");
-  g.addColorStop(0.35, "rgba(200,161,90,0.6)");
-  g.addColorStop(0.7, "rgba(200,161,90,0.22)");
-  g.addColorStop(1, "rgba(200,161,90,0)");
+  g.addColorStop(0, "rgba(245,246,250,0.85)");
+  g.addColorStop(0.35, "rgba(214,216,222,0.6)");
+  g.addColorStop(0.7, "rgba(214,216,222,0.22)");
+  g.addColorStop(1, "rgba(214,216,222,0)");
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, size, size);
   const texture = new CanvasTexture(canvas);

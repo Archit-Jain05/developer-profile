@@ -45,10 +45,7 @@
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1;
-  background: var(--grad-primary);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--chalk);
 }
 
 .stat-grid dt {
@@ -71,7 +68,7 @@
 
 .trail__route {
   fill: none;
-  stroke: rgba(236, 232, 224, 0.2);
+  stroke: var(--bevel);
   stroke-width: 2;
   stroke-linecap: round;
   stroke-dasharray: 1 11;
@@ -79,10 +76,10 @@
 
 .trail__drawn {
   fill: none;
-  stroke: var(--brass);
+  stroke: var(--chalk);
   stroke-width: 3;
   stroke-linecap: round;
-  filter: drop-shadow(0 0 6px rgba(200, 161, 90, 0.45));
+
 }
 
 .trail__head {
@@ -91,11 +88,11 @@
 }
 
 .trail__head circle:first-child {
-  fill: rgba(200, 161, 90, 0.22);
+  fill: rgba(214, 216, 222, 0.22);
 }
 
 .trail__head circle:last-child {
-  fill: var(--bone);
+  fill: var(--chalk);
 }
 
 .trail__waypoint {
@@ -105,8 +102,8 @@
   height: 18px;
   margin: -9px 0 0 -9px;
   border-radius: 50%;
-  background: var(--ink);
-  border: 3px solid var(--brass);
+  background: var(--ground);
+  border: 3px solid var(--chalk);
   opacity: 0;
   transform: scale(0);
   transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s;
@@ -123,14 +120,14 @@
   position: absolute;
   inset: -3px;
   border-radius: 50%;
-  border: 2px solid var(--brass);
+  border: 2px solid var(--chalk);
   animation: waypoint-ring 0.9s ease-out 0.1s both;
 }
 
 .trail__waypoint.is-current {
-  background: var(--brass);
-  border-color: var(--brass);
-  box-shadow: 0 0 0 6px rgba(200, 161, 90, 0.16), 0 0 20px rgba(200, 161, 90, 0.6);
+  background: var(--chalk);
+  border-color: var(--chalk);
+  box-shadow: 0 0 0 6px rgba(214, 216, 222, 0.16), 0 0 20px rgba(214, 216, 222, 0.6);
 }
 
 @keyframes waypoint-ring {
@@ -201,9 +198,12 @@
   place-items: center;
   width: 96px;
   height: 96px;
-  border-radius: 22px;
-  background: linear-gradient(160deg, #ffffff, #e6f1fb);
-  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.06), 0 10px 24px -12px rgba(0, 0, 0, 0.6);
+  border-radius: var(--radius-sm);
+  /* A bone tile, not the pale blue gradient left over from the rejected blue
+     scheme. Dark logos need a light ground to clear contrast — Flutter's
+     #02569b runs 2.65:1 on the page and 6.07:1 here. */
+  background: #eee6e0;
+  box-shadow: var(--plate-emboss);
   overflow: hidden;
 }
 
@@ -219,7 +219,7 @@
   font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 800;
-  color: var(--slate);
+  color: var(--ground);
 }
 
 .timeline__body {
@@ -242,8 +242,8 @@
   border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #17140c;
-  background: var(--grad-primary);
+  color: var(--ground);
+  background: var(--chalk);
 }
 
 .timeline__role,
@@ -282,7 +282,7 @@
   font: inherit;
   text-align: left;
   cursor: pointer;
-  transition: transform 0.25s, box-shadow 0.25s;
+  transition: border-color 0.18s;
 }
 
 .card-button:active {
@@ -291,8 +291,7 @@
 }
 
 .card-button:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--glass-highlight), 0 30px 70px -28px rgba(0, 0, 0, 0.9), 0 10px 36px -14px rgba(200, 161, 90, 0.22);
+  border-color: var(--border-strong);
 }
 
 .card-button__cue {
@@ -332,63 +331,32 @@
   padding: 0;
 }
 
-.project-tilt {
-  --rx: 0deg;
-  --ry: 0deg;
-  --mx: 50%;
-  --my: 50%;
-  perspective: 1100px;
-}
-
+/* The pointer-following tilt, the sheen sweep and the image zoom are gone.
+   A hover trick on every card is a generated-design default, and the tilt
+   fought the single fixed light the rest of the page is built around. What a
+   card does on hover now is state, not performance: its border lights up. */
 .project {
   height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transform: rotateX(var(--rx)) rotateY(var(--ry));
-  transform-style: preserve-3d;
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s;
-  will-change: transform;
+  transition: border-color 0.18s;
 }
 
-.project-tilt:hover .project {
-  transition-duration: 0.08s, 0.35s;
-  box-shadow: var(--glass-highlight), 0 30px 70px -28px rgba(0, 0, 0, 0.9), 0 12px 40px -14px rgba(200, 161, 90, 0.22);
-}
-
-.project__sheen {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  border-radius: inherit;
-  background: radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.16), transparent 45%);
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
-}
-
-.project-tilt:hover .project__sheen {
-  opacity: 1;
+.project:hover {
+  border-color: var(--border-strong);
 }
 
 .project__media {
-  margin: 12px 12px 0;
+  margin: 10px 10px 0;
   aspect-ratio: 16 / 9;
-  border-radius: calc(var(--radius-lg) - 10px);
   overflow: hidden;
-  background: rgba(8, 8, 10, 0.6);
-  transform: translateZ(30px);
 }
 
 .project__media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.project-tilt:hover .project__media img {
-  transform: scale(1.04);
 }
 
 .project__body {
@@ -447,64 +415,59 @@
   color: var(--text-muted);
 }
 
-/* ---------- Skills ---------- */
-.skills-panel {
-  padding: var(--s-6);
+/* ---------- Skills ----------
+   Ruled rows, not meters. Each skill says where it shipped; a skill with
+   nothing behind it says nothing rather than claiming a percentage. */
+.skills-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: var(--s-7);
+}
+
+.skills-group__title {
+  margin: 0 0 var(--s-3);
+  padding-bottom: var(--s-2);
+  border-bottom: 1px solid var(--bevel);
+  font-family: var(--font-display);
+  font-size: var(--step-0);
+  font-weight: 600;
+  color: var(--ash);
 }
 
 .skills {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--s-5) var(--s-6);
+  gap: 0;
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.skill__head {
-  display: flex;
-  align-items: center;
+.skill {
+  display: grid;
+  grid-template-columns: 28px minmax(0, auto) minmax(0, 1fr);
+  align-items: baseline;
   gap: var(--s-3);
-  margin-bottom: var(--s-2);
+  padding-block: var(--s-3);
+  border-bottom: 1px solid var(--bevel);
 }
 
 .skill__icon {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  font-size: 1.1rem;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid var(--border);
+  font-size: 1.05rem;
+  line-height: 1;
+  transform: translateY(2px);
 }
 
 .skill__name {
-  flex: 1;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-.skill__percent {
-  font-size: var(--step--1);
+/* Where it shipped — the dense register. */
+.skill__where {
+  font-variation-settings: "wdth" 78;
   font-variant-numeric: tabular-nums;
-  color: var(--text-muted);
-}
-
-.skill__track {
-  height: 8px;
-  border-radius: 99px;
-  background: rgba(255, 255, 255, 0.07);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
-  overflow: hidden;
-}
-
-.skill__fill {
-  height: 100%;
-  border-radius: inherit;
-  background: var(--brass);
-  box-shadow: 0 0 12px rgba(200, 161, 90, 0.4);
-  transition: width 1.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+  font-size: var(--step--2);
+  color: var(--slate-text);
+  text-align: right;
 }
 
 /* ---------- GitHub ---------- */
@@ -636,14 +599,14 @@
 }
 
 .repo:hover {
-  background: rgba(200, 161, 90, 0.1);
-  border-color: rgba(224, 189, 128, 0.45);
+  background: rgba(214, 216, 222, 0.1);
+  border-color: rgba(255, 255, 255, 0.45);
 }
 
 .repo__icon {
   flex: none;
   font-size: 1.2rem;
-  color: var(--brass);
+  color: var(--slate-text);
 }
 
 .repo__main {
@@ -752,7 +715,7 @@
   font-family: var(--font-display);
   font-size: var(--step-1);
   font-weight: 700;
-  color: var(--brass);
+  color: var(--chalk);
 }
 
 /* ---------- Responsive ---------- */

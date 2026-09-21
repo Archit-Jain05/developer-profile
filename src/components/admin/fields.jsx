@@ -241,7 +241,7 @@ function FileInput({ kind, value, pendingFile, onPickFile, onClear }) {
         kind === "image" ? (
           <img className="file-input__preview" src={shown} alt="Preview" />
         ) : (
-          <a className="link-arrow" href={shown} target="_blank" rel="noopener noreferrer">
+          <a className="link-out" href={shown} target="_blank" rel="noopener noreferrer">
             {pendingFile ? pendingFile.name : "View current file"}
           </a>
         )
