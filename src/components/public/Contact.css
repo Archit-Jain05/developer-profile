@@ -127,9 +127,11 @@
   border-color: var(--accent);
 }
 
+/* The field edge carries the colour; the message itself stays white so it
+   meets contrast at this small size. */
 .field__error {
   font-size: var(--step--2);
-  color: var(--accent);
+  color: var(--ink);
 }
 
 .contact-form .btn {

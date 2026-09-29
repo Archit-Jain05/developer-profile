@@ -137,7 +137,7 @@ function Board({ skills, legends, layout, palette, reducedMotion, visibleRef, on
     <group rotation={[0, -0.1, 0]}>
       {/* The case the keys sit in, in the card colour. */}
       <RoundedBox args={[layout.width + 0.56, 0.3, layout.rows + 0.56]} radius={0.16} smoothness={4} position={[0, -0.26, 0]}>
-        <meshStandardMaterial color={palette.secondary} roughness={0.6} metalness={0.1} />
+        <meshStandardMaterial color={palette.case} roughness={0.6} metalness={0.1} />
       </RoundedBox>
       {layout.keys.map((k, i) => (
         <Key
@@ -147,8 +147,8 @@ function Board({ skills, legends, layout, palette, reducedMotion, visibleRef, on
           z={k.z}
           w={k.w}
           legend={legends[i]}
-          cap={i === hiKey ? palette.accent : palette.cap}
-          glow={i === hiKey ? palette.secondary : palette.accent}
+          cap={i === hiKey ? palette.ink : palette.cap}
+          glow={i === hiKey ? palette.case : palette.accent}
           pressedAt={pressedAt}
           onPress={press}
           onTouch={touch}
@@ -182,10 +182,9 @@ export default function KeyboardScene({ skills, onSayHi }) {
 
   const palette = useMemo(
     () => ({
-      cap: token("--base-2", "#111111"),
-      secondary: token("--secondary", "#6d001a"),
-      accent: token("--accent", "#ffffff"),
-      base: token("--base", "#000000"),
+      cap: token("--base-2", "#0d0d0d"),
+      case: token("--accent-fill", "#6d001a"),
+      accent: token("--accent", "#c94d69"),
       ink: token("--ink", "#ffffff"),
     }),
     [],
@@ -205,7 +204,7 @@ export default function KeyboardScene({ skills, onSayHi }) {
         made = layout.keys.map((k, i) =>
           i < skills.length
             ? makeLegend(skills[i].name, k.w, { cap: palette.cap, ink: palette.ink, mark: getSkillIcon(skills[i].icon).color })
-            : makeLegend("Say hi", k.w, { cap: palette.accent, ink: palette.base }),
+            : makeLegend("Say hi", k.w, { cap: palette.ink, ink: palette.case }),
         );
         setLegends(made);
       });

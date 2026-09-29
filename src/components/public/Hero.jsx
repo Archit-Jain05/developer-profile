@@ -92,11 +92,8 @@ export default function Hero({ profile }) {
           </p>
         )}
 
-        <div className="hero__corner hero__corner--left">
-          <p className="hero__tagline">{profile.tagline}</p>
-        </div>
-
         <div className="hero__corner hero__corner--right">
+          <p className="hero__tagline">{profile.tagline}</p>
           <a href="#projects" className="btn btn--primary">
             See projects
           </a>

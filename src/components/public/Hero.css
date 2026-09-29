@@ -53,7 +53,8 @@
   transform: translate3d(calc(var(--mx) * -24px), calc(var(--my) * -8px), 0);
 }
 
-/* One gradient across the word, white into the full burgundy. Each letter
+/* One gradient across the word, white into the lighter burgundy (the palette
+   burgundy is too dark to read on black at the end of the word). Each letter
    paints its own slice: --word-w and --x are measured in Hero.jsx. The padding
    (cancelled by an equal negative margin) gives overhanging glyph edges room,
    so the tight tracking does not shave them off. */
@@ -62,7 +63,7 @@
   padding: 0.12em 0.08em;
   margin: -0.12em -0.08em;
   color: transparent;
-  background: linear-gradient(90deg, var(--ink) 0%, var(--secondary) 100%)
+  background: linear-gradient(90deg, var(--ink) 0%, var(--accent) 100%)
     calc(-1 * var(--x, 0px)) 0 / var(--word-w, 100%) 100% no-repeat;
   -webkit-background-clip: text;
   background-clip: text;
@@ -74,7 +75,7 @@
   z-index: 2;
   left: 50%;
   bottom: 0;
-  height: min(72svh, 792px);
+  height: min(62svh, 680px);
   translate: -50% 0;
   transform: translate3d(calc(var(--mx) * 8px), calc(var(--my) * 8px), 0);
 }
@@ -88,19 +89,21 @@
   filter: drop-shadow(0 32px 64px rgba(0, 0, 0, 0.6));
 }
 
-/* The surname crosses in front of the portrait, in the serif. */
+/* The surname, as the reference sets it: level, in the serif italic, low on
+   the left, starting beside the figure and crossing the lower torso — clear
+   of the face. */
 .hero__last {
   position: absolute;
   z-index: 3;
-  left: 54%;
-  top: 56%;
+  left: 20%;
+  top: 70%;
   margin: 0;
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: clamp(3.5rem, 10vw, 10rem);
+  font-size: clamp(3.5rem, 8.4vw, 8.5rem);
   line-height: 1;
-  color: var(--accent);
-  transform: translate3d(calc(var(--mx) * 32px), calc(var(--my) * 16px), 0) rotate(-8deg);
+  color: var(--ink);
+  transform: translate3d(calc(var(--mx) * 32px), calc(var(--my) * 16px), 0);
   text-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
   pointer-events: none;
 }
@@ -113,11 +116,6 @@
   bottom: 40px;
 }
 
-.hero__corner--left {
-  left: var(--gutter);
-  max-width: 20ch;
-}
-
 .hero__corner--right {
   right: var(--gutter);
   display: flex;
@@ -126,11 +124,14 @@
   gap: var(--sp-2);
 }
 
+/* The one-line pitch on the right, in the serif, as the reference does. */
 .hero__tagline {
-  font-size: var(--step-2);
-  font-weight: 500;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
+  max-width: 14ch;
+  margin-bottom: var(--sp-1);
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 2.6vw, 2.5rem);
+  line-height: 1.1;
+  text-align: right;
   color: var(--ink);
 }
 
@@ -154,7 +155,7 @@
   }
 
   html[data-revealed] .hero__last {
-    animation: fade-in 1s var(--ease-out) 720ms both;
+    animation: slide-in 1.2s var(--ease-out) 640ms both;
   }
 
   html[data-revealed] .hero__corner {
@@ -219,6 +220,17 @@
   }
 }
 
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    translate: -48px 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
 @keyframes recede {
   to {
     scale: 0.94;
@@ -242,7 +254,7 @@
 /* ---------- Smaller screens ---------- */
 @media (max-width: 1199px) {
   .hero__person {
-    height: min(61svh, 648px);
+    height: min(53svh, 560px);
   }
 }
 
@@ -256,15 +268,15 @@
   }
 
   .hero__person {
-    height: 58svh;
+    height: 52svh;
   }
 
   .hero__last {
-    left: 58%;
-    top: 70%;
+    left: var(--gutter);
+    top: 60%;
   }
 
-  .hero__corner--left {
+  .hero__tagline {
     display: none;
   }
 

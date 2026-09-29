@@ -1,32 +1,33 @@
 :root {
   /* ---------------------------------------------------------------------
-     Palette: black, burgundy, white — in an 80 / 15 / 5 split.
+     Palette: white leads, on a dark site.
 
-     --base       80%  the page: true black
-     --secondary  15%  cards, panels, the 3D stages: burgundy #6D001A, 21 L*
-                       above the page, so a card visibly sits on it
-     --accent      5%  buttons and anything that needs direct attention:
-                       white. Burgundy cannot do this job — it is only
-                       1.67:1 against black, so a burgundy button or line
-                       would barely show.
-     --ink             text. The -2 / -3 steps are greys chosen to stay
-                       readable on burgundy as well as on black.
+     --ink          white — the main colour: headings, text, the name
+     --base         black — the page
+     --secondary    near-black cards and panels, 9 L* above the page so they
+                    read as a separate surface
+     --accent-fill  the palette burgundy #6D001A, for filled buttons and tags
+                    with white on top (12.6:1)
+     --accent       a lighter burgundy for anything drawn on black — lines,
+                    dots, focus rings, the end of the name. The palette
+                    burgundy is only 1.67:1 against black, so a thin line or
+                    letter in it disappears; this one is 4.75:1.
 
      Technology logos keep their own brand colours.
      --------------------------------------------------------------------- */
   --base: #000000;
-  --base-2: #111111;      /* lifted wells: inputs, the contribution calendar */
-  --secondary: #6d001a;
-  --secondary-2: #85082a; /* raised inside a card, hover state */
-  --accent: #ffffff;      /* 21:1 on black; the label on an accent button is black */
-  --accent-2: #e4e4e4;    /* accent hover */
-  --ink: #ffffff;         /* headings, primary text — 12.6:1 on burgundy */
-  --ink-2: #d0d0d0;       /* body text — 8:1 on burgundy */
-  --ink-3: #adadad;       /* meta: dates, counts, captions — 5.6:1 on burgundy */
+  --base-2: #0d0d0d;      /* wells: inputs, the contribution calendar */
+  --secondary: #1a1a1a;
+  --secondary-2: #262626; /* raised inside a card, hover state */
+  --accent-fill: #6d001a;
+  --accent: #c94d69;
+  --ink: #ffffff;
+  --ink-2: #d0d0d0;       /* body text — 11.9:1 on a card */
+  --ink-3: #a6a6a6;       /* meta: dates, counts, captions — 7.6:1 on a card */
 
   --line: rgba(255, 255, 255, 0.12);
   --line-strong: rgba(255, 255, 255, 0.24);
-  --accent-soft: rgba(255, 255, 255, 0.16);
+  --accent-soft: rgba(201, 77, 105, 0.18);
   --shadow-card: 0 24px 48px -24px rgba(0, 0, 0, 0.9);
 
   /* Blur only where it means something: the sticky nav over moving content

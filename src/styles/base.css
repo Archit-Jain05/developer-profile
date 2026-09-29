@@ -47,8 +47,8 @@ select {
 }
 
 ::selection {
-  background: var(--accent);
-  color: var(--base);
+  background: var(--accent-fill);
+  color: var(--ink);
 }
 
 h1,
@@ -186,9 +186,9 @@ h3 {
    The accent is for buttons and anything that needs direct attention — about
    5% of the page.
 
-   On hover (and keyboard focus) a fill rises from the bottom of the pill and
-   the label swaps colour with it: burgundy floods the white primary button,
-   white floods the outlined one. The button lifts slightly, its icon dips,
+   On hover (and keyboard focus) a white fill rises from the bottom of the
+   pill and the label swaps colour with it. The primary button is the palette
+   burgundy with a lighter burgundy edge, so its outline still reads on black. The button lifts slightly, its icon dips,
    and pressing gives a small squash. */
 .btn {
   --btn-fill: transparent;
@@ -252,18 +252,20 @@ h3 {
 }
 
 .btn--primary {
-  --btn-fill: var(--secondary);
-  --btn-ink-hover: var(--ink);
-  background: var(--accent);
-  color: var(--base);
+  --btn-fill: var(--ink);
+  --btn-ink-hover: var(--accent-fill);
+  background: var(--accent-fill);
+  border-color: var(--accent);
+  color: var(--ink);
 }
 
 .btn--primary:is(:hover, :focus-visible):not(:disabled) {
-  box-shadow: 0 16px 32px -16px rgba(109, 0, 26, 0.9);
+  border-color: var(--ink);
+  box-shadow: 0 16px 32px -16px rgba(201, 77, 105, 0.7);
 }
 
 .btn--ghost {
-  --btn-fill: var(--accent);
+  --btn-fill: var(--ink);
   --btn-ink-hover: var(--base);
   background: transparent;
   border-color: var(--line-strong);
@@ -271,7 +273,7 @@ h3 {
 }
 
 .btn--ghost:is(:hover, :focus-visible):not(:disabled) {
-  border-color: var(--accent);
+  border-color: var(--ink);
 }
 
 .btn--sm {
