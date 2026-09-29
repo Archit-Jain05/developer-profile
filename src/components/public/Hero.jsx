@@ -1,6 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { FiDownload } from "react-icons/fi";
-import cutout from "../../assets/archit-cutout.webp";
 import { supportsWebGL } from "../../lib/webgl.js";
 import SceneBoundary from "./SceneBoundary.jsx";
 
@@ -68,7 +67,10 @@ export default function Hero({ profile }) {
         </h1>
 
         <div className="hero__person">
-          <img className="hero__cutout" src={cutout} alt={profile.full_name} width="1171" height="1102" fetchPriority="high" draggable={false} />
+          <img
+            className="hero__cutout"
+            src={profile.hero_image_url || "/seed/archit-cutout.webp"}
+            alt={profile.full_name} width="1171" height="1102" fetchPriority="high" draggable={false} />
         </div>
 
         {last && (

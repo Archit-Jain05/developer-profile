@@ -1,17 +1,21 @@
-# Supabase pauses free projects after a week without database activity.
-# This runs a tiny read query every 3 days so the portfolio backend stays awake.
+# Supabase pauses free projects after a week without activity. This job writes
+# one timestamp to a hidden table (internal.heartbeat, via public.heartbeat())
+# so the database always sees real activity. Nothing on the site reads it.
+#
+# It runs twice a week rather than once: a weekly run sits exactly on the
+# seven-day limit, and GitHub can delay scheduled jobs by hours.
 name: Supabase keep-alive
 
 on:
   schedule:
-    - cron: "17 6 */3 * *"
+    - cron: "17 6 * * 1,4" # Mondays and Thursdays, 06:17 UTC
   workflow_dispatch:
 
 jobs:
-  ping:
+  heartbeat:
     runs-on: ubuntu-latest
     steps:
-      - name: Query the profile table
+      - name: Write the heartbeat
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
@@ -20,7 +24,15 @@ jobs:
             echo "::error::Add SUPABASE_URL and SUPABASE_ANON_KEY as repository secrets."
             exit 1
           fi
-          curl --fail --silent --show-error \
-            "$SUPABASE_URL/rest/v1/profile?select=id" \
+          status=$(curl --silent --show-error --output response.json --write-out "%{http_code}" \
+            -X POST "$SUPABASE_URL/rest/v1/rpc/heartbeat" \
             -H "apikey: $SUPABASE_ANON_KEY" \
-            -H "Authorization: Bearer $SUPABASE_ANON_KEY"
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{}')
+          if [ "$status" != "200" ]; then
+            echo "::error::Heartbeat failed with HTTP $status: $(cat response.json)"
+            echo "If it says the function does not exist, run supabase/migrations/20260929000000_heartbeat_and_copy.sql in the SQL Editor."
+            exit 1
+          fi
+          echo "Heartbeat written at $(cat response.json)"

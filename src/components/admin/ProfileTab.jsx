@@ -6,10 +6,15 @@ import EntityForm from "./EntityForm.jsx";
 
 const PROFILE_FIELDS = [
   { name: "full_name", label: "Full name", type: "text", required: true },
-  { name: "eyebrow", label: "Title (e.g. Software Developer)", type: "text" },
-  { name: "tagline", label: "Hero tagline", type: "text" },
-  { name: "intro", label: "Hero intro", type: "textarea" },
-  { name: "hero_image_url", label: "Profile photo (shown in About)", type: "image", folder: "profile" },
+  { name: "eyebrow", label: "Title (e.g. Software Developer, used in the browser tab)", type: "text" },
+  { name: "tagline", label: "Tagline (right-hand side of the hero)", type: "text" },
+  { name: "intro", label: "Intro (the large statement just below the hero)", type: "textarea" },
+  {
+    name: "hero_image_url",
+    label: "Hero photo: yourself with the background removed (transparent PNG or WebP)",
+    type: "image",
+    folder: "profile",
+  },
   { name: "resume_url", label: "Résumé (PDF)", type: "pdf", folder: "resume" },
   { name: "about_heading", label: "About heading", type: "text" },
   { name: "about_body", label: "About text (blank line between paragraphs)", type: "textarea" },

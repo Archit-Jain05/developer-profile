@@ -9,8 +9,6 @@ describe("toFormValues", () => {
     expect(toFormValues(byTable.skills.fields)).toEqual({
       name: "",
       icon: "",
-      percent: "80",
-      show_in_hero: false,
     });
   });
 
@@ -46,9 +44,10 @@ describe("fromFormValues", () => {
   });
 
   it("reports required, range and url errors", () => {
-    const { errors } = fromFormValues(byTable.skills.fields, { name: "", icon: "", percent: "150", show_in_hero: false });
+    const { errors } = fromFormValues(byTable.skills.fields, { name: "", icon: "" });
     expect(errors.name).toMatch(/required/);
-    expect(errors.percent).toMatch(/at most 100/);
+    const edu = fromFormValues(byTable.education.fields, { end_year: "2150" });
+    expect(edu.errors.end_year).toMatch(/at most 2100/);
 
     const project = fromFormValues(byTable.projects.fields, { title: "X", tech: [], github_url: "github.com/x" });
     expect(project.errors.github_url).toMatch(/https?/);

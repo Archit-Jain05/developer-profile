@@ -9,11 +9,11 @@ export const fallbackContent = {
     eyebrow: "Software Developer",
     tagline: "I build apps for web and mobile.",
     intro:
-      "I'm an IT student in Mumbai who freelances and interns as a developer. Most of what I ship is client-facing: Shopify storefronts, Next.js sites and a Flutter app.",
-    about_heading: "About",
+      "I'm an IT student at DJSCE in Mumbai who builds for real clients alongside my degree: Shopify storefronts, Next.js platforms and a Flutter app. Right now I'm a software developer at ZootechX.",
+    about_heading: "Building real products since my diploma",
     about_body:
-      "I'm an Information Technology student who loves turning ideas into real products. I'm especially interested in Artificial Intelligence and Machine Learning, and I want to bring them into apps I build for Android, Windows and the web. I also work as a freelance developer.\n\nRight now I'm learning cross-platform development with Flutter. I'm always happy to collaborate on challenging projects built with the latest technology, so feel free to reach out by email or on LinkedIn.",
-    hero_image_url: "/seed/archit.jpg",
+      "I started building for clients during my diploma in Information Technology: a website for Dcyber Techlabs' Africa region, then a year looking after Hophead.co's Shopify and React storefronts. Today I'm studying for my B.Tech at DJSCE and working as a software developer at ZootechX, where I build client platforms like Velora and talk to clients directly about what they need.\n\nI freelance too. ASMAAN, a 3D Shopify storefront for a botanical drink brand, is in pre-launch now. And I build things to learn from, like a capture-the-flag platform set on a 3D island and MoneyMind, a Flutter app that scans bills and turns them into invoices. Next, I want to bring machine learning into the apps I make. If you have a project, or a role where that fits, I'd like to hear about it.",
+    hero_image_url: "/seed/archit-cutout.webp",
     resume_url: "/seed/resume.pdf",
     email: "architjain2005@gmail.com",
     phone: "+91 7710990629",
@@ -21,7 +21,7 @@ export const fallbackContent = {
     github_url: "https://github.com/Archit-Jain05",
     linkedin_url: "https://www.linkedin.com/in/archit-jain-6021711aa",
     contact_blurb:
-      "I'm always open to discussing new projects, freelance work and opportunities. Let's build something great together!",
+      "Tell me what you're building and when you need it. I reply by email, usually within a day or two.",
     stats: [
       { value: "4+", label: "Years building", icon: "calendar" },
       { value: "3", label: "Roles", icon: "briefcase" },
@@ -141,18 +141,18 @@ export const fallbackContent = {
     {
       id: "p3",
       title: "Velora",
-      description: "A TypeScript and Next.js project.",
+      description: "Luxury travel platform for curated journeys, with a departures calendar, enquiries, and an admin for editing itineraries day by day.",
       image_url: PROJECT_PLACEHOLDER,
       tech: ["Next.js", "TypeScript"],
       github_url: "https://github.com/Archit-Jain05/Velora",
       live_url: "https://velora-ashen-psi.vercel.app",
-      experience_id: null,
+      experience_id: "e1",
       sort_order: 3,
     },
     {
       id: "p4",
       title: "bb3",
-      description: "A TypeScript and Next.js project.",
+      description: "Capture-the-flag platform with challenges in seven categories, team scoring, hints and a live leaderboard, set on a 3D island.",
       image_url: PROJECT_PLACEHOLDER,
       tech: ["Next.js", "TypeScript"],
       github_url: "https://github.com/Archit-Jain05/bb3",

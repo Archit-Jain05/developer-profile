@@ -54,12 +54,20 @@ Every line should say `PASS`. The check leaves one test message named "RLS check
 ## 6. Keep the free project awake
 
 Supabase pauses free projects after a week with too little database activity. The workflow in
-`.github/workflows/supabase-keepalive.yml` queries the database every 3 days.
+`.github/workflows/supabase-keepalive.yml` writes a heartbeat every Monday and Thursday: it calls
+`public.heartbeat()`, which bumps one timestamp in `internal.heartbeat`. That table sits in a schema
+the API does not expose, so nothing about it appears on the site or in `/admin`.
 
-1. Push the repo to GitHub.
-2. **Repo → Settings → Secrets and variables → Actions → New repository secret**, add
+1. Run `supabase/migrations/20260929000000_heartbeat_and_copy.sql` in the SQL Editor (it creates the
+   heartbeat, and also updates the site copy).
+2. Push the repo to GitHub.
+3. **Repo → Settings → Secrets and variables → Actions → New repository secret**, add
    `SUPABASE_URL` and `SUPABASE_ANON_KEY` (same values as `.env`).
-3. **Actions → Supabase keep-alive → Run workflow** once to confirm it goes green.
+4. **Actions → Supabase keep-alive → Run workflow** once to confirm it goes green. The log ends with
+   the time the heartbeat was written.
+
+GitHub switches off scheduled workflows in a repository with no commits for 60 days. If that
+happens, it emails you; re-enable the workflow from the Actions tab.
 
 If the project ever does pause, the site automatically shows the bundled content instead of breaking.
 Restore the project from the Supabase dashboard.

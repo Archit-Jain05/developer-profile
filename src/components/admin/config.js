@@ -14,12 +14,14 @@ export const ENTITY_CONFIGS = [
     fields: [
       { name: "name", label: "Name", type: "text", required: true, maxLength: 60 },
       { name: "icon", label: "Icon", type: "icon" },
-      { name: "percent", label: "Percent", type: "number", required: true, min: 0, max: 100, default: 80 },
-      { name: "show_in_hero", label: "Show in hero “Technologies I work with” row", type: "checkbox", default: false },
     ],
+    // The site groups skills by the projects that list them in their tech tags
+    // ("Shipped with" / "Working with"), and each one becomes a key on the 3D
+    // keyboard. The old percent and show-in-hero columns are no longer shown
+    // anywhere, so they are left out of the form (the database has defaults).
     summary: (item) => ({
       title: item.name,
-      subtitle: `${item.percent}%${item.show_in_hero ? " · shown in hero" : ""}`,
+      subtitle: "Match a project's tech tag exactly to list it under “Shipped with”",
       icon: getSkillIcon(item.icon),
     }),
   },
@@ -77,8 +79,8 @@ export const ENTITY_CONFIGS = [
     fields: [
       { name: "title", label: "Title", type: "text", required: true },
       { name: "description", label: "Description", type: "textarea" },
-      { name: "image_url", label: "Screenshot", type: "image", folder: "projects" },
-      { name: "tech", label: "Tech tags", type: "tags" },
+      { name: "image_url", label: "Screenshot (shown on the 3D laptop or phone screen)", type: "image", folder: "projects" },
+      { name: "tech", label: "Tech tags (Flutter or Dart shows it on a phone, anything else on a laptop)", type: "tags" },
       { name: "github_url", label: "GitHub URL", type: "url" },
       { name: "live_url", label: "Live URL", type: "url" },
       {
