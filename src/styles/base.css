@@ -13,8 +13,8 @@ html {
 
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--text);
+  background: var(--base);
+  color: var(--ink);
   font-family: var(--font);
   font-size: var(--step-0);
   line-height: 1.65;
@@ -22,9 +22,6 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
-
-/* Text stays selectable. The whole point of the site is being contacted, and
-   an unselectable body means nobody can copy the email or phone number. */
 
 img {
   max-width: 100%;
@@ -45,13 +42,13 @@ select {
 }
 
 :focus-visible {
-  outline: 2px solid var(--chalk);
-  outline-offset: 3px;
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
 }
 
 ::selection {
-  background: var(--chalk);
-  color: var(--ground);
+  background: var(--accent);
+  color: var(--base);
 }
 
 h1,
@@ -66,102 +63,156 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  font-variation-settings: "wdth" 112;
   font-weight: 600;
   letter-spacing: var(--track-display);
+  color: var(--ink);
 }
 
+/* ---------- Layout ----------
+   Full width with gutters, on a 12-column grid. Sections compose across the
+   columns — side titles, splits, bento arrangements — instead of stacking
+   inside one narrow column down the middle. */
 .container {
   width: 100%;
   max-width: var(--max-width);
   margin-inline: auto;
-  padding-inline: var(--s-5);
+  padding-inline: var(--gutter);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+  row-gap: var(--sp-6);
 }
 
 .section {
   position: relative;
-  padding-block: var(--s-7);
+  padding-block: var(--section-space) 0;
 }
 
+/* Everything after the hero is one sheet that slides up over the pinned hero,
+   its leading edge cut on a slant. It is opaque, so the hero disappears
+   beneath it rather than scrolling away. */
+.sheet {
+  position: relative;
+  z-index: 1;
+  padding-top: var(--sp-8);
+  background: var(--base);
+  clip-path: polygon(0 0, 100% var(--sp-8), 100% 100%, 0 100%);
+  /* Elements waiting to slide in from the side must not widen the page. */
+  overflow-x: clip;
+}
+
+/* Split head: the title on the left, a single supporting line on the right,
+   sharing a baseline. Used where a section opens across the full width. */
 .section-head {
   display: grid;
-  gap: var(--s-2);
-  max-width: 62ch;
-  margin-bottom: var(--s-6);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+  row-gap: var(--sp-2);
+  align-items: end;
+  margin-bottom: var(--sp-8);
+}
+
+.section-head > .section-title {
+  grid-column: 1 / span 7;
+}
+
+.section-head > .section-lede {
+  grid-column: 8 / span 5;
 }
 
 .section-title {
   font-size: var(--step-3);
+  line-height: 1.2;
+}
+
+/* Full-width sections open with the heading set large and tight, the way the
+   hero sets the name. Titles in a side column stay at the smaller step. */
+.section-head > .section-title {
+  font-size: clamp(3rem, 7.5vw, 8rem);
   font-weight: 600;
-  line-height: 1.25;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+}
+
+/* An occasional phrase in the serif italic, set at a slight angle across the
+   heavy sans — used in a couple of headings, not all of them. */
+.serif {
+  display: inline-block;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--ink-2);
+  rotate: -4deg;
+  translate: 0 0.08em;
 }
 
 .section-lede {
-  color: var(--text-muted);
-  font-size: 1.05rem;
+  max-width: 48ch;
+  color: var(--ink-2);
+  font-size: var(--step-1);
+  line-height: 1.55;
 }
 
 .muted {
-  color: var(--text-muted);
+  color: var(--ink-2);
 }
 
 /* ---------- Surfaces ----------
-   Three roles, each recognisable at a glance, replacing the one translucent
-   recipe that used to be worn by nine different content types at once.
-
-   .plate  a solid panel sitting ON the page
-   .well   a recess cut INTO the page — screens, inputs, calendars
-   (a third role, bare content separated by rules, needs no class)
-
-   Depth is one hairline of light along the top edge and a soft shadow beneath
-   — enough to lift a surface off the page without the heavy machined emboss
-   that reads as material rather than as minimal. */
+   The secondary colour is for cards and panels — about 15% of the page. A
+   card sits flat on the base and is told apart by its fill alone (9 L*
+   above the page). No drop shadow: shadows are kept for the few things that
+   actually float over the page — the scrolled nav and the dialogs. Radius
+   follows size: large panels round more than cards, cards more than rows. */
+.card,
 .plate,
 .glass {
   position: relative;
-  background: var(--plate-fill);
-  border: 1px solid var(--hairline);
+  background: var(--secondary);
   border-radius: var(--radius);
-  box-shadow: var(--plate-emboss), var(--plate-shadow);
-  isolation: isolate;
 }
 
 .well {
-  background: var(--well-fill);
-  border: 1px solid var(--hairline);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--well-emboss);
-}
-
-/* Admin and other plain surfaces */
-.card {
-  background: var(--surface);
-  border: 1px solid var(--hairline);
+  background: var(--base-2);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
-  box-shadow: var(--plate-emboss);
+  box-shadow: inset 0 1px 2px rgba(1, 10, 12, 0.6);
 }
 
-/* ---------- Buttons ---------- */
+/* ---------- Buttons ----------
+   The accent is for buttons and anything that needs direct attention — about
+   5% of the page. Everything else stays in the base and secondary colours. */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--s-2);
-  /* 44px minimum target. */
-  min-height: 44px;
-  padding: 11px 22px;
+  gap: var(--sp-1);
+  min-height: 48px;
+  padding: var(--sp-1) var(--sp-3);
   border-radius: var(--radius-pill);
   border: 1px solid transparent;
   font-size: var(--step--1);
   font-weight: 600;
+  letter-spacing: 0.01em;
   cursor: pointer;
-  transition: background 0.18s, border-color 0.18s, color 0.18s;
   white-space: nowrap;
+  transition:
+    background 0.24s var(--ease-out),
+    border-color 0.24s var(--ease-out),
+    color 0.24s var(--ease-out),
+    translate 0.24s var(--ease-out),
+    box-shadow 0.24s var(--ease-out);
+}
+
+.btn svg {
+  transition: translate 0.24s var(--ease-out);
 }
 
 .btn:active:not(:disabled) {
-  transform: translateY(0) scale(0.97);
-  transition-duration: 0.08s;
+  scale: 0.97;
 }
 
 .btn:disabled {
@@ -169,92 +220,98 @@ h3 {
   cursor: not-allowed;
 }
 
-/* There is no accent hue, so emphasis is inversion: the brightest value on
-   the page, filled, with the page's own ground as the label. 17.3:1. */
 .btn--primary {
-  background: var(--chalk);
-  color: var(--ground);
+  background: var(--accent);
+  color: var(--base);
 }
 
 .btn--primary:hover:not(:disabled) {
-  background: #ffffff;
+  background: var(--accent-2);
+  translate: 0 -2px;
+  box-shadow: 0 16px 32px -16px rgba(250, 143, 120, 0.6);
+}
+
+.btn--primary:hover:not(:disabled) svg {
+  translate: 0 2px;
 }
 
 .btn--ghost {
   background: transparent;
-  border-color: var(--border-strong);
-  color: var(--text);
+  border-color: var(--line-strong);
+  color: var(--ink);
 }
 
 .btn--ghost:hover:not(:disabled) {
-  border-color: var(--chalk);
-  color: var(--chalk);
+  border-color: var(--ink);
+  background: var(--secondary);
 }
 
 .btn--sm {
-  min-height: 36px;
-  padding: 7px 14px;
+  min-height: 40px;
+  padding: var(--sp-1) var(--sp-2);
   font-size: var(--step--2);
 }
 
-/* Reserved for links that genuinely leave the site, where the arrow means
-   "opens in a new tab". Everything internal is a plain underlined link. */
-.link-out {
+/* Links that leave the site keep an arrow, because there it means "opens in a
+   new tab". Internal links are plain. Both underline on hover. */
+.link-out,
+.link-in {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  color: var(--text);
+  gap: var(--sp-1);
+  color: var(--ink);
   font-size: var(--step--1);
   font-weight: 600;
   text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-color: var(--border-strong);
-  transition: text-decoration-color 0.18s, color 0.18s;
+  text-underline-offset: 6px;
+  text-decoration-color: var(--line-strong);
+  transition: text-decoration-color 0.2s, color 0.2s;
 }
 
-.link-out:hover {
-  color: var(--chalk);
-  text-decoration-color: var(--chalk);
-}
-
-/* Internal navigation: no arrow. */
-.link-in {
-  color: var(--text);
-  font-size: var(--step--1);
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-color: var(--border-strong);
-  transition: text-decoration-color 0.18s, color 0.18s;
-}
-
+.link-out:hover,
 .link-in:hover {
-  color: var(--chalk);
-  text-decoration-color: var(--chalk);
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tags li {
+  padding: 0 var(--sp-2);
+  line-height: 32px;
+  border-radius: var(--radius-pill);
+  background: var(--secondary-2);
+  color: var(--ink-2);
+  font-size: var(--step--2);
 }
 
 .skeleton {
-  background: linear-gradient(90deg, var(--plinth) 0%, var(--surface) 50%, var(--plinth) 100%);
+  background: linear-gradient(90deg, var(--secondary) 0%, var(--secondary-2) 50%, var(--secondary) 100%);
   background-size: 200% 100%;
   animation: shimmer 1.4s infinite;
-  border-radius: var(--radius-sm);
-}
-
-/* The dense register: dates, counts, scores. Archivo narrowed rather than a
-   third monospace family, so numbers still line up in columns without the
-   tracked-out mono label that reads as template chrome. */
-.data {
-  font-variation-settings: "wdth" 78;
-  font-variant-numeric: tabular-nums;
-  font-size: var(--step--2);
-  color: var(--slate-text);
-  letter-spacing: 0.01em;
+  border-radius: var(--radius);
 }
 
 @keyframes shimmer {
   to {
     background-position: -200% 0;
   }
+}
+
+/* The dense register: dates, counts, scores. Archivo narrowed rather than a
+   monospace face, so numbers line up without a tracked-out mono label. */
+.data {
+  font-variation-settings: "wdth" 88;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--step--2);
+  color: var(--ink-3);
 }
 
 .visually-hidden {
@@ -264,6 +321,129 @@ h3 {
   overflow: hidden;
   clip: rect(0 0 0 0);
   white-space: nowrap;
+}
+
+/* ---------- Motion ----------
+   Scroll animations use CSS scroll-driven timelines, so they cost no
+   JavaScript and track the scrollbar exactly, including when scrolling back
+   up. Browsers without support, and anyone who asks for reduced motion, get
+   the finished state: content is never hidden behind an animation that
+   cannot run. */
+.scroll-progress {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 72%;
+    }
+
+    .reveal--left {
+      animation-name: reveal-left;
+    }
+
+    .reveal--right {
+      animation-name: reveal-right;
+    }
+
+    .reveal--scale {
+      animation-name: reveal-scale;
+    }
+
+    /* Titles wipe up out of a clip, like a line of type being set. */
+    .reveal-title {
+      animation: reveal-clip linear both;
+      animation-timeline: view();
+      animation-range: entry 8% entry 88%;
+    }
+
+    /* Children of a stagger group arrive one after another as the group
+       scrolls in; --i is set per child in the markup. */
+    .stagger > * {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry calc(var(--i, 0) * 8%) entry calc(64% + var(--i, 0) * 8%);
+    }
+
+    .scroll-progress {
+      display: block;
+      position: fixed;
+      z-index: 100;
+      inset: 0 0 auto;
+      height: 3px;
+      background: var(--accent);
+      transform-origin: 0 50%;
+      animation: grow-x linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    translate: 0 48px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes reveal-left {
+  from {
+    opacity: 0;
+    translate: -64px 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes reveal-right {
+  from {
+    opacity: 0;
+    translate: 64px 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes reveal-scale {
+  from {
+    opacity: 0;
+    scale: 0.92;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes reveal-clip {
+  from {
+    clip-path: inset(0 0 100% 0);
+    translate: 0 32px;
+  }
+  to {
+    clip-path: inset(0 0 -16px 0);
+    translate: 0 0;
+  }
+}
+
+@keyframes grow-x {
+  from {
+    scale: 0 1;
+  }
+  to {
+    scale: 1 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -279,16 +459,16 @@ h3 {
   }
 }
 
-@media (max-width: 767px) {
-  .section {
-    padding-block: var(--s-6);
+/* ---------- Narrow screens ----------
+   Every multi-column composition collapses to one column; the side titles
+   move back above their content. */
+@media (max-width: 1023px) {
+  .section-head > .section-title,
+  .section-head > .section-lede {
+    grid-column: 1 / -1;
   }
-  .container {
-    padding-inline: var(--s-4);
-  }
-  h1,
-  h2,
-  h3 {
-    font-variation-settings: "wdth" 104;
+
+  .section-head {
+    margin-bottom: var(--sp-6);
   }
 }

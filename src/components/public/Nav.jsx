@@ -31,7 +31,7 @@ export default function Nav({ resumeUrl, name = "Archit Jain", githubUrl, linked
 
   return (
     <header className={`nav ${scrolled ? "is-scrolled" : ""}`}>
-      <div className="nav__bar glass">
+      <div className="nav__bar">
         <Link to="/" className={`nav__brand ${wordmark === name ? "nav__brand--spaced" : ""}`} onClick={close}>
           <img className="nav__mark" src={logo} alt="" width="26" height="26" />
           <span className="nav__wordmark" aria-hidden="true">{wordmark}</span>

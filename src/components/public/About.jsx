@@ -3,34 +3,37 @@ import "./Sections.css";
 
 export default function About({ profile }) {
   const stats = profile.stats ?? [];
+  const [lead, ...rest] = toParagraphs(profile.about_body);
 
   return (
     <section id="about" className="section">
-      <div className="container">
-        <div className="about glass">
-          <div className="about__text">
-            <h2 className="section-title">{profile.about_heading}</h2>
-            <div className="about__body">
-              {toParagraphs(profile.about_body).map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
-            </div>
-            <a href="#contact" className="link-in">
-              Start a conversation
-            </a>
-          </div>
+      <div className="container grid about">
+        {profile.intro && <p className="about__statement reveal">{profile.intro}</p>}
 
-          {stats.length > 0 && (
-            <dl className="stat-grid">
-              {stats.map((stat, i) => (
-                <div key={i} className="stat-grid__item">
-                  <dt>{stat.label}</dt>
-                  <dd>{stat.value}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
+        <div className="about__side">
+          <h2 className="section-title reveal-title">{profile.about_heading}</h2>
+          <a href="#contact" className="link-in">
+            Contact me
+          </a>
         </div>
+
+        <div className="about__body reveal">
+          {lead && <p className="about__lead">{lead}</p>}
+          {rest.map((p, i) => (
+            <p key={i}>{p}</p>
+          ))}
+        </div>
+
+        {stats.length > 0 && (
+          <dl className="about__stats stagger">
+            {stats.map((stat, i) => (
+              <div key={i} className="stat" style={{ "--i": i }}>
+                <dt>{stat.label}</dt>
+                <dd>{stat.value}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
       </div>
     </section>
   );

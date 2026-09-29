@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FiArrowUpRight, FiGithub, FiGitCommit } from "react-icons/fi";
+import { FiGithub, FiGitCommit } from "react-icons/fi";
 import { fetchContributions, fetchGithubActivity, githubUsername, languageColor, toCalendar } from "../../lib/github.js";
 import { timeAgo } from "../../lib/format.js";
 import { useInView } from "../../hooks/useInView.js";
@@ -13,16 +13,16 @@ function Contributions({ calendar, githubUrl }) {
   if (weeks.length === 0) return null;
 
   return (
-    <figure className="contrib">
+    <figure className="contrib reveal">
       <figcaption className="contrib__head">
         <span>{calendar.total.toLocaleString()} contributions in the last year</span>
         <a className="link-out" href={githubUrl} target="_blank" rel="noopener noreferrer">
-          See the profile <FiArrowUpRight aria-hidden="true" />
+          See the profile
         </a>
       </figcaption>
 
-      <div className="contrib__scroll">
-        <div className="contrib__plot">
+      <div className="contrib__scroll" data-lenis-prevent>
+        <div className="contrib__plot" style={{ "--weeks": weeks.length }}>
           <div className="contrib__months" aria-hidden="true">
             {months.map((m) => (
               <span key={`${m.label}-${m.index}`} style={{ gridColumn: m.index + 1 }}>
@@ -101,21 +101,20 @@ export default function GitHubActivity({ githubUrl }) {
   return (
     <section id="github" className="section" ref={ref}>
       <div className="container">
-        <div className="github glass">
-          <div className="github__head">
-            <div className="section-head">
-              <h2 className="section-title">Live from GitHub</h2>
-              <p className="section-lede">What I've been pushing lately, pulled straight from my public repos.</p>
-            </div>
+        <div className="section-head">
+          <h2 className="section-title reveal-title">GitHub</h2>
+          <div className="github__lede">
             <a className="btn btn--ghost btn--sm" href={githubUrl} target="_blank" rel="noopener noreferrer">
               <FiGithub aria-hidden="true" /> @{username}
             </a>
           </div>
+        </div>
 
+        <div className="github">
           {(status === "idle" || status === "loading") && (
             <div className="github__grid" aria-busy="true">
-              <div className="skeleton" style={{ height: 180 }} />
-              <div className="skeleton" style={{ height: 180 }} />
+              <div className="skeleton github__stats" style={{ height: 184 }} />
+              <div className="skeleton repo-feed" style={{ height: 184 }} />
             </div>
           )}
 
@@ -123,7 +122,7 @@ export default function GitHubActivity({ githubUrl }) {
             <p className="github__error">
               GitHub isn't responding right now.{" "}
               <a className="link-out" href={githubUrl} target="_blank" rel="noopener noreferrer">
-                See my profile on GitHub <FiArrowUpRight aria-hidden="true" />
+                See my profile on GitHub
               </a>
             </p>
           )}
@@ -166,9 +165,9 @@ export default function GitHubActivity({ githubUrl }) {
                 )}
               </div>
 
-              <ul className="repo-feed" aria-label="Recently updated repositories">
-                {data.recent.map((repo) => (
-                  <li key={repo.name}>
+              <ul className="repo-feed stagger" aria-label="Recently updated repositories">
+                {data.recent.map((repo, i) => (
+                  <li key={repo.name} style={{ "--i": i }}>
                     <a className="repo" href={repo.url} target="_blank" rel="noopener noreferrer">
                       <FiGitCommit className="repo__icon" aria-hidden="true" />
                       <span className="repo__main">
@@ -183,7 +182,6 @@ export default function GitHubActivity({ githubUrl }) {
                           <time dateTime={repo.pushedAt}>Pushed {timeAgo(repo.pushedAt)}</time>
                         </span>
                       </span>
-                      <FiArrowUpRight className="repo__arrow" aria-hidden="true" />
                     </a>
                   </li>
                 ))}

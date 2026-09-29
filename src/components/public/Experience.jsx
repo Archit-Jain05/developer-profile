@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { FiArrowUpRight, FiGithub, FiPlus } from "react-icons/fi";
+import { FiGithub, FiPlus } from "react-icons/fi";
 import { formatDateRange } from "../../lib/format.js";
 import DetailDialog from "./DetailDialog.jsx";
 import { lengthAtY, trailPath } from "./trailPath.js";
@@ -7,8 +7,9 @@ import "./Sections.css";
 
 // Keep in sync with the container query in Sections.css.
 const COMPACT_WIDTH = 760;
-// Waypoint height within each card, level with the logo.
-const WAYPOINT_OFFSET = 52;
+// Waypoint height within each card, level with the logo's centre
+// (32px card padding + half of the 80px logo).
+const WAYPOINT_OFFSET = 72;
 // The path reaches whatever sits this far down the viewport.
 const VIEWPORT_ANCHOR = 0.62;
 
@@ -53,7 +54,7 @@ function ExperienceDetail({ job, projects }) {
 
       {job.website_url && (
         <a className="link-out" href={job.website_url} target="_blank" rel="noopener noreferrer">
-          Visit {job.company} <FiArrowUpRight aria-hidden="true" />
+          Visit {job.company}
         </a>
       )}
 
@@ -80,7 +81,7 @@ function ExperienceDetail({ job, projects }) {
                 <div className="project__links">
                   {project.live_url && (
                     <a className="link-out" href={project.live_url} target="_blank" rel="noopener noreferrer">
-                      Open live site <FiArrowUpRight aria-hidden="true" />
+                      Open live site
                     </a>
                   )}
                   {project.github_url && (
@@ -103,8 +104,8 @@ function measureTrail(root) {
   const width = root.clientWidth;
   const height = root.offsetHeight;
   const compact = width < COMPACT_WIDTH;
-  const center = compact ? 18 : width / 2;
-  const swing = compact ? 9 : 54;
+  const center = compact ? 16 : width / 2;
+  const swing = compact ? 8 : 56;
   const cards = [...root.querySelectorAll(".trail__item")];
   const waypoints = cards.map((card, i) => ({
     x: center + (i % 2 === 0 ? -swing : swing),
@@ -198,8 +199,9 @@ export default function Experience({ items, projects = [] }) {
     <section id="experience" className="section">
       <div className="container">
         <div className="section-head">
-          <h2 className="section-title">Where I've worked</h2>
-          <p className="section-lede">From my first internship to what I'm building now. Open a role to see the projects I worked on there.</p>
+          <h2 className="section-title reveal-title">
+            Experience <span className="serif">so far</span>
+          </h2>
         </div>
 
         <div ref={trailRef} className="trail">
@@ -240,7 +242,7 @@ export default function Experience({ items, projects = [] }) {
                   <button
                     ref={(el) => (el ? cardRefs.current.set(job.id, el) : cardRefs.current.delete(job.id))}
                     type="button"
-                    className="timeline__card glass card-button"
+                    className={`timeline__card card card-button reveal ${i % 2 === 0 ? "reveal--left" : "reveal--right"}`}
                     aria-haspopup="dialog"
                     onClick={() => {
                       originRef.current = cardRefs.current.get(job.id);

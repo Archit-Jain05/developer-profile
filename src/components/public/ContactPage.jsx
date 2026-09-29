@@ -1,6 +1,7 @@
 import { useEffect } from "react";
-import { FiGithub, FiLinkedin, FiMail, FiPhone } from "react-icons/fi";
+import { FiGithub, FiLinkedin } from "react-icons/fi";
 import { useContent } from "../../hooks/useContent.js";
+import { useSmoothScroll } from "../../hooks/useSmoothScroll.js";
 import Backdrop from "./Backdrop.jsx";
 import ContactForm from "./ContactForm.jsx";
 import FooterBar from "./FooterBar.jsx";
@@ -12,11 +13,12 @@ const TOPICS = ["A job opportunity", "Freelance work", "A collaboration", "Somet
 
 export default function ContactPage() {
   const { content } = useContent();
+  useSmoothScroll();
   const profile = content?.profile;
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Contact — Archit Jain";
+    document.title = "Contact Archit Jain";
   }, []);
 
   if (!profile) return null;
@@ -42,17 +44,11 @@ export default function ContactPage() {
             <ul className="contact__details">
               {profile.email && (
                 <li>
-                  <span className="contact__icon">
-                    <FiMail aria-hidden="true" />
-                  </span>
                   <a href={`mailto:${profile.email}`}>{profile.email}</a>
                 </li>
               )}
               {profile.show_phone && profile.phone && (
                 <li>
-                  <span className="contact__icon">
-                    <FiPhone aria-hidden="true" />
-                  </span>
                   <a href={`tel:${profile.phone.replace(/\s+/g, "")}`}>{profile.phone}</a>
                 </li>
               )}

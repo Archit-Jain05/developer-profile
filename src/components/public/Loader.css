@@ -21,7 +21,7 @@
   z-index: 1;
   display: grid;
   justify-items: center;
-  gap: var(--s-5);
+  gap: var(--sp-3);
   width: min(380px, 78vw);
 }
 
@@ -80,12 +80,12 @@
   color: rgba(255, 255, 255, 0.45);
   font-variant-numeric: tabular-nums;
   justify-self: end;
-  margin-top: calc(-1 * var(--s-3));
+  margin-top: calc(-1 * var(--sp-2));
 }
 
 .loader__count span::after {
   content: "%";
-  margin-left: 1px;
+  margin-left: 0;
 }
 
 /* ---------- Exit: the circuit etches itself through the panel ---------- */

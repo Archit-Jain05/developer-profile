@@ -129,22 +129,3 @@ export async function createScreenTexture(project, { portrait = false } = {}) {
   texture.anisotropy = 8;
   return texture;
 }
-
-/** Radial glow used behind the devices so the glass has colour to refract. */
-export function createGlowTexture() {
-  const size = 512;
-  const canvas = document.createElement("canvas");
-  canvas.width = size;
-  canvas.height = size;
-  const ctx = canvas.getContext("2d");
-  const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
-  g.addColorStop(0, "rgba(245,246,250,0.85)");
-  g.addColorStop(0.35, "rgba(214,216,222,0.6)");
-  g.addColorStop(0.7, "rgba(214,216,222,0.22)");
-  g.addColorStop(1, "rgba(214,216,222,0)");
-  ctx.fillStyle = g;
-  ctx.fillRect(0, 0, size, size);
-  const texture = new CanvasTexture(canvas);
-  texture.colorSpace = SRGBColorSpace;
-  return texture;
-}

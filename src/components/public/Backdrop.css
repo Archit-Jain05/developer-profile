@@ -1,24 +1,17 @@
-/* One light, fixed. The two blurred blobs that used to drift across this
-   layer on 26s and 32s loops are gone: ambient motion nobody triggered, and
-   a moving light source meant nothing on the page could cast a consistent
-   shadow. What remains models a single key at upper-right, which every
-   specular edge and every shadow direction on the site is derived from. */
+/* The page's ground: the base colour, flat, with a faint fibre so large areas
+   have some tooth. No glows — gradients used as decoration are out. */
 .backdrop {
   position: fixed;
   inset: 0;
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
-  background:
-    radial-gradient(ellipse 78% 54% at 74% -10%, rgba(245, 239, 234, 0.055), transparent 64%),
-    var(--ground);
+  background: var(--base);
 }
 
-/* Paper fibre. Sits over the flat darks so large areas have tooth instead of
-   banding on cheap panels. */
 .backdrop__grain {
   position: absolute;
   inset: 0;
-  opacity: 0.05;
+  opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }

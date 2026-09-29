@@ -1,18 +1,10 @@
 import { lazy, Suspense, useEffect, useState } from "react";
-import { FiArrowUpRight, FiGithub } from "react-icons/fi";
+import { FiGithub } from "react-icons/fi";
+import { supportsWebGL } from "../../lib/webgl.js";
 import SceneBoundary from "./SceneBoundary.jsx";
 import "./Sections.css";
 
 const DeviceViewer = lazy(() => import("./three/DeviceViewer.jsx"));
-
-function supportsWebGL() {
-  try {
-    const canvas = document.createElement("canvas");
-    return Boolean(canvas.getContext("webgl2") || canvas.getContext("webgl"));
-  } catch {
-    return false;
-  }
-}
 
 /** Shown while the scene loads, when WebGL is missing, or if it throws. */
 function ShotFallback({ project }) {
@@ -38,15 +30,18 @@ export default function Projects({ items, experience = [] }) {
     <section id="projects" className="section">
       <div className="container">
         <div className="section-head">
-          <h2 className="section-title">Things I've built</h2>
-          <p className="section-lede">
-            Storefronts, apps and experiments, from client work and my own time.
+          <h2 className="section-title reveal-title">
+            Projects <span className="serif">that shipped</span>
+          </h2>
+          <p className="section-lede reveal">
+            Storefronts, apps and experiments, from client work and my own time. Pick one to see it on the
+            device it runs on, and drag to turn it.
           </p>
         </div>
 
         <div className="work">
           {/* The canvas is decorative: everything it shows is in the list beside it. */}
-          <div className="work__stage" aria-hidden="true">
+          <div className="work__stage reveal reveal--scale" aria-hidden="true">
             {webgl ? (
               <SceneBoundary fallback={<ShotFallback project={selected} />}>
                 <Suspense fallback={<ShotFallback project={selected} />}>
@@ -58,12 +53,16 @@ export default function Projects({ items, experience = [] }) {
             )}
           </div>
 
-          <ul className="work__list">
-            {items.map((project) => {
+          <ul className="work__list stagger">
+            {items.map((project, index) => {
               const company = companies.get(project.experience_id);
               const isSelected = project.id === selected?.id;
               return (
-                <li key={project.id} className={`work__item ${isSelected ? "is-selected" : ""}`}>
+                <li
+                  key={project.id}
+                  className={`work__item ${isSelected ? "is-selected" : ""}`}
+                  style={{ "--i": index }}
+                >
                   <button
                     type="button"
                     className="work__pick"
@@ -73,7 +72,7 @@ export default function Projects({ items, experience = [] }) {
                   >
                     <span className="work__title">{project.title}</span>
                     {project.tech?.length > 0 && (
-                      <span className="work__tech">{project.tech.join(" · ")}</span>
+                      <span className="work__tech">{project.tech.join(", ")}</span>
                     )}
                   </button>
 
@@ -84,7 +83,7 @@ export default function Projects({ items, experience = [] }) {
                       <div className="work__links">
                         {project.live_url && (
                           <a className="link-out" href={project.live_url} target="_blank" rel="noopener noreferrer">
-                            Open live site <FiArrowUpRight aria-hidden="true" />
+                            Open live site
                           </a>
                         )}
                         {project.github_url && (

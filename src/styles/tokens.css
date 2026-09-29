@@ -1,114 +1,103 @@
 :root {
   /* ---------------------------------------------------------------------
-     Palette: neutral graphite, properly lit.
+     Palette: "night harbour". Four colours, used in an 80 / 15 / 5 split.
 
-     The scheme this replaces failed for a measurable reason, and it was not
-     the absence of colour: the whole page lived inside 5.6 L* (ground 2.8,
-     the bottom of every card 3.4) and contained no true black, so nothing
-     could read as sitting on anything. This ladder spans 26 L* and is
-     anchored on #000000, which is what gives a dark interface depth.
+     --base       80%  the page itself — a deep harbour teal, clearly a colour
+                       rather than a tinted black
+     --secondary  15%  cards, panels, controls. 9 L* above the base, so a card
+                       visibly sits on the page (the old scheme had 0.6 L*)
+     --accent      5%  buttons and anything that needs direct attention —
+                       coral, 25 L* clear of body text so it reads as an accent
+     --ink             text
 
-     There is no invented accent hue. The only chroma on the site comes from
-     the technology logos and GitHub's own contribution greens — real colour,
-     sourced from the work rather than picked from a swatch.
+     The -2 / -3 steps are tints of the same four colours for hierarchy, not
+     new colours. Technology logos keep their own brand colours.
      --------------------------------------------------------------------- */
-  --void: #000000;      /* L*  0.0 — wells only: screen recesses, inputs */
-  --ground: #08090a;    /* L*  2.4 — the page */
-  --plinth: #0f1113;    /* L*  4.4 — alternating full-bleed bands */
-  --surface: #16181b;   /* L*  6.5 — panels and cards */
-  --riser: #1e2126;     /* L*  9.3 — tags, tiles, things raised inside a card */
-  --bevel: #3a3f46;     /* L* 26.4 — lit edges and hairline rules */
+  --base: #0a1f24;
+  --base-2: #05171b;      /* recesses: inputs, screens, calendar wells */
+  --secondary: #19333a;
+  --secondary-2: #213d45; /* raised inside a card, hover state */
+  --accent: #fa8f78;      /* 7.5:1 on base; label on accent is --base, 7.5:1 */
+  --accent-2: #ffa592;    /* accent hover */
+  --ink: #eef5f7;         /* 15.4:1 on base — headings, primary text */
+  --ink-2: #acc2c8;       /*  9.2:1 on base, 7.2:1 on card — body text */
+  --ink-3: #8fa7ad;       /*  meta: dates, counts, captions */
 
-  --chalk: #edeff2;     /* 17.3:1 on ground — primary text, and the button fill */
-  --ash: #a6acb4;       /*  8.7:1 — secondary text */
-  --slate-text: #7c848d; /* 5.0:1 — dates, counts, metadata only */
+  --line: rgba(238, 245, 247, 0.1);
+  --line-strong: rgba(238, 245, 247, 0.2);
+  --accent-soft: rgba(250, 143, 120, 0.14);
+  --shadow-card: 0 24px 48px -24px rgba(1, 10, 12, 0.85);
 
-  /* Semantic, not decorative: errors need to be distinguishable at a glance.
-     Orange-red rather than a true red so it survives deuteranopia. */
-  --danger: #f2764c;
+  /* Blur only where it means something: the sticky nav over moving content
+     and the modal scrim. */
+  --glass-blur: blur(16px) saturate(120%);
 
   /* ---------------------------------------------------------------------
-     Aliases. Admin.css and the older public CSS consume these names.
+     Spacing: an 8-point system. Every margin, padding, gap and offset is
+     one of these. The number in the name is the multiple of 8.
      --------------------------------------------------------------------- */
-  --bg: var(--ground);
-  --bg-alt: var(--plinth);
-  --surface-2: var(--riser);
-  --text: var(--chalk);
-  --text-muted: var(--ash);
-  --text-dim: var(--slate-text);
-  --success: var(--chalk);
+  --sp-1: 8px;
+  --sp-2: 16px;
+  --sp-3: 24px;
+  --sp-4: 32px;
+  --sp-5: 40px;
+  --sp-6: 48px;
+  --sp-8: 64px;
+  --sp-10: 80px;
+  --sp-12: 96px;
+  --sp-16: 128px;
 
-  /* No accent hue. "Accent" resolves to the top of the value ladder, so a
-     call site that asks for emphasis gets contrast instead of colour. */
-  --accent: var(--chalk);
-  --accent-strong: var(--chalk);
-  --accent-soft: rgba(237, 239, 242, 0.1);
-  --border: var(--bevel);
-  --border-strong: #565e6b;
+  /* Layout: full width with gutters, on a 12-column grid, rather than one
+     narrow column down the centre. The cap only stops lines from running
+     absurdly long on ultra-wide screens. */
+  --gutter: 24px;
+  --grid-gap: 24px;
+  --max-width: 1760px;
+  --section-space: 96px;
+
+  /* Shape: multiples of 8, scaled to the size of the surface. */
+  --radius-sm: 8px;
+  --radius: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
 
   /* ---------------------------------------------------------------------
-     Light. One source, fixed at upper-right, and everything on the page is
-     derived from it: speculars brightest at the top-right corner, shadows
-     falling down-and-left with a negative x-offset.
+     Type. Instrument Sans throughout: heavy and tightly tracked at display
+     sizes, normal spacing for reading. Instrument Serif italic is kept for a
+     few contrasting phrases. Hierarchy comes from clear size steps and three
+     text colours.
      --------------------------------------------------------------------- */
-  --plate-fill: var(--surface);
-  /* A single hairline of light along the top edge, and nothing else. The
-     heavier emboss-and-shade treatment read as material rather than minimal. */
-  --plate-emboss: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  --plate-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.8);
-  --well-fill: var(--void);
-  --well-emboss: inset 0 1px 2px rgba(0, 0, 0, 0.6);
-  --hairline: rgba(255, 255, 255, 0.09);
-  --hairline-strong: rgba(255, 255, 255, 0.16);
-
-  /* Blur is kept only where it means something: the sticky nav over moving
-     content, and the modal scrim. */
-  --glass-blur: blur(20px) saturate(115%);
-
-  /* ---------------------------------------------------------------------
-     Shape. Generous and soft, but still a system rather than one radius on
-     everything: the scale tracks the size of the surface, so a large panel is
-     rounder than a tag and a control is rounder than a panel.
-     --------------------------------------------------------------------- */
-  --radius-plate: 20px;  /* photography and large media */
-  --radius-lg: 22px;     /* full panels */
-  --radius: 16px;        /* cards */
-  --radius-sm: 10px;     /* controls, tags, inputs */
-  --radius-pill: 999px;  /* only where a shape is genuinely circular */
-  --max-width: 1240px;
-
-  --s-1: 4px;
-  --s-2: 8px;
-  --s-3: 12px;
-  --s-4: 16px;
-  --s-5: 24px;
-  --s-6: 40px;
-  --s-7: 64px;
-  --s-8: 112px;
-
-  /* ---------------------------------------------------------------------
-     Type. One superfamily, three widths. Archivo expanded (wdth 112) carries
-     display, normal width carries prose and UI, and narrowed (wdth 78) with
-     tabular figures makes the dense data register. Width does the work two
-     extra typefaces would otherwise be hired for, and expanded grotesque
-     headings read as formal signage rather than as a default.
-     --------------------------------------------------------------------- */
-  --font: "Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-display: "Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font: "Instrument Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Instrument Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
   --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
 
-  /* Deliberately bimodal: one very loud register, one dense one, and a gap in
-     the middle. The interval between them is the composition. */
-  --step--2: 0.8125rem;
-  --step--1: 0.9375rem;
-  --step-0: 1.0625rem;
-  --step-1: 1.1875rem;
-  --step-2: 1.5rem;
-  --step-3: clamp(1.9rem, 3vw, 2.5rem);
-  --step-4: clamp(2.75rem, 7vw, 5.5rem);
+  --step--2: 0.8125rem;                 /* 13  meta */
+  --step--1: 0.9375rem;                 /* 15  small UI */
+  --step-0: 1.0625rem;                  /* 17  body */
+  --step-1: 1.25rem;                    /* 20  lead, card titles */
+  --step-2: 1.5rem;                     /* 24  sub-heads */
+  --step-3: clamp(2rem, 3.4vw, 3rem);   /* 32–48  section titles */
+  --step-4: clamp(3.5rem, 7vw, 6rem);   /* 56–96  the name */
 
-  /* Tracking. Display type is set wide and open, never tightened — the
-     previous condensed setting read as cramped. */
-  --track-display: 0.005em;
-  --track-body: 0.004em;
+  --track-display: -0.02em;
+  --track-body: 0;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --gutter: 48px;
+    --grid-gap: 32px;
+    --section-space: 128px;
+  }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --gutter: 80px;
+    --grid-gap: 40px;
+    --section-space: 160px;
+  }
 }

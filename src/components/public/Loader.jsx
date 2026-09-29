@@ -65,6 +65,14 @@ export default function Loader({ ready }) {
     return () => cancelAnimationFrame(frame);
   }, [phase, ready]);
 
+  // The hero's entrance is keyed off this attribute, so it plays as the panel
+  // lifts rather than invisibly underneath it.
+  useEffect(() => {
+    const root = document.documentElement;
+    if (phase === "loading") delete root.dataset.revealed;
+    else root.dataset.revealed = "";
+  }, [phase]);
+
   useEffect(() => {
     if (phase !== "exiting") return;
     const t = setTimeout(() => setPhase("done"), EXIT_MS);
@@ -127,7 +135,7 @@ export default function Loader({ ready }) {
             <circle className="loader__wipe" cx="80" cy="50" r="0" fill="#000000" />
           </mask>
         </defs>
-        <rect x="-20" y="-20" width="200" height="140" fill="#0b0b0d" mask="url(#loader-cut)" />
+        <rect x="-20" y="-20" width="200" height="140" style={{ fill: "var(--base)" }} mask="url(#loader-cut)" />
       </svg>
 
       <p className="visually-hidden">Loading Archit Jain's portfolio</p>

@@ -10,7 +10,7 @@ export const fallbackContent = {
     tagline: "I build apps for web and mobile.",
     intro:
       "I'm an IT student in Mumbai who freelances and interns as a developer. Most of what I ship is client-facing: Shopify storefronts, Next.js sites and a Flutter app.",
-    about_heading: "I'm passionate about building useful software",
+    about_heading: "About",
     about_body:
       "I'm an Information Technology student who loves turning ideas into real products. I'm especially interested in Artificial Intelligence and Machine Learning, and I want to bring them into apps I build for Android, Windows and the web. I also work as a freelance developer.\n\nRight now I'm learning cross-platform development with Flutter. I'm always happy to collaborate on challenging projects built with the latest technology, so feel free to reach out by email or on LinkedIn.",
     hero_image_url: "/seed/archit.jpg",

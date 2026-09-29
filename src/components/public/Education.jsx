@@ -62,13 +62,13 @@ function EduDetail({ edu }) {
   );
 }
 
-function EduCard({ edu, onOpen, cardRef }) {
+function EduCard({ edu, index, onOpen, cardRef }) {
   return (
-    <li>
+    <li style={{ "--i": index }}>
       <button
         ref={cardRef}
         type="button"
-        className="edu glass card-button"
+        className="edu card card-button"
         aria-haspopup="dialog"
         onClick={onOpen}
       >
@@ -97,15 +97,15 @@ export default function Education({ items }) {
 
   return (
     <section id="education" className="section">
-      <div className="container">
-        <div className="section-head">
-          <h2 className="section-title">Where I studied</h2>
-          <p className="section-lede">Open a school to see what I studied there.</p>
+      <div className="container grid">
+        <div className="side-head">
+          <h2 className="section-title reveal-title">Education</h2>
         </div>
-        <ul className="edu-grid">
-          {items.map((edu) => (
+        <ul className="edu-grid stagger">
+          {items.map((edu, i) => (
             <EduCard
               key={edu.id}
+              index={i}
               edu={edu}
               cardRef={(el) => (el ? cardRefs.current.set(edu.id, el) : cardRefs.current.delete(edu.id))}
               onOpen={() => {

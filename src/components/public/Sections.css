@@ -1,59 +1,67 @@
-/* ---------- About ---------- */
-.about {
-  display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-  gap: var(--s-7);
-  align-items: center;
-  padding: var(--s-6) clamp(var(--s-5), 4vw, var(--s-7));
-}
+/* All spacing here is on the 8-point grid: --sp-N is N × 8px. */
 
-.about__text {
+/* A title that sits in the first four columns and stays put while the
+   content beside it scrolls past. */
+.side-head,
+.about__side {
+  grid-column: 1 / span 4;
+  align-self: start;
+  position: sticky;
+  top: 128px;
   display: grid;
-  gap: var(--s-5);
+  gap: var(--sp-2);
   justify-items: start;
 }
 
+/* ---------- About ---------- */
 .about__body {
+  grid-column: 5 / span 5;
+  align-self: start;
   display: grid;
-  gap: var(--s-3);
-  max-width: 68ch;
-  color: var(--text-muted);
-  font-size: 1.05rem;
+  align-content: start;
+  gap: var(--sp-3);
+  max-width: 64ch;
+  color: var(--ink-2);
 }
 
-.stat-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--s-3);
+.about__lead {
+  font-size: var(--step-1);
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+/* The facts as a ruled list — label and value on one line, at reading size —
+   rather than big-number tiles. */
+.about__stats {
+  grid-column: 10 / span 3;
+  align-self: start;
   margin: 0;
+  border-top: 1px solid var(--line-strong);
 }
 
-.stat-grid__item {
+.stat {
   display: flex;
-  flex-direction: column-reverse;
-  gap: 4px;
-  padding: var(--s-5);
-  border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.045);
-  border: 1px solid var(--border);
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding-block: var(--sp-2);
+  border-bottom: 1px solid var(--line);
 }
 
-.stat-grid dd {
+.stat dt {
+  color: var(--ink-2);
+}
+
+.stat dd {
   margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(1.8rem, 3vw, 2.6rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1;
-  color: var(--chalk);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
 }
 
-.stat-grid dt {
-  font-size: var(--step--1);
-  color: var(--text-muted);
-}
-
-/* ---------- Experience trail ---------- */
+/* ---------- Experience trail ----------
+   The path draws itself in the accent as the page scrolls, and each role
+   arrives from its own side. */
 .trail {
   position: relative;
   container-type: inline-size;
@@ -68,18 +76,17 @@
 
 .trail__route {
   fill: none;
-  stroke: var(--bevel);
+  stroke: var(--line-strong);
   stroke-width: 2;
   stroke-linecap: round;
-  stroke-dasharray: 1 11;
+  stroke-dasharray: 1 10;
 }
 
 .trail__drawn {
   fill: none;
-  stroke: var(--chalk);
+  stroke: var(--accent);
   stroke-width: 3;
   stroke-linecap: round;
-
 }
 
 .trail__head {
@@ -88,56 +95,56 @@
 }
 
 .trail__head circle:first-child {
-  fill: rgba(214, 216, 222, 0.22);
+  fill: var(--accent-soft);
 }
 
 .trail__head circle:last-child {
-  fill: var(--chalk);
+  fill: var(--accent);
 }
 
 .trail__waypoint {
   position: absolute;
   z-index: 1;
-  width: 18px;
-  height: 18px;
-  margin: -9px 0 0 -9px;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
   border-radius: 50%;
-  background: var(--ground);
-  border: 3px solid var(--chalk);
+  background: var(--base);
+  border: 3px solid var(--ink);
   opacity: 0;
-  transform: scale(0);
-  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s;
+  scale: 0;
+  transition: scale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s;
   pointer-events: none;
 }
 
 .trail__waypoint.is-reached {
   opacity: 1;
-  transform: scale(1);
+  scale: 1;
 }
 
 .trail__waypoint.is-reached::before {
   content: "";
   position: absolute;
-  inset: -3px;
+  inset: 0;
   border-radius: 50%;
-  border: 2px solid var(--chalk);
+  border: 2px solid var(--accent);
   animation: waypoint-ring 0.9s ease-out 0.1s both;
 }
 
 .trail__waypoint.is-current {
-  background: var(--chalk);
-  border-color: var(--chalk);
-  box-shadow: 0 0 0 6px rgba(214, 216, 222, 0.16), 0 0 20px rgba(214, 216, 222, 0.6);
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 8px var(--accent-soft);
 }
 
 @keyframes waypoint-ring {
   from {
     opacity: 0.9;
-    transform: scale(1);
+    scale: 1;
   }
   to {
     opacity: 0;
-    transform: scale(2.6);
+    scale: 3;
   }
 }
 
@@ -146,12 +153,12 @@
   flex-direction: column;
   list-style: none;
   margin: 0;
-  padding: var(--s-5) 0 var(--s-7);
+  padding: var(--sp-3) 0 var(--sp-8);
 }
 
 .trail__item {
   position: relative;
-  width: calc(50% - 88px);
+  width: calc(50% - 96px);
 }
 
 .trail__item--right {
@@ -162,48 +169,36 @@
   margin-top: -96px;
 }
 
-.trail__item .timeline__card {
-  opacity: 0.72;
-  transition: opacity 0.5s, transform 0.25s, box-shadow 0.25s;
-}
-
-.trail__item.is-reached .timeline__card {
-  opacity: 1;
-}
-
 @container (max-width: 759px) {
   .trail__item,
   .trail__item--right {
     align-self: stretch;
     width: auto;
-    margin-left: 44px;
+    margin-left: var(--sp-6);
   }
 
   .trail__item + .trail__item {
-    margin-top: var(--s-5);
+    margin-top: var(--sp-3);
   }
 }
 
 .timeline__card {
   display: grid;
-  grid-template-columns: 96px minmax(0, 1fr);
-  gap: var(--s-5);
-  padding: var(--s-5);
-  border-radius: var(--radius);
+  grid-template-columns: 80px minmax(0, 1fr);
+  gap: var(--sp-3);
+  padding: var(--sp-4);
 }
 
+/* Logo tiles are light, because most company and school marks are drawn for
+   a white page and disappear on a dark one. */
 .timeline__logo,
 .edu__logo {
   display: grid;
   place-items: center;
-  width: 96px;
-  height: 96px;
-  border-radius: var(--radius-sm);
-  /* A bone tile, not the pale blue gradient left over from the rejected blue
-     scheme. Dark logos need a light ground to clear contrast — Flutter's
-     #02569b runs 2.65:1 on the page and 6.07:1 here. */
-  background: #eee6e0;
-  box-shadow: var(--plate-emboss);
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius);
+  background: var(--ink);
   overflow: hidden;
 }
 
@@ -218,13 +213,13 @@
 .edu__logo span {
   font-family: var(--font-display);
   font-size: 2rem;
-  font-weight: 800;
-  color: var(--ground);
+  font-weight: 700;
+  color: var(--base);
 }
 
 .timeline__body {
   display: grid;
-  gap: 6px;
+  gap: var(--sp-1);
   align-content: start;
   justify-items: start;
 }
@@ -232,18 +227,20 @@
 .timeline__dates {
   display: flex;
   align-items: center;
-  gap: var(--s-2);
+  gap: var(--sp-1);
   font-size: var(--step--1);
-  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-3);
 }
 
 .timeline__now {
-  padding: 1px 10px;
-  border-radius: 999px;
-  font-size: 0.75rem;
+  padding: 0 var(--sp-1);
+  line-height: 24px;
+  border-radius: var(--radius-pill);
+  font-size: var(--step--2);
   font-weight: 600;
-  color: var(--ground);
-  background: var(--chalk);
+  color: var(--base);
+  background: var(--accent);
 }
 
 .timeline__role,
@@ -254,13 +251,14 @@
 }
 
 .timeline__role {
-  font-size: var(--step-1);
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  font-weight: 600;
   line-height: 1.25;
 }
 
 .timeline__company {
-  color: var(--accent-strong);
+  color: var(--ink);
   font-weight: 500;
 }
 
@@ -269,78 +267,77 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   overflow: hidden;
-  max-width: 68ch;
-  margin-block: 4px 6px;
-  color: var(--text-muted);
+  max-width: 64ch;
+  margin-block: var(--sp-1);
+  color: var(--ink-2);
 }
 
 /* ---------- Cards that open a detail view ---------- */
 .card-button {
   width: 100%;
-  border: 0;
   color: inherit;
   font: inherit;
   text-align: left;
   cursor: pointer;
-  transition: border-color 0.18s;
-}
-
-.card-button:active {
-  transform: translateY(-1px) scale(0.985);
-  transition-duration: 0.09s;
+  border: 0;
+  transition: background 0.3s var(--ease-out);
 }
 
 .card-button:hover {
-  border-color: var(--border-strong);
+  background: var(--secondary-2);
+}
+
+.card-button:active {
+  scale: 0.99;
 }
 
 .card-button__cue {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  margin-top: var(--s-2);
-  font-size: 0.9rem;
+  gap: var(--sp-1);
+  margin-top: var(--sp-1);
+  font-size: var(--step--1);
   font-weight: 600;
-  color: var(--accent-strong);
+  color: var(--ink);
 }
 
 .card-button__cue svg {
-  transition: transform 0.3s;
-}
-
-.card-button:hover .card-button__cue {
-  color: var(--accent-strong);
+  color: var(--accent);
+  transition: rotate 0.3s var(--ease-out);
 }
 
 .card-button:hover .card-button__cue svg {
-  transform: rotate(90deg);
+  rotate: 90deg;
 }
 
 .tags--roomy li {
-  padding: 5px 13px;
-  font-size: 0.85rem;
+  padding: 0 var(--sp-2);
+  line-height: 40px;
+  font-size: var(--step--1);
 }
 
 /* ---------- Projects ----------
-   The 3D lives here rather than in the hero. It shows the selected project on
-   the device it actually ships on, so it demonstrates the work instead of
-   decorating the name. The list beside it is the real, accessible content —
-   the canvas is aria-hidden. */
+   The device stage takes seven columns and stays in view while the list
+   beside it scrolls; picking a project swaps what is on the screen. */
 .work {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-  gap: clamp(var(--s-6), 5vw, var(--s-8));
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+  row-gap: var(--sp-5);
   align-items: start;
 }
 
 .work__stage {
+  grid-column: 1 / span 7;
   position: sticky;
-  top: 104px;
+  top: 128px;
   border-radius: var(--radius-lg);
+  background: var(--secondary);
+  overflow: hidden;
 }
 
 .device-viewer {
-  height: clamp(360px, 42vw, 520px);
+  height: clamp(400px, 40vw, 600px);
 }
 
 .device-viewer[data-draggable="true"] canvas {
@@ -356,9 +353,6 @@
   display: grid;
   place-items: center;
   overflow: hidden;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--hairline);
-  background: var(--surface);
 }
 
 .device-viewer--flat img {
@@ -368,13 +362,15 @@
 }
 
 .work__list {
+  grid-column: 8 / span 5;
   list-style: none;
   margin: 0;
   padding: 0;
+  border-top: 1px solid var(--line);
 }
 
 .work__item {
-  border-bottom: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--line);
 }
 
 .work__pick {
@@ -382,92 +378,119 @@
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--s-3);
+  gap: var(--sp-2);
   width: 100%;
-  min-height: 44px;
-  padding: var(--s-4) 0;
+  min-height: 48px;
+  padding: var(--sp-3) 0;
   background: none;
   border: 0;
-  color: var(--ash);
+  color: var(--ink-3);
   text-align: left;
   cursor: pointer;
-  transition: color 0.18s;
+  transition: color 0.24s, padding 0.3s var(--ease-out);
 }
 
-.work__pick:hover,
+.work__pick:hover {
+  color: var(--ink);
+  padding-left: var(--sp-1);
+}
+
 .work__item.is-selected .work__pick {
-  color: var(--chalk);
+  color: var(--ink);
+  padding-left: var(--sp-3);
 }
 
 .work__title {
+  position: relative;
   font-family: var(--font-display);
-  font-variation-settings: "wdth" 112;
-  font-size: var(--step-1);
+  font-size: var(--step-2);
   font-weight: 600;
 }
 
+/* The selected project is marked with the accent. */
+.work__title::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -24px;
+  width: 8px;
+  height: 8px;
+  translate: 0 -50%;
+  border-radius: 50%;
+  background: var(--accent);
+  scale: 0;
+  transition: scale 0.3s var(--ease-out);
+}
+
+.work__item.is-selected .work__title::before {
+  scale: 1;
+}
+
 .work__tech {
-  font-variation-settings: "wdth" 78;
+  font-variation-settings: "wdth" 88;
   font-size: var(--step--2);
-  color: var(--slate-text);
+  color: var(--ink-3);
 }
 
 .work__detail {
   display: grid;
-  gap: var(--s-3);
-  padding-bottom: var(--s-5);
-  max-width: 54ch;
+  gap: var(--sp-2);
+  padding: 0 0 var(--sp-3) var(--sp-3);
+  max-width: 56ch;
+  animation: detail-open 0.4s var(--ease-out) both;
+}
+
+@keyframes detail-open {
+  from {
+    opacity: 0;
+    translate: 0 -8px;
+  }
 }
 
 .work__origin {
-  font-variation-settings: "wdth" 78;
   font-size: var(--step--2);
-  color: var(--slate-text);
+  color: var(--ink-3);
 }
 
 .work__desc {
-  color: var(--ash);
+  color: var(--ink-2);
 }
 
 .work__links {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--s-5);
-}
-
-@media (max-width: 899px) {
-  .work {
-    grid-template-columns: 1fr;
-    gap: var(--s-5);
-  }
-
-  .work__stage {
-    position: static;
-  }
+  gap: var(--sp-3);
 }
 
 /* ---------- Skills ----------
-   Ruled rows, not meters. Each skill says where it shipped; a skill with
-   nothing behind it says nothing rather than claiming a percentage. */
-.skills-groups {
+   Ruled rows on the left, the keyboard on the right. Each skill says where it
+   shipped; a skill with nothing behind it says nothing rather than claiming a
+   percentage. */
+.skills-layout {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
-  gap: var(--s-7);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+  row-gap: var(--sp-5);
+  align-items: center;
+}
+
+.skills-groups {
+  grid-column: 1 / span 5;
+  display: grid;
+  gap: var(--sp-6);
 }
 
 .skills-group__title {
-  margin: 0 0 var(--s-3);
-  padding-bottom: var(--s-2);
-  border-bottom: 1px solid var(--bevel);
-  font-family: var(--font-display);
+  margin: 0 0 var(--sp-1);
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--line-strong);
   font-size: var(--step-0);
   font-weight: 600;
-  color: var(--ash);
+  color: var(--ink);
 }
 
 .skills {
   display: grid;
-  gap: 0;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -475,117 +498,117 @@
 
 .skill {
   display: grid;
-  grid-template-columns: 28px minmax(0, auto) minmax(0, 1fr);
-  align-items: baseline;
-  gap: var(--s-3);
-  padding-block: var(--s-3);
-  border-bottom: 1px solid var(--bevel);
+  grid-template-columns: 32px minmax(0, auto) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--sp-2);
+  padding-block: var(--sp-2);
+  border-bottom: 1px solid var(--line);
 }
 
 .skill__icon {
-  font-size: 1.05rem;
-  line-height: 1;
-  transform: translateY(2px);
+  display: grid;
+  place-items: center;
+  font-size: 1.125rem;
 }
 
 .skill__name {
   font-weight: 600;
+  color: var(--ink);
 }
 
 /* Where it shipped — the dense register. */
 .skill__where {
-  font-variation-settings: "wdth" 78;
-  font-variant-numeric: tabular-nums;
+  font-variation-settings: "wdth" 88;
   font-size: var(--step--2);
-  color: var(--slate-text);
+  color: var(--ink-3);
   text-align: right;
 }
 
+.skills-stage {
+  grid-column: 6 / span 7;
+}
+
+.keyboard-scene {
+  height: clamp(360px, 34vw, 520px);
+}
+
 /* ---------- GitHub ---------- */
-.github {
-  padding: var(--s-6);
-}
-
-.github__head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 0 var(--s-4);
-  margin-bottom: var(--s-6);
-}
-
-.github__head .section-head {
-  margin-bottom: var(--s-4);
+.github__lede {
+  grid-column: 8 / span 5;
+  display: grid;
+  gap: var(--sp-2);
+  justify-items: start;
 }
 
 .github__grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
-  gap: var(--s-6);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+  row-gap: var(--sp-3);
 }
 
 .github__stats {
+  grid-column: 1 / span 4;
   display: grid;
-  gap: var(--s-5);
+  gap: var(--sp-3);
   align-content: start;
 }
 
 .github__numbers {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--s-3);
   margin: 0;
+  border-top: 1px solid var(--line-strong);
 }
 
 .github__numbers div {
   display: flex;
-  flex-direction: column-reverse;
-  justify-content: flex-end;
-  padding: var(--s-4);
-  border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border);
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding-block: var(--sp-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.github__numbers dt {
+  color: var(--ink-2);
 }
 
 .github__numbers dd {
   margin: 0;
-  font-family: var(--font-display);
-  font-size: var(--step-2);
-  font-weight: 700;
-}
-
-.github__numbers dt {
-  font-size: var(--step--1);
-  color: var(--text-muted);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
 }
 
 .langs {
   display: grid;
-  gap: var(--s-3);
+  gap: var(--sp-2);
 }
 
 .langs__title {
   font-size: var(--step--1);
-  color: var(--text-muted);
+  color: var(--ink-2);
 }
 
 .langs__bar {
   display: flex;
-  gap: 3px;
-  height: 12px;
-  border-radius: 99px;
+  height: 8px;
+  border-radius: var(--radius-pill);
   overflow: hidden;
 }
 
 .langs__bar span {
-  min-width: 4px;
+  min-width: 8px;
+  border-right: 2px solid var(--base);
+}
+
+.langs__bar span:last-child {
+  border-right: 0;
 }
 
 .langs__legend {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--s-2) var(--s-4);
+  gap: var(--sp-1) var(--sp-3);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -596,23 +619,26 @@
 .repo__lang {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--sp-1);
 }
 
 .langs__legend span {
-  color: var(--text-muted);
+  color: var(--ink-3);
 }
 
 .langs__legend i,
 .repo__lang i {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
 }
 
 .repo-feed {
+  grid-column: 5 / span 8;
   display: grid;
-  gap: var(--s-2);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: var(--sp-2);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -621,23 +647,22 @@
 .repo {
   display: flex;
   align-items: center;
-  gap: var(--s-3);
-  padding: 14px var(--s-4);
-  border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border);
-  transition: background 0.2s, border-color 0.2s;
+  gap: var(--sp-2);
+  height: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--radius-sm);
+  background: var(--secondary);
+  transition: background 0.24s;
 }
 
 .repo:hover {
-  background: rgba(214, 216, 222, 0.1);
-  border-color: rgba(255, 255, 255, 0.45);
+  background: var(--secondary-2);
 }
 
 .repo__icon {
   flex: none;
-  font-size: 1.2rem;
-  color: var(--slate-text);
+  font-size: 1.25rem;
+  color: var(--ink-3);
 }
 
 .repo__main {
@@ -656,35 +681,25 @@
 .repo__meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 2px var(--s-4);
-  font-size: 0.82rem;
-  color: var(--text-muted);
-}
-
-.repo__arrow {
-  flex: none;
-  color: var(--text-muted);
-  transition: transform 0.2s, color 0.2s;
-}
-
-.repo:hover .repo__arrow {
-  color: var(--accent-strong);
-  transform: translate(2px, -2px);
+  gap: 0 var(--sp-2);
+  font-size: var(--step--2);
+  color: var(--ink-3);
 }
 
 .github__error {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--s-2);
-  color: var(--text-muted);
+  gap: var(--sp-1);
+  color: var(--ink-2);
 }
 
 /* ---------- Education ---------- */
 .edu-grid {
+  grid-column: 5 / span 8;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--s-5);
+  gap: var(--sp-3);
   list-style: none;
   padding: 0;
   margin: 0;
@@ -694,38 +709,37 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: var(--s-2);
-  padding: var(--s-5);
-  border-radius: var(--radius);
+  gap: var(--sp-1);
+  padding: var(--sp-4);
 }
 
 .edu__top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: var(--s-3);
+  margin-bottom: var(--sp-2);
 }
 
 .edu__logo {
-  width: 72px;
-  height: 72px;
-  border-radius: 18px;
+  width: 64px;
+  height: 64px;
 }
 
 .edu__years {
   font-size: var(--step--1);
-  color: var(--text-muted);
+  color: var(--ink-3);
   font-variant-numeric: tabular-nums;
 }
 
 .edu__school {
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: var(--step-1);
+  font-weight: 600;
   line-height: 1.3;
+  color: var(--ink);
 }
 
 .edu__course {
-  color: var(--text-muted);
+  color: var(--ink-2);
 }
 
 .edu__foot {
@@ -733,9 +747,9 @@
   flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
-  gap: var(--s-2);
+  gap: var(--sp-1);
   margin-top: auto;
-  padding-top: var(--s-3);
+  padding-top: var(--sp-2);
 }
 
 .edu__foot .card-button__cue {
@@ -744,95 +758,19 @@
 
 .edu__score {
   font-family: var(--font-display);
-  font-size: var(--step-1);
-  font-weight: 700;
-  color: var(--chalk);
+  font-size: var(--step-2);
+  font-weight: 600;
+  color: var(--ink);
 }
 
-/* ---------- Responsive ---------- */
-@media (max-width: 1023px) {
-  .skills {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .github__grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 859px) {
-  .about {
-    grid-template-columns: 1fr;
-    gap: var(--s-6);
-  }
-
-  .project-grid,
-  .edu-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 599px) {
-  .about,
-  .skills-panel,
-  .github {
-    padding: var(--s-5);
-  }
-
-  .stat-grid__item {
-    padding: var(--s-4);
-  }
-
-  .skills {
-    grid-template-columns: 1fr;
-  }
-
-  .timeline__card {
-    grid-template-columns: 1fr;
-    gap: var(--s-3);
-    padding: var(--s-4);
-  }
-
-  .timeline__logo {
-    width: 52px;
-    height: 52px;
-    border-radius: 14px;
-  }
-
-  .edu__logo {
-    width: 56px;
-    height: 56px;
-    border-radius: 14px;
-  }
-
-  .github__numbers {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .github__numbers div {
-    padding: var(--s-3);
-  }
-
-  .github__numbers dt {
-    font-size: 0.78rem;
-    line-height: 1.3;
-  }
-
-  .github__numbers dd {
-    font-size: 1.4rem;
-  }
-}
-
-/* ---------- GitHub contribution calendar ---------- */
-/* Its own dark card: the calendar needs GitHub's near-black behind it for the
-   green to read, which the translucent panel underneath cannot provide. */
+/* ---------- GitHub contribution calendar ----------
+   Fluid columns, so the year spans the full width of the page instead of
+   sitting at a fixed size in one corner. */
 .contrib {
-  margin: var(--s-5) 0 0;
-  padding: var(--s-5);
-  border-radius: var(--radius);
-  background: #0d1117;
-  border: 1px solid rgba(240, 246, 252, 0.1);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  margin: var(--sp-6) 0 0;
+  padding: var(--sp-4);
+  border-radius: var(--radius-lg);
+  background: var(--base-2);
 }
 
 .contrib__head {
@@ -840,70 +778,67 @@
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--s-3);
-  margin-bottom: var(--s-4);
-  color: #c9d1d9;
-  font-size: 0.95rem;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-3);
+  color: var(--ink);
+  font-size: var(--step-0);
 }
 
-/* The calendar keeps its natural width; only this strip scrolls. */
 .contrib__scroll {
   overflow-x: auto;
   overscroll-behavior-x: contain;
-  padding-bottom: 4px;
+  padding-bottom: var(--sp-1);
 }
 
 .contrib__plot {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto minmax(0, 1fr);
   grid-template-areas:
     ". months"
     "days weeks";
-  gap: 4px 6px;
-  min-width: max-content;
+  gap: var(--sp-1);
+  min-width: 720px;
 }
 
 .contrib__months {
   grid-area: months;
   display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 14px;
-  font-size: 0.72rem;
-  color: #8b949e;
+  grid-template-columns: repeat(var(--weeks, 53), minmax(0, 1fr));
+  column-gap: var(--sp-1);
+  font-size: var(--step--2);
+  color: var(--ink-3);
 }
 
 .contrib__days {
   grid-area: days;
   display: grid;
-  grid-template-rows: repeat(7, 14px);
-  gap: 0;
+  grid-template-rows: repeat(7, minmax(0, 1fr));
+  row-gap: var(--sp-1);
+  align-items: center;
   list-style: none;
   margin: 0;
   padding: 0;
-  font-size: 0.68rem;
-  line-height: 14px;
-  color: #8b949e;
+  font-size: var(--step--2);
+  line-height: 1;
+  color: var(--ink-3);
 }
 
 .contrib__weeks {
   grid-area: weeks;
-  display: flex;
-  gap: 3px;
+  display: grid;
+  grid-template-columns: repeat(var(--weeks, 53), minmax(0, 1fr));
+  column-gap: var(--sp-1);
 }
 
 .contrib__week {
   display: grid;
-  grid-template-rows: repeat(7, 11px);
-  gap: 3px;
+  row-gap: var(--sp-1);
 }
 
 .contrib__day {
-  width: 11px;
-  height: 11px;
-  border-radius: 2px;
-  background: #161b22;
-  outline: 1px solid rgba(255, 255, 255, 0.04);
-  outline-offset: -1px;
+  aspect-ratio: 1;
+  border-radius: 4px;
+  background: var(--secondary);
 }
 
 .contrib__day[data-level="1"] {
@@ -924,23 +859,97 @@
 
 .contrib__day.is-empty {
   background: transparent;
-  outline: none;
 }
 
 .contrib__legend {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 4px;
-  margin-top: var(--s-3);
-  font-size: 0.72rem;
-  color: #8b949e;
+  gap: var(--sp-1);
+  margin-top: var(--sp-2);
+  font-size: var(--step--2);
+  color: var(--ink-3);
 }
 
-.contrib__legend .contrib__day:first-of-type {
-  margin-left: 4px;
+.contrib__legend .contrib__day {
+  width: 16px;
 }
 
-.contrib__legend .contrib__day:last-of-type {
-  margin-right: 4px;
+/* ---------- Narrow screens ----------
+   Every multi-column composition collapses to one column; sticky side titles
+   move back above their content. */
+@media (max-width: 1023px) {
+  .side-head,
+  .about__side,
+  .about__body,
+  .about__stats,
+  .edu-grid,
+  .work__stage,
+  .work__list,
+  .skills-groups,
+  .skills-stage,
+  .github__lede,
+  .github__stats,
+  .repo-feed {
+    grid-column: 1 / -1;
+  }
+
+  .side-head,
+  .about__side,
+  .work__stage {
+    position: static;
+  }
+
+  .about__stats {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+
+  .edu-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+}
+
+@media (max-width: 599px) {
+  .timeline__card {
+    grid-template-columns: 1fr;
+    gap: var(--sp-2);
+    padding: var(--sp-3);
+  }
+
+  .timeline__logo,
+  .edu__logo {
+    width: 56px;
+    height: 56px;
+  }
+
+  .edu {
+    padding: var(--sp-3);
+  }
+
+  .repo-feed {
+    grid-template-columns: 1fr;
+  }
+
+  .contrib {
+    padding: var(--sp-2);
+  }
+}
+
+/* The intro, set large at the top of the sheet: the first thing that slides
+   over the hero. */
+.about__statement {
+  grid-column: 1 / span 10;
+  margin-bottom: var(--sp-8);
+  font-size: clamp(1.75rem, 3.4vw, 3.25rem);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+
+@media (max-width: 1023px) {
+  .about__statement {
+    grid-column: 1 / -1;
+    margin-bottom: var(--sp-5);
+  }
 }

@@ -90,6 +90,7 @@ export default function DetailDialog({ originRef, labelledBy, onClose, children 
 
   return (
     <dialog
+      data-lenis-prevent
       ref={dialogRef}
       className="detail"
       aria-labelledby={labelledBy}
