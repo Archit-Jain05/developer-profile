@@ -59,7 +59,7 @@ export default function PublicSite() {
             <About profile={profile} />
             <Education items={content.education} />
             <Experience items={content.experience} projects={content.projects} />
-            <Projects items={content.projects} experience={content.experience} />
+            <Projects items={content.projects} experience={content.experience} githubUrl={profile.github_url} />
             <Skills skills={content.skills} projects={content.projects} />
             <GitHubActivity githubUrl={profile.github_url} />
             <Contact profile={profile} />

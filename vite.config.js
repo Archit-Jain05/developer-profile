@@ -4,6 +4,11 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    // drei's View pulls in tunnel-rat, whose nested zustand was getting its own
+    // copy of React bundled in — two Reacts, and "Invalid hook call". One copy.
+    dedupe: ["react", "react-dom"],
+  },
   build: {
     // The Three.js chunk (~1 MB, ~275 kB gzipped) is lazy-loaded by the hero
     // scene after first paint, so a larger limit than the default is expected.

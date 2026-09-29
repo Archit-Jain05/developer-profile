@@ -41,8 +41,9 @@ select {
   color: inherit;
 }
 
+/* White, not the accent: burgundy is under the 3:1 a focus ring needs on black. */
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--ink);
   outline-offset: 4px;
 }
 
@@ -261,7 +262,7 @@ h3 {
 
 .btn--primary:is(:hover, :focus-visible):not(:disabled) {
   border-color: var(--ink);
-  box-shadow: 0 16px 32px -16px rgba(201, 77, 105, 0.7);
+  box-shadow: 0 16px 32px -16px rgba(109, 0, 26, 0.9);
 }
 
 .btn--ghost {

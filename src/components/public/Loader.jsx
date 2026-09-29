@@ -1,32 +1,56 @@
-import { useEffect, useRef, useState } from "react";
-import logo from "../../assets/pfp.svg";
-import { circuitPaths } from "./circuitPaths.js";
+import { useEffect, useState } from "react";
+import logoSvg from "../../assets/pfp.svg?raw";
 import "./Loader.css";
 
-const MIN_MS = 900;
-const MAX_MS = 4500;
-const EXIT_MS = 2100;
-// How far the bar may creep before the thing it is waiting for actually arrives.
+// Long enough for the mark to finish assembling before the screen lifts.
+const MIN_MS = 1600;
+const MAX_MS = 5000;
+const EXIT_MS = 1000;
+// How far the counter may creep before the thing it is waiting for actually arrives.
 const STAGE = { start: 0.08, documentReady: 0.7, done: 1 };
-
-// The logo is the A, the same way the header wordmark reads.
-const LETTERS = ["R", "C", "H", "I", "T"];
-const TRACES = circuitPaths();
+// Each piece of the A gets its own fixed scatter offset, written straight into
+// the markup so it is there from the first paint.
+let piece = 0;
+// Merged into the style attribute each path already has (its fill): a second
+// style attribute on the same element would be dropped by the parser.
+const MARK = logoSvg.slice(logoSvg.indexOf("<svg")).replace(/style="fill: var(--logo-color, white)"/g, () => {
+  const i = piece++;
+  const dx = ((i * 37) % 11) * 8 - 40;
+  const dy = ((i * 53) % 9) * 8 - 32;
+  const r = ((i * 29) % 7) * 12 - 36;
+  return `style="fill: var(--logo-color, white); --i: ${i}; --dx: ${dx}px; --dy: ${dy}px; --r: ${r}deg"`;
+});
+// One object for the life of the page. The loader re-renders every frame to
+// move its counter, and React rewrites the markup whenever it is handed a new
+// { __html } object — which would restart every piece's animation each frame.
+const MARK_HTML = { __html: MARK };
 
 function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
+/** One digit of the counter, rolling to its value like an odometer wheel. */
+function Digit({ value }) {
+  return (
+    <span className="loader__digit">
+      <span className="loader__reel" style={{ "--d": value }}>
+        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
+          <span key={n}>{n}</span>
+        ))}
+      </span>
+    </span>
+  );
+}
+
 /**
- * Opening screen: the name drops in over a hairline track that fills as the page
- * and the 3D scene load. On the way out, circuit traces are cut through the black
- * panel and widen until the hero underneath is fully visible.
+ * Opening screen: the A assembles piece by piece inside a registration-marked
+ * tile while the counter rolls up to 100. On the way out the tile swells to
+ * fill the screen and fades, as the hero begins its own entrance underneath.
  */
 export default function Loader({ ready }) {
   const [phase, setPhase] = useState("loading");
   const [minElapsed, setMinElapsed] = useState(false);
-  const barRef = useRef(null);
-  const countRef = useRef(null);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     if (phase !== "loading") return;
@@ -42,30 +66,26 @@ export default function Loader({ ready }) {
     if (phase === "loading" && ready && minElapsed) setPhase("exiting");
   }, [phase, ready, minElapsed]);
 
-  // The bar eases towards whatever has actually finished, so it never sits at a
-  // number that means nothing.
+  // The counter eases towards whatever has actually finished, so it never sits
+  // at a number that means nothing.
   useEffect(() => {
     if (phase === "done") return;
     let value = 0;
     let frame = 0;
-
     const target = () => {
       if (phase === "exiting" || ready) return STAGE.done;
       return document.readyState === "complete" ? STAGE.documentReady : STAGE.start;
     };
-
     const paint = () => {
-      value += (target() - value) * (prefersReducedMotion() ? 1 : 0.045);
-      if (barRef.current) barRef.current.style.transform = `scaleX(${value.toFixed(4)})`;
-      if (countRef.current) countRef.current.textContent = String(Math.round(value * 100));
+      value += (target() - value) * (prefersReducedMotion() ? 1 : 0.05);
+      setCount(Math.min(100, Math.round(value * 100)));
       frame = requestAnimationFrame(paint);
     };
-
     frame = requestAnimationFrame(paint);
     return () => cancelAnimationFrame(frame);
   }, [phase, ready]);
 
-  // The hero's entrance is keyed off this attribute, so it plays as the panel
+  // The hero's entrance is keyed off this attribute, so it plays as the tile
   // lifts rather than invisibly underneath it.
   useEffect(() => {
     const root = document.documentElement;
@@ -92,52 +112,19 @@ export default function Loader({ ready }) {
 
   return (
     <div className={`loader ${phase === "exiting" ? "is-exiting" : ""}`} role="status" aria-live="polite">
-      <div className="loader__stage" aria-hidden="true">
-        <div className="loader__word">
-          <span className="loader__letter" style={{ "--i": 0 }}>
-            <img className="loader__mark" src={logo} alt="" />
-          </span>
-          {LETTERS.map((letter, i) => (
-            <span key={letter} className="loader__letter" style={{ "--i": i + 1 }}>
-              {letter}
-            </span>
-          ))}
+      <div className="loader__frame" aria-hidden="true">
+        <div className="loader__tile">
+          <div className="loader__mark" dangerouslySetInnerHTML={MARK_HTML} />
         </div>
-
-        <div className="loader__track">
-          <span ref={barRef} className="loader__bar" />
-        </div>
-        <p className="loader__count">
-          <span ref={countRef}>0</span>
-        </p>
       </div>
-      {/* The black panel itself, with the circuit cut out of it: everything drawn
-          black inside the mask becomes a window onto the hero underneath. */}
-      <svg
-        className="loader__panel"
-        viewBox="0 0 160 100"
-        preserveAspectRatio="xMidYMid slice"
-        aria-hidden="true"
-      >
-        <defs>
-          <mask id="loader-cut" maskUnits="userSpaceOnUse" x="-20" y="-20" width="200" height="140">
-            <rect x="-20" y="-20" width="200" height="140" fill="#ffffff" />
-            <g className="loader__cuts">
-              {TRACES.map((trace, i) => (
-                <g key={i} style={{ "--i": i }}>
-                  <path className="loader__trace" d={trace.d} pathLength="1" />
-                  {trace.pads.map((pad, j) => (
-                    <circle key={j} className="loader__pad" cx={pad.x} cy={pad.y} r="1.1" />
-                  ))}
-                </g>
-              ))}
-            </g>
-            <circle className="loader__wipe" cx="80" cy="50" r="0" fill="#000000" />
-          </mask>
-        </defs>
-        <rect x="-20" y="-20" width="200" height="140" style={{ fill: "var(--base)" }} mask="url(#loader-cut)" />
-      </svg>
-
+      <p className="loader__name" aria-hidden="true">
+        Archit Jain
+      </p>
+      <p className="loader__count" aria-hidden="true">
+        <Digit value={Math.floor(count / 100)} />
+        <Digit value={Math.floor(count / 10) % 10} />
+        <Digit value={count % 10} />
+      </p>
       <p className="visually-hidden">Loading Archit Jain's portfolio</p>
     </div>
   );

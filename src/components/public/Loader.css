@@ -1,189 +1,165 @@
 .loader {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: 200;
   display: grid;
-  place-content: center;
-  background: transparent;
+  place-items: center;
+  align-content: center;
+  gap: var(--sp-4);
+  background: var(--base);
+  transition: opacity 0.5s ease 0.5s;
 }
 
-/* The black panel is painted by this SVG, so the circuit can be cut out of it. */
-.loader__panel {
+/* The tile with a "+" registration mark just outside each corner. */
+.loader__frame {
+  position: relative;
+  padding: var(--sp-1);
+}
+
+.loader__frame::before {
+  content: "";
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
+  pointer-events: none;
+  /* Four small crosses, each a horizontal and a vertical stroke centred on a
+     point 8px outside the tile corner. */
+  background:
+    linear-gradient(var(--line-strong), var(--line-strong)) 0 8px / 16px 1px,
+    linear-gradient(var(--line-strong), var(--line-strong)) 8px 0 / 1px 16px,
+    linear-gradient(var(--line-strong), var(--line-strong)) 100% 8px / 16px 1px,
+    linear-gradient(var(--line-strong), var(--line-strong)) calc(100% - 8px) 0 / 1px 16px,
+    linear-gradient(var(--line-strong), var(--line-strong)) 0 calc(100% - 8px) / 16px 1px,
+    linear-gradient(var(--line-strong), var(--line-strong)) 8px 100% / 1px 16px,
+    linear-gradient(var(--line-strong), var(--line-strong)) 100% calc(100% - 8px) / 16px 1px,
+    linear-gradient(var(--line-strong), var(--line-strong)) calc(100% - 8px) 100% / 1px 16px;
+  background-repeat: no-repeat;
+  translate: -8px -8px;
+  width: calc(100% + 16px);
+  height: calc(100% + 16px);
 }
 
-.loader__stage {
-  position: relative;
-  z-index: 1;
+.loader__tile {
   display: grid;
-  justify-items: center;
-  gap: var(--sp-3);
-  width: min(380px, 78vw);
-}
-
-/* The letters fall towards the viewer's eye line, so the word has depth. */
-.loader__word {
-  display: flex;
-  align-items: baseline;
-  gap: 0.02em;
-  perspective: 900px;
-  perspective-origin: 50% 20%;
-  font-family: var(--font-display);
-  font-size: clamp(2.4rem, 8vw, 3.6rem);
-  font-weight: 800;
-  letter-spacing: -0.045em;
-  line-height: 1;
-}
-
-.loader__letter {
-  display: block;
-  transform-origin: 50% 120%;
-  color: #ffffff;
-  animation: letter-fall 1s cubic-bezier(0.2, 1.32, 0.4, 1) backwards;
-  animation-delay: calc(var(--i) * 90ms);
+  place-items: center;
+  width: 256px;
+  height: 256px;
+  background: var(--secondary);
+  transition:
+    scale 0.9s cubic-bezier(0.7, 0, 0.2, 1),
+    border-radius 0.9s cubic-bezier(0.7, 0, 0.2, 1);
 }
 
 .loader__mark {
-  display: block;
-  width: auto;
-  height: 0.88em;
-  translate: 0 0.03em;
+  width: 160px;
+  height: 160px;
+  --logo-color: var(--ink);
 }
 
-/* One hairline. The fill is a scaled span so it animates on the compositor. */
-.loader__track {
-  position: relative;
+.loader__mark svg {
   width: 100%;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.16);
+  height: 100%;
+  overflow: visible;
+}
+
+/* Each piece of the A arrives from its own scattered position and locks in. */
+.loader__mark path {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  translate: var(--dx, 0) var(--dy, 0);
+  rotate: var(--r, 0deg);
+  scale: 0.6;
+  animation: piece-in 0.8s var(--ease-out) calc(160ms + var(--i, 0) * 48ms) forwards;
+}
+
+@keyframes piece-in {
+  to {
+    opacity: 1;
+    translate: 0 0;
+    rotate: 0deg;
+    scale: 1;
+  }
+}
+
+.loader__name {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--step-2);
+  color: var(--ink-2);
+  animation: fade-up 0.8s var(--ease-out) 0.4s both;
+}
+
+/* The counter, bottom centre, each digit a rolling wheel. */
+.loader__count {
+  position: absolute;
+  bottom: var(--sp-5);
+  left: 50%;
+  translate: -50% 0;
+  display: flex;
+  margin: 0;
+  font-size: var(--step--1);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.2em;
+  color: var(--ink-3);
+}
+
+.loader__digit {
+  display: inline-block;
+  height: 1.2em;
+  line-height: 1.2em;
   overflow: hidden;
 }
 
-.loader__bar {
+.loader__reel span {
   display: block;
-  height: 100%;
-  width: 100%;
-  background: #ffffff;
-  transform: scaleX(0);
-  transform-origin: left center;
+  height: 1.2em;
 }
 
-.loader__count {
-  font-family: var(--font-display);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.45);
-  font-variant-numeric: tabular-nums;
-  justify-self: end;
-  margin-top: calc(-1 * var(--sp-2));
+.loader__reel {
+  display: flex;
+  flex-direction: column;
+  translate: 0 calc(var(--d) * -1.2em);
+  transition: translate 0.2s var(--ease-out);
 }
 
-.loader__count span::after {
-  content: "%";
-  margin-left: 0;
-}
-
-/* ---------- Exit: the circuit etches itself through the panel ---------- */
-/* Black inside the mask means a hole, so these shapes are the windows. */
-.loader__trace {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 0.95;
-  stroke-linecap: square;
-  stroke-linejoin: miter;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-}
-
-.loader__pad {
-  fill: #000000;
-  opacity: 0;
-}
-
-.loader.is-exiting .loader__trace {
-  animation: trace-cut 0.8s cubic-bezier(0.35, 0, 0.2, 1) forwards;
-  animation-delay: calc(var(--i) * 30ms);
-}
-
-.loader.is-exiting .loader__pad {
-  animation: pad-cut 0.3s ease forwards;
-  animation-delay: calc(0.3s + var(--i) * 30ms);
-}
-
-/* Then the opening spreads from the middle until the panel is gone. */
-.loader.is-exiting .loader__wipe {
-  animation: wipe-open 1.25s 0.7s cubic-bezier(0.5, 0, 0.2, 1) forwards;
-}
-
-.loader.is-exiting .loader__letter {
-  animation: letter-lift 0.6s cubic-bezier(0.4, 0, 0.9, 0.4) forwards;
-  animation-delay: calc(var(--i) * 35ms);
-}
-
-.loader.is-exiting .loader__track,
-.loader.is-exiting .loader__count {
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-@keyframes trace-cut {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes pad-cut {
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes wipe-open {
-  to {
-    r: 150;
-  }
-}
-
-@keyframes letter-fall {
+@keyframes fade-up {
   from {
     opacity: 0;
-    transform: translate3d(0, -140%, 320px) rotateX(-85deg);
-  }
-  60% {
-    opacity: 1;
-  }
-  to {
-    opacity: 1;
-    transform: none;
+    translate: 0 16px;
   }
 }
 
-@keyframes letter-lift {
-  to {
-    opacity: 0;
-    transform: translate3d(0, -35%, 260px) rotateX(45deg);
-  }
+/* ---------- Exit ----------
+   Everything but the tile fades; the tile swells past the edges of the screen,
+   then the whole layer fades to reveal the hero. */
+.loader.is-exiting {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loader.is-exiting .loader__mark,
+.loader.is-exiting .loader__name,
+.loader.is-exiting .loader__count,
+.loader.is-exiting .loader__frame::before {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.loader.is-exiting .loader__tile {
+  scale: 9;
+  border-radius: 50%;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .loader {
-    transition: opacity 0.25s ease;
-  }
-
-  .loader.is-exiting {
-    opacity: 0;
-  }
-
-  .loader__letter,
-  .loader.is-exiting .loader__letter,
-  .loader.is-exiting .loader__trace,
-  .loader.is-exiting .loader__pad,
-  .loader.is-exiting .loader__wipe {
+  .loader__mark path {
     animation: none;
+    opacity: 1;
+    translate: 0 0;
+    rotate: 0deg;
+    scale: 1;
+  }
+
+  .loader.is-exiting .loader__tile {
+    scale: 1;
   }
 }

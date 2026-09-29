@@ -1,12 +1,16 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Canvas } from "@react-three/fiber";
 import {
   ContactShadows,
   Environment,
+  Float,
   Lightformer,
   MeshTransmissionMaterial,
+  PerspectiveCamera,
   PresentationControls,
   RoundedBox,
+  View,
 } from "@react-three/drei";
 import { Object3D } from "three";
 import { createScreenTexture } from "./screenTexture.js";
@@ -107,10 +111,13 @@ function Laptop({ screen }) {
   );
 }
 
-function Phone({ screen }) {
+function Phone({ screen, lite }) {
   return (
     <group position={[0, -0.1, 0]} rotation={[0.03, -0.25, 0]} scale={1.45}>
       <RoundedBox args={[0.95, 1.95, 0.09]} radius={0.12} smoothness={6}>
+        {lite ? (
+          <meshPhysicalMaterial color="#c4c6cc" transparent opacity={0.42} roughness={0.08} clearcoat={1} depthWrite={false} />
+        ) : (
         <MeshTransmissionMaterial
           color="#eeeff2"
           samples={4}
@@ -122,46 +129,25 @@ function Phone({ screen }) {
           chromaticAberration={0.05}
           clearcoat={1}
         />
+        )}
       </RoundedBox>
       <Screen texture={screen} width={0.84} height={1.8} position={[0, 0, 0.051]} />
     </group>
   );
 }
 
-/**
- * The project device viewer. This is the 3D moved out of the hero, where it
- * was decoration beside the name, and into the one place it does real work:
- * showing what a project actually looked like running, on the device it ships
- * on. A Flutter app renders on a phone, a Shopify or Next.js build on a
- * laptop, and the screen carries the project's own screenshot.
- */
-export default function DeviceViewer({ project }) {
-  const wrapper = useRef(null);
-  const [visible, setVisible] = useState(true);
-  const [screen, setScreen] = useState(null);
-
-  const { coarse, reducedMotion, lite } = useMemo(() => {
-    const mq = (q) => typeof window !== "undefined" && window.matchMedia(q).matches;
-    const isCoarse = mq("(pointer: coarse)");
-    return {
-      coarse: isCoarse,
-      lite: isCoarse || mq("(max-width: 767px)") || (navigator.hardwareConcurrency ?? 8) <= 4,
-      reducedMotion: mq("(prefers-reduced-motion: reduce)"),
-    };
-  }, []);
-
+/** One project on the device it ships on, lit, turnable, gently floating. */
+function DeviceScene({ project, lite, coarse, calm, accent }) {
   const platform = platformFor(project);
+  const [screen, setScreen] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
     let made = null;
     createScreenTexture(project, { portrait: platform === "phone" }).then((texture) => {
       made = texture;
-      if (cancelled) {
-        texture.dispose();
-        return;
-      }
-      setScreen(texture);
+      if (cancelled) texture.dispose();
+      else setScreen(texture);
     });
     return () => {
       cancelled = true;
@@ -169,45 +155,101 @@ export default function DeviceViewer({ project }) {
     };
   }, [project, platform]);
 
-  // Stop rendering while off screen to save battery.
-  useEffect(() => {
-    const el = wrapper.current;
-    if (!el || typeof IntersectionObserver === "undefined") return;
-    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), {
-      rootMargin: "100px",
-    });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  const device = platform === "phone" ? <Phone screen={screen} /> : <Laptop screen={screen} />;
+  const device = (
+    <Float speed={calm ? 0 : 1.2} rotationIntensity={calm ? 0 : 0.15} floatIntensity={calm ? 0 : 0.35}>
+      <group rotation={[0.1, -0.3, 0]}>
+        {platform === "phone" ? <Phone screen={screen} lite={lite} /> : <Laptop screen={screen} />}
+      </group>
+    </Float>
+  );
 
   return (
-    <div ref={wrapper} className="device-viewer" data-draggable={!coarse}>
-      <Canvas
-        frameloop={visible ? "always" : "never"}
-        dpr={lite ? [1, 1.5] : [1, 2]}
-        camera={{ position: [0, 0.3, 6.1], fov: 34 }}
-        gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-        aria-hidden="true"
-      >
-        <ambientLight intensity={0.4} />
-        <directionalLight position={[4, 6, 5]} intensity={1.3} />
-        <pointLight position={[-4, 1, 3]} intensity={16} color="#c9ced6" />
-        {coarse || reducedMotion ? (
-          <group rotation={[0.1, -0.3, 0]}>{device}</group>
-        ) : (
-          <PresentationControls global cursor snap speed={1.3} polar={[-0.22, 0.22]} azimuth={[-0.6, 0.6]}>
-            <group rotation={[0.1, -0.3, 0]}>{device}</group>
-          </PresentationControls>
-        )}
-        <ContactShadows position={[0, -1.7, 0]} opacity={0.4} scale={9} blur={2.6} far={3} color="#000000" />
-        <Environment resolution={256} frames={1}>
-          <Lightformer form="rect" intensity={3} color="#ffffff" position={[0, 4, -2]} scale={[8, 2, 1]} />
-          <Lightformer form="rect" intensity={2.4} color="#c9ced6" position={[-5, 0, 2]} rotation-y={Math.PI / 2} scale={[6, 3, 1]} />
-          <Lightformer form="rect" intensity={2} color="#9aa1aa" position={[5, 1, 0]} rotation-y={-Math.PI / 2} scale={[6, 3, 1]} />
-        </Environment>
-      </Canvas>
-    </div>
+    <>
+      <PerspectiveCamera makeDefault position={[0, 0.3, platform === "phone" ? 7.6 : 6.2]} fov={34} />
+      <ambientLight intensity={0.4} />
+      <directionalLight position={[4, 6, 5]} intensity={1.3} />
+      {/* A burgundy rim light, the same light that stands behind the portrait. */}
+      <pointLight position={[-4, 1, 3]} intensity={18} color={accent} />
+      {coarse ? (
+        device
+      ) : (
+        <PresentationControls snap speed={1.3} polar={[-0.22, 0.22]} azimuth={[-0.6, 0.6]}>
+          {device}
+        </PresentationControls>
+      )}
+      <ContactShadows position={[0, -1.6, 0]} opacity={0.45} scale={9} blur={2.6} far={3} color="#000000" />
+      <Environment resolution={128} frames={1}>
+        <Lightformer form="rect" intensity={3} color="#ffffff" position={[0, 4, -2]} scale={[8, 2, 1]} />
+        <Lightformer form="rect" intensity={2.4} color={accent} position={[-5, 0, 2]} rotation-y={Math.PI / 2} scale={[6, 3, 1]} />
+        <Lightformer form="rect" intensity={2} color="#9aa1aa" position={[5, 1, 0]} rotation-y={-Math.PI / 2} scale={[6, 3, 1]} />
+      </Environment>
+    </>
+  );
+}
+
+/**
+ * The 3D for the horizontal projects gallery: every card's image area becomes
+ * a drei View showing that project on the device it ships on — a Flutter app
+ * on a phone, a Shopify or Next.js build on a laptop — with the project's own
+ * screenshot on its screen.
+ *
+ * All the views share one canvas, so four devices cost about what one did. The
+ * canvas is portalled to <body>, fixed over the viewport under the nav, and
+ * draws only inside each card's rectangle; it stops rendering while the
+ * section is off screen. The cards themselves are ordinary markup, so the
+ * content is all there without WebGL.
+ */
+export default function ProjectDevices({ projects, rootRef }) {
+  const [slots, setSlots] = useState([]);
+  const [visible, setVisible] = useState(false);
+
+  const env = useMemo(() => {
+    const mq = (q) => window.matchMedia(q).matches;
+    const coarse = mq("(pointer: coarse)");
+    return {
+      coarse,
+      lite: coarse || mq("(max-width: 767px)") || (navigator.hardwareConcurrency ?? 8) <= 4,
+      calm: mq("(prefers-reduced-motion: reduce)"),
+      accent: getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#6d001a",
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    setSlots([...rootRef.current.querySelectorAll("[data-device-slot]")]);
+  }, [rootRef, projects]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { rootMargin: "200px" });
+    observer.observe(rootRef.current);
+    return () => observer.disconnect();
+  }, [rootRef]);
+
+  return (
+    <>
+      {slots.map((slot, i) =>
+        projects[i]
+          ? createPortal(
+              <View className="hpanel__view">
+                <DeviceScene project={projects[i]} {...env} />
+              </View>,
+              slot,
+            )
+          : null,
+      )}
+      {createPortal(
+        <Canvas
+          className="devices-canvas"
+          eventSource={rootRef.current}
+          eventPrefix="client"
+          frameloop={visible ? "always" : "never"}
+          dpr={env.lite ? [1, 1.5] : [1, 2]}
+          gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+          aria-hidden="true"
+        >
+          <View.Port />
+        </Canvas>,
+        document.body,
+      )}
+    </>
   );
 }

@@ -184,7 +184,7 @@ export default function KeyboardScene({ skills, onSayHi }) {
     () => ({
       cap: token("--base-2", "#0d0d0d"),
       case: token("--accent-fill", "#6d001a"),
-      accent: token("--accent", "#c94d69"),
+      accent: token("--accent", "#6d001a"),
       ink: token("--ink", "#ffffff"),
     }),
     [],

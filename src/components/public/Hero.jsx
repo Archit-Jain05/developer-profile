@@ -1,6 +1,10 @@
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { FiDownload } from "react-icons/fi";
 import cutout from "../../assets/archit-cutout.webp";
+import { supportsWebGL } from "../../lib/webgl.js";
+import SceneBoundary from "./SceneBoundary.jsx";
+
+const HeroField = lazy(() => import("./three/HeroField.jsx"));
 import "./Hero.css";
 
 /** Layers drift against the pointer by different amounts, so the scene has depth. */
@@ -28,62 +32,43 @@ function usePointerDepth(ref) {
 }
 
 /**
- * One gradient across the whole word, though each letter is its own element
- * (so they can animate in one at a time): every letter is told where it sits
- * in the word and paints its own slice of a single word-wide gradient.
- */
-function useWordGradient(ref, word) {
-  useLayoutEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const measure = () => {
-      const letters = [...el.children];
-      if (letters.length === 0) return;
-      const start = letters[0].offsetLeft;
-      const end = letters.at(-1).offsetLeft + letters.at(-1).offsetWidth;
-      el.style.setProperty("--word-w", `${end - start}px`);
-      for (const letter of letters) letter.style.setProperty("--x", `${letter.offsetLeft - start}px`);
-    };
-    measure();
-    document.fonts?.ready.then(measure);
-    const observer = new ResizeObserver(measure);
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [ref, word]);
-}
-
-/**
  * The landing view: the first name as a wall of type, the portrait cut out and
  * standing in front of it, and the surname crossing in front of the portrait.
  * The hero stays pinned while the rest of the page slides up over it.
  */
 export default function Hero({ profile }) {
   const stage = useRef(null);
-  const word = useRef(null);
+  const [webgl, setWebgl] = useState(false);
   usePointerDepth(stage);
 
+  useEffect(() => {
+    setWebgl(supportsWebGL());
+  }, []);
+
   const [first, ...rest] = (profile.full_name ?? "").split(" ");
-  useWordGradient(word, first);
   const last = rest.join(" ");
 
   return (
     <section id="home" className="hero">
       <div ref={stage} className="hero__stage">
         <div className="hero__light" aria-hidden="true" />
+        {webgl && (
+          <SceneBoundary fallback={null}>
+            <Suspense fallback={null}>
+              <HeroField stageRef={stage} />
+            </Suspense>
+          </SceneBoundary>
+        )}
 
         <h1 className="hero__name">
-          <span ref={word} className="hero__first" aria-hidden="true">
-            {[...first].map((letter, i) => (
-              <span key={i} className="hero__letter" style={{ "--i": i }}>
-                {letter}
-              </span>
-            ))}
+          <span className="hero__first" aria-hidden="true">
+            {first}
           </span>
           <span className="visually-hidden">{profile.full_name}</span>
         </h1>
 
         <div className="hero__person">
-          <img className="hero__cutout" src={cutout} alt={profile.full_name} width="1171" height="1102" fetchPriority="high" />
+          <img className="hero__cutout" src={cutout} alt={profile.full_name} width="1171" height="1102" fetchPriority="high" draggable={false} />
         </div>
 
         {last && (
@@ -91,6 +76,10 @@ export default function Hero({ profile }) {
             {last}
           </p>
         )}
+
+        <p className="hero__corner hero__hint" aria-hidden="true">
+          Press and hold to charge the A, then let go.
+        </p>
 
         <div className="hero__corner hero__corner--right">
           <p className="hero__tagline">{profile.tagline}</p>

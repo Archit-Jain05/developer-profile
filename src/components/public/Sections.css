@@ -316,150 +316,210 @@
   font-size: var(--step--1);
 }
 
-/* ---------- Projects ----------
-   The device stage takes seven columns and stays in view while the list
-   beside it scrolls; picking a project swaps what is on the screen. */
-.work {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--grid-gap);
-  row-gap: var(--sp-5);
-  align-items: start;
+/* ---------- Projects: horizontal gallery ----------
+   The section is as tall as the track is wide. Its inner frame pins to the
+   viewport, and a scroll-driven animation slides the track sideways for as
+   long as the section is pinned — so scrolling down moves through the
+   projects left to right. Pure CSS: no scroll listeners.
+
+   Panel widths are in vw so the section height can be computed from them:
+   height = one screen + however far the track overflows the screen. */
+.hscroll {
+  --intro: 40vw;
+  --panel: 60vw;
+  --end: 36vw;
+  --track: calc(var(--intro) + var(--cards) * var(--panel) + var(--end));
+  position: relative;
+  margin-top: var(--section-space);
+  height: calc(100svh + var(--track) - 100vw);
+  view-timeline: --projects block;
 }
 
-.work__stage {
-  grid-column: 1 / span 7;
+.hscroll__pin {
   position: sticky;
-  top: 128px;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.hscroll__track {
+  display: flex;
+  width: var(--track);
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .hscroll__track {
+      animation: slide-track linear both;
+      animation-timeline: --projects;
+      animation-range: contain 0% contain 100%;
+    }
+  }
+}
+
+@keyframes slide-track {
+  to {
+    translate: calc(100vw - var(--track)) 0;
+  }
+}
+
+/* Without scroll-driven animation, or under reduced motion, the gallery is an
+   ordinary strip you swipe or scroll sideways. */
+@supports not (animation-timeline: view()) {
+  .hscroll {
+    height: auto;
+  }
+
+  .hscroll__pin {
+    position: static;
+    overflow-x: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hscroll {
+    height: auto;
+  }
+
+  .hscroll__pin {
+    position: static;
+    overflow-x: auto;
+  }
+}
+
+/* Each panel is a full-height column, divided from the next by a hairline. */
+.hpanel {
+  flex: none;
+  width: var(--panel);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--sp-3);
+  padding: var(--sp-12) var(--sp-5) var(--sp-6);
+  border-left: 1px solid var(--line);
+}
+
+.hpanel--intro {
+  width: var(--intro);
+  gap: var(--sp-3);
+  padding-left: var(--gutter);
+  border-left: 0;
+}
+
+.hpanel--intro .section-title {
+  font-size: clamp(3rem, 6vw, 6.5rem);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+}
+
+.hpanel--end {
+  width: var(--end);
+  align-items: flex-start;
+}
+
+.hpanel__end-title {
+  font-size: clamp(1.75rem, 2.6vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+/* The device stage: a card lit from behind in burgundy, the same light that
+   stands behind the portrait. ProjectDevices draws the device into it. */
+.hpanel__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  max-height: 56svh;
+  overflow: hidden;
   border-radius: var(--radius-lg);
-  background: var(--secondary);
-  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 55%, rgb(109, 0, 26) 0%, rgb(109, 0, 26) 30%, transparent 78%),
+    var(--secondary);
 }
 
-.device-viewer {
-  height: clamp(400px, 40vw, 600px);
-}
-
-.device-viewer[data-draggable="true"] canvas {
-  cursor: grab;
-}
-
-.device-viewer[data-draggable="true"] canvas:active {
-  cursor: grabbing;
-}
-
-/* No WebGL, or the scene threw: the screenshot at full width. */
-.device-viewer--flat {
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-}
-
-.device-viewer--flat img {
+.hpanel__media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.work__list {
-  grid-column: 8 / span 5;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  border-top: 1px solid var(--line);
+.hpanel__view {
+  position: absolute;
+  inset: 0;
 }
 
-.work__item {
-  border-bottom: 1px solid var(--line);
+.hpanel__view[data-draggable="true"],
+.hpanel__media:hover {
+  cursor: grab;
 }
 
-.work__pick {
+.hpanel__info {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: flex-end;
   justify-content: space-between;
-  gap: var(--sp-2);
-  width: 100%;
-  min-height: 48px;
-  padding: var(--sp-3) 0;
-  background: none;
-  border: 0;
-  color: var(--ink-3);
-  text-align: left;
-  cursor: pointer;
-  transition: color 0.24s, padding 0.3s var(--ease-out);
+  gap: var(--sp-2) var(--sp-5);
 }
 
-.work__pick:hover {
-  color: var(--ink);
-  padding-left: var(--sp-1);
-}
-
-.work__item.is-selected .work__pick {
-  color: var(--ink);
-  padding-left: var(--sp-3);
-}
-
-.work__title {
-  position: relative;
-  font-family: var(--font-display);
-  font-size: var(--step-2);
-  font-weight: 600;
-}
-
-/* The selected project is marked with the accent. */
-.work__title::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: -24px;
-  width: 8px;
-  height: 8px;
-  translate: 0 -50%;
-  border-radius: 50%;
-  background: var(--accent);
-  scale: 0;
-  transition: scale 0.3s var(--ease-out);
-}
-
-.work__item.is-selected .work__title::before {
-  scale: 1;
-}
-
-.work__tech {
-  font-variation-settings: "wdth" 88;
-  font-size: var(--step--2);
-  color: var(--ink-3);
-}
-
-.work__detail {
+.hpanel__text {
   display: grid;
-  gap: var(--sp-2);
-  padding: 0 0 var(--sp-3) var(--sp-3);
-  max-width: 56ch;
-  animation: detail-open 0.4s var(--ease-out) both;
+  gap: var(--sp-1);
+  max-width: 48ch;
 }
 
-@keyframes detail-open {
-  from {
-    opacity: 0;
-    translate: 0 -8px;
-  }
+.hpanel__title {
+  font-size: clamp(1.75rem, 2.6vw, 2.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
 }
 
-.work__origin {
-  font-size: var(--step--2);
-  color: var(--ink-3);
-}
-
-.work__desc {
+.hpanel__desc {
   color: var(--ink-2);
 }
 
-.work__links {
+.hpanel__meta {
+  font-size: var(--step--1);
+  color: var(--ink-3);
+}
+
+.hpanel__links {
   display: flex;
   flex-wrap: wrap;
   gap: var(--sp-3);
+}
+
+/* The shared 3D canvas: fixed over the viewport, under the nav. It draws only
+   inside each card's image area and never takes pointer events itself. */
+.devices-canvas {
+  position: fixed !important;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .hscroll {
+    --intro: 88vw;
+    --panel: 88vw;
+    --end: 88vw;
+  }
+
+  .hpanel {
+    padding: var(--sp-12) var(--sp-2) var(--sp-5);
+  }
+
+  .hpanel--intro {
+    padding-left: var(--gutter);
+  }
+
+  .hpanel__media {
+    aspect-ratio: 4 / 3;
+  }
 }
 
 /* ---------- Skills ----------
@@ -884,8 +944,6 @@
   .about__body,
   .about__stats,
   .edu-grid,
-  .work__stage,
-  .work__list,
   .skills-groups,
   .skills-stage,
   .github__lede,
@@ -895,8 +953,7 @@
   }
 
   .side-head,
-  .about__side,
-  .work__stage {
+  .about__side {
     position: static;
   }
 

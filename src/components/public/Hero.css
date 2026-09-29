@@ -16,6 +16,64 @@
   position: relative;
   height: 100%;
   overflow: hidden;
+  /* Holding to charge the lines must not select text or pop an image menu. */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* The 3D field (three/HeroField.jsx), between the light and the name. It
+   fades in once loaded, and takes no pointer events itself. */
+.hero__field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  animation: fade-in 1.2s var(--ease-out) both;
+}
+
+/* While charging, the whole hero tilts in 3D like a card being bent — --charge
+   runs from 0 to 1 and is set by HeroField. On release it springs back flat,
+   with a little overshoot. */
+.hero__stage {
+  transform: perspective(1400px) rotateX(calc(var(--charge, 0) * 9deg)) rotateY(calc(var(--charge, 0) * -12deg))
+    rotateZ(calc(var(--charge, 0) * -2.5deg));
+}
+
+.hero__stage:not([data-charging]) {
+  transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* While charging, the light swells and the name trembles. */
+.hero__light {
+  transition: scale 1.2s var(--ease-out), opacity 1.2s var(--ease-out);
+}
+
+.hero__stage[data-charging] .hero__light {
+  scale: 1.25;
+}
+
+/* On the heading wrapper, not the word: the word's own entrance animation
+   must keep running, or it falls back to its hidden starting state. */
+.hero__stage[data-charging] .hero__name {
+  animation: tremble 0.12s linear infinite;
+}
+
+@keyframes tremble {
+  25% {
+    translate: 1px -1px;
+  }
+  75% {
+    translate: -1px 1px;
+  }
+}
+
+.hero__hint {
+  left: var(--gutter);
+  max-width: 20ch;
+  margin: 0;
+  font-size: var(--step--1);
+  line-height: 1.4;
+  color: var(--ink-3);
 }
 
 /* Burgundy light behind the person, so the cutout reads as lit rather than
@@ -28,7 +86,7 @@
   aspect-ratio: 1;
   translate: -50% 0;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(150, 0, 36, 0.9) 0%, rgba(109, 0, 26, 0.42) 34%, transparent 66%);
+  background: radial-gradient(circle, rgb(109, 0, 26) 0%, rgb(109, 0, 26) 26%, rgba(109, 0, 26, 0.5) 46%, transparent 68%);
   transform: translate3d(calc(var(--mx) * -16px), calc(var(--my) * -16px), 0);
   pointer-events: none;
 }
@@ -43,30 +101,25 @@
   pointer-events: none;
 }
 
+/* One gradient across the whole word — white into the lighter burgundy (the
+   palette burgundy is too dark to read on black). inline-block so the
+   gradient spans the word rather than the full width of the hero; the padding
+   (cancelled by an equal negative margin) keeps overhanging glyph edges inside
+   the painted area. */
 .hero__first {
-  display: block;
+  display: inline-block;
+  padding: 0.12em 0.08em;
+  margin: -0.12em -0.08em;
+  color: transparent;
+  background: linear-gradient(90deg, var(--ink) 20%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
   font-size: clamp(6rem, 29vw, 30rem);
   font-weight: 700;
   line-height: 0.8;
   letter-spacing: -0.055em;
   white-space: nowrap;
   transform: translate3d(calc(var(--mx) * -24px), calc(var(--my) * -8px), 0);
-}
-
-/* One gradient across the word, white into the lighter burgundy (the palette
-   burgundy is too dark to read on black at the end of the word). Each letter
-   paints its own slice: --word-w and --x are measured in Hero.jsx. The padding
-   (cancelled by an equal negative margin) gives overhanging glyph edges room,
-   so the tight tracking does not shave them off. */
-.hero__letter {
-  display: inline-block;
-  padding: 0.12em 0.08em;
-  margin: -0.12em -0.08em;
-  color: transparent;
-  background: linear-gradient(90deg, var(--ink) 0%, var(--accent) 100%)
-    calc(-1 * var(--x, 0px)) 0 / var(--word-w, 100%) 100% no-repeat;
-  -webkit-background-clip: text;
-  background-clip: text;
 }
 
 /* ---------- The person ---------- */
@@ -139,15 +192,16 @@
 @media (prefers-reduced-motion: no-preference) {
   /* Load: the letters rise one by one as the loading screen lifts (the
      loader sets data-revealed on <html>), then the person, then the rest. */
-  .hero__letter,
+  .hero__first,
   .hero__person,
   .hero__last,
   .hero__corner {
     opacity: 0;
   }
 
-  html[data-revealed] .hero__letter {
-    animation: letter-in 1.1s var(--ease-out) calc(var(--i) * 72ms) both;
+  /* The word is uncovered left to right, so it still reads letter by letter. */
+  html[data-revealed] .hero__first {
+    animation: name-in 1.4s var(--ease-out) both;
   }
 
   html[data-revealed] .hero__person {
@@ -171,10 +225,11 @@
       animation-range: 0 100svh;
     }
 
-    .hero__first {
-      animation: lift linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 100svh;
+    /* The entrance and the scroll lift run together on the same element. */
+    html[data-revealed] .hero__first {
+      animation: name-in 1.4s var(--ease-out) both, lift linear both;
+      animation-timeline: auto, scroll(root);
+      animation-range: normal, 0 100svh;
     }
 
     .hero__cutout {
@@ -185,15 +240,15 @@
   }
 }
 
-@keyframes letter-in {
+@keyframes name-in {
   from {
     opacity: 0;
-    translate: 0 40%;
+    clip-path: inset(0 100% 0 0);
     filter: blur(16px);
   }
   to {
     opacity: 1;
-    translate: 0 0;
+    clip-path: inset(-24% -16% -24% -16%);
     filter: blur(0);
   }
 }
@@ -276,7 +331,8 @@
     top: 60%;
   }
 
-  .hero__tagline {
+  .hero__tagline,
+  .hero__hint {
     display: none;
   }
 
@@ -289,5 +345,12 @@
 
   .hero__corner--right .btn {
     flex: 1 1 0;
+  }
+}
+
+/* The lines do not react under reduced motion, so the hint would mislead. */
+@media (prefers-reduced-motion: reduce) {
+  .hero__hint {
+    display: none;
   }
 }

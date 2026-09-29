@@ -1,105 +1,94 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { FiGithub } from "react-icons/fi";
 import { supportsWebGL } from "../../lib/webgl.js";
 import SceneBoundary from "./SceneBoundary.jsx";
 import "./Sections.css";
 
-const DeviceViewer = lazy(() => import("./three/DeviceViewer.jsx"));
+const ProjectDevices = lazy(() => import("./three/ProjectDevices.jsx"));
 
-/** Shown while the scene loads, when WebGL is missing, or if it throws. */
-function ShotFallback({ project }) {
-  return (
-    <div className="device-viewer device-viewer--flat">
-      {project?.image_url && <img src={project.image_url} alt={`${project.title} screenshot`} />}
-    </div>
-  );
-}
-
-export default function Projects({ items, experience = [] }) {
+/**
+ * Projects as a horizontal gallery: the section pins, and scrolling down
+ * slides the cards sideways. Each card's image area is a slot the 3D layer
+ * (ProjectDevices) fills with the project running on its device; everything
+ * else is plain markup, so the section reads fine without WebGL.
+ */
+export default function Projects({ items, experience = [], githubUrl }) {
+  const root = useRef(null);
+  const [webgl, setWebgl] = useState(false);
   const companies = new Map(experience.map((job) => [job.id, job.company]));
-  const [selectedId, setSelectedId] = useState(items[0]?.id);
-  const [webgl, setWebgl] = useState(null);
 
   useEffect(() => {
     setWebgl(supportsWebGL());
   }, []);
 
-  const selected = items.find((p) => p.id === selectedId) ?? items[0];
-
   return (
-    <section id="projects" className="section">
-      <div className="container">
-        <div className="section-head">
-          <h2 className="section-title reveal-title">
-            Projects <span className="serif">that shipped</span>
-          </h2>
-          <p className="section-lede reveal">
-            Storefronts, apps and experiments, from client work and my own time. Pick one to see it on the
-            device it runs on, and drag to turn it.
-          </p>
-        </div>
-
-        <div className="work">
-          {/* The canvas is decorative: everything it shows is in the list beside it. */}
-          <div className="work__stage reveal reveal--scale" aria-hidden="true">
-            {webgl ? (
-              <SceneBoundary fallback={<ShotFallback project={selected} />}>
-                <Suspense fallback={<ShotFallback project={selected} />}>
-                  <DeviceViewer project={selected} />
-                </Suspense>
-              </SceneBoundary>
-            ) : (
-              <ShotFallback project={selected} />
-            )}
+    <section id="projects" ref={root} className="hscroll" style={{ "--cards": items.length }}>
+      <div className="hscroll__pin">
+        <div className="hscroll__track">
+          <div className="hpanel hpanel--intro">
+            <h2 className="section-title reveal-title">
+              Projects <span className="serif">that shipped</span>
+            </h2>
+            <p className="section-lede">
+              Storefronts, apps and experiments, from client work and my own time. Scroll to move through them, and
+              drag a device to turn it.
+            </p>
           </div>
 
-          <ul className="work__list stagger">
-            {items.map((project, index) => {
-              const company = companies.get(project.experience_id);
-              const isSelected = project.id === selected?.id;
-              return (
-                <li
-                  key={project.id}
-                  className={`work__item ${isSelected ? "is-selected" : ""}`}
-                  style={{ "--i": index }}
-                >
-                  <button
-                    type="button"
-                    className="work__pick"
-                    aria-pressed={isSelected}
-                    onClick={() => setSelectedId(project.id)}
-                    onFocus={() => setSelectedId(project.id)}
-                  >
-                    <span className="work__title">{project.title}</span>
-                    {project.tech?.length > 0 && (
-                      <span className="work__tech">{project.tech.join(", ")}</span>
-                    )}
-                  </button>
+          {items.map((project) => {
+            const company = companies.get(project.experience_id);
+            return (
+              <article key={project.id} className="hpanel">
+                <div className="hpanel__media" data-device-slot>
+                  {!webgl && project.image_url && <img src={project.image_url} alt={`${project.title} screenshot`} loading="lazy" />}
+                </div>
 
-                  {isSelected && (
-                    <div className="work__detail">
-                      {company && <p className="work__origin">Built at {company}</p>}
-                      {project.description && <p className="work__desc">{project.description}</p>}
-                      <div className="work__links">
-                        {project.live_url && (
-                          <a className="link-out" href={project.live_url} target="_blank" rel="noopener noreferrer">
-                            Open live site
-                          </a>
-                        )}
-                        {project.github_url && (
-                          <a className="link-out" href={project.github_url} target="_blank" rel="noopener noreferrer">
-                            <FiGithub aria-hidden="true" /> Source
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+                <div className="hpanel__info">
+                  <div className="hpanel__text">
+                    <h3 className="hpanel__title">{project.title}</h3>
+                    {project.description && <p className="hpanel__desc">{project.description}</p>}
+                    <p className="hpanel__meta">
+                      {company ? `Built at ${company}. ` : ""}
+                      {project.tech?.join(", ")}
+                    </p>
+                  </div>
+
+                  <div className="hpanel__links">
+                    {project.live_url && (
+                      <a className="link-out" href={project.live_url} target="_blank" rel="noopener noreferrer">
+                        Open live site
+                      </a>
+                    )}
+                    {project.github_url && (
+                      <a className="link-out" href={project.github_url} target="_blank" rel="noopener noreferrer">
+                        <FiGithub aria-hidden="true" /> Source
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+
+          <div className="hpanel hpanel--end">
+            <p className="hpanel__end-title">Everything else lives on GitHub.</p>
+            <p className="muted">Experiments, coursework and the things I build to learn a tool properly.</p>
+            {githubUrl && (
+              <a className="btn btn--ghost" href={githubUrl} target="_blank" rel="noopener noreferrer">
+                <FiGithub aria-hidden="true" /> See all repositories
+              </a>
+            )}
+          </div>
         </div>
       </div>
+
+      {webgl && items.length > 0 && (
+        <SceneBoundary fallback={null}>
+          <Suspense fallback={null}>
+            <ProjectDevices projects={items} rootRef={root} />
+          </Suspense>
+        </SceneBoundary>
+      )}
     </section>
   );
 }
