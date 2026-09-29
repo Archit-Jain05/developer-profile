@@ -53,11 +53,19 @@
   transform: translate3d(calc(var(--mx) * -24px), calc(var(--my) * -8px), 0);
 }
 
-/* Each letter a step dimmer than the last. Faded by opacity rather than mixed
-   with burgundy, which would produce pinks the palette does not have. */
+/* One gradient across the word, white into the full burgundy. Each letter
+   paints its own slice: --word-w and --x are measured in Hero.jsx. The padding
+   (cancelled by an equal negative margin) gives overhanging glyph edges room,
+   so the tight tracking does not shave them off. */
 .hero__letter {
   display: inline-block;
-  color: rgb(255 255 255 / calc(1 - var(--i) * 0.13));
+  padding: 0.12em 0.08em;
+  margin: -0.12em -0.08em;
+  color: transparent;
+  background: linear-gradient(90deg, var(--ink) 0%, var(--secondary) 100%)
+    calc(-1 * var(--x, 0px)) 0 / var(--word-w, 100%) 100% no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
 /* ---------- The person ---------- */
@@ -66,7 +74,7 @@
   z-index: 2;
   left: 50%;
   bottom: 0;
-  height: min(80svh, 880px);
+  height: min(72svh, 792px);
   translate: -50% 0;
   transform: translate3d(calc(var(--mx) * 8px), calc(var(--my) * 8px), 0);
 }
@@ -234,7 +242,7 @@
 /* ---------- Smaller screens ---------- */
 @media (max-width: 1199px) {
   .hero__person {
-    height: min(68svh, 720px);
+    height: min(61svh, 648px);
   }
 }
 
@@ -248,7 +256,7 @@
   }
 
   .hero__person {
-    height: 64svh;
+    height: 58svh;
   }
 
   .hero__last {

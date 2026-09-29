@@ -184,8 +184,18 @@ h3 {
 
 /* ---------- Buttons ----------
    The accent is for buttons and anything that needs direct attention — about
-   5% of the page. Everything else stays in the base and secondary colours. */
+   5% of the page.
+
+   On hover (and keyboard focus) a fill rises from the bottom of the pill and
+   the label swaps colour with it: burgundy floods the white primary button,
+   white floods the outlined one. The button lifts slightly, its icon dips,
+   and pressing gives a small squash. */
 .btn {
+  --btn-fill: transparent;
+  --btn-ink-hover: inherit;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -200,19 +210,40 @@ h3 {
   cursor: pointer;
   white-space: nowrap;
   transition:
-    background 0.24s var(--ease-out),
-    border-color 0.24s var(--ease-out),
-    color 0.24s var(--ease-out),
-    translate 0.24s var(--ease-out),
-    box-shadow 0.24s var(--ease-out);
+    color 0.4s var(--ease-out),
+    border-color 0.4s var(--ease-out),
+    translate 0.4s var(--ease-out),
+    scale 0.2s var(--ease-out),
+    box-shadow 0.4s var(--ease-out);
 }
 
-.btn svg {
-  transition: translate 0.24s var(--ease-out);
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--btn-fill);
+  scale: 1 0;
+  transform-origin: 50% 100%;
+  transition: scale 0.5s var(--ease-out);
+}
+
+.btn:is(:hover, :focus-visible):not(:disabled) {
+  color: var(--btn-ink-hover);
+  translate: 0 -2px;
+}
+
+.btn:is(:hover, :focus-visible):not(:disabled)::before {
+  scale: 1 1;
+}
+
+.btn:is(:hover, :focus-visible):not(:disabled) svg {
+  animation: icon-dip 0.6s var(--ease-out);
 }
 
 .btn:active:not(:disabled) {
-  scale: 0.97;
+  scale: 0.96;
 }
 
 .btn:disabled {
@@ -221,29 +252,26 @@ h3 {
 }
 
 .btn--primary {
+  --btn-fill: var(--secondary);
+  --btn-ink-hover: var(--ink);
   background: var(--accent);
   color: var(--base);
 }
 
-.btn--primary:hover:not(:disabled) {
-  background: var(--accent-2);
-  translate: 0 -2px;
-  box-shadow: 0 16px 32px -16px rgba(255, 255, 255, 0.28);
-}
-
-.btn--primary:hover:not(:disabled) svg {
-  translate: 0 2px;
+.btn--primary:is(:hover, :focus-visible):not(:disabled) {
+  box-shadow: 0 16px 32px -16px rgba(109, 0, 26, 0.9);
 }
 
 .btn--ghost {
+  --btn-fill: var(--accent);
+  --btn-ink-hover: var(--base);
   background: transparent;
   border-color: var(--line-strong);
   color: var(--ink);
 }
 
-.btn--ghost:hover:not(:disabled) {
-  border-color: var(--ink);
-  background: var(--secondary);
+.btn--ghost:is(:hover, :focus-visible):not(:disabled) {
+  border-color: var(--accent);
 }
 
 .btn--sm {
@@ -252,8 +280,14 @@ h3 {
   font-size: var(--step--2);
 }
 
-/* Links that leave the site keep an arrow, because there it means "opens in a
-   new tab". Internal links are plain. Both underline on hover. */
+@keyframes icon-dip {
+  40% {
+    translate: 0 4px;
+  }
+}
+
+/* Links that leave the site keep an arrow-free label; both kinds sit on a
+   faint rule, and a bright one draws in from the left on hover. */
 .link-out,
 .link-in {
   display: inline-flex;
@@ -262,16 +296,16 @@ h3 {
   color: var(--ink);
   font-size: var(--step--1);
   font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 6px;
-  text-decoration-color: var(--line-strong);
-  transition: text-decoration-color 0.2s, color 0.2s;
+  text-decoration: none;
+  background:
+    linear-gradient(var(--ink), var(--ink)) 0 100% / 0 1px no-repeat,
+    linear-gradient(var(--line-strong), var(--line-strong)) 0 100% / 100% 1px no-repeat;
+  transition: background-size 0.45s var(--ease-out);
 }
 
-.link-out:hover,
-.link-in:hover {
-  color: var(--accent);
-  text-decoration-color: var(--accent);
+.link-out:is(:hover, :focus-visible),
+.link-in:is(:hover, :focus-visible) {
+  background-size: 100% 1px, 100% 1px;
 }
 
 .tags {

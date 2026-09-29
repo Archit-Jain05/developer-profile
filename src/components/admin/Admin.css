@@ -3,13 +3,13 @@
   color: var(--accent);
 }
 
+/* Destructive: a darker red rises on hover. (It used to switch to the accent,
+   which is now white — white text on white.) */
 .btn--danger {
+  --btn-fill: #9e2f2f;
+  --btn-ink-hover: #fff;
   background: #c94b4b;
   color: #fff;
-}
-
-.btn--danger:hover:not(:disabled) {
-  background: var(--accent);
 }
 
 /* ---------- Centered screens (login, notices) ---------- */

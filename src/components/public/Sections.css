@@ -953,3 +953,22 @@
     margin-bottom: var(--sp-5);
   }
 }
+
+/* Small replies to the pointer: an icon tilts on its row, a logo lifts in its
+   card. Nothing here moves on its own. */
+.skill__icon,
+.timeline__logo,
+.edu__logo {
+  transition: scale 0.5s var(--ease-out), rotate 0.5s var(--ease-out);
+}
+
+.skill:hover .skill__icon {
+  scale: 1.2;
+  rotate: -8deg;
+}
+
+.card-button:hover .timeline__logo,
+.card-button:hover .edu__logo {
+  scale: 1.06;
+  rotate: -3deg;
+}
