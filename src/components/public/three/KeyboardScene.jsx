@@ -26,7 +26,7 @@ function makeLegend(text, units, { cap, ink, mark }) {
   ctx.fillRect(0, 0, w, h);
 
   let size = 64;
-  const font = (s) => `600 ${s}px Archivo, system-ui, sans-serif`;
+  const font = (s) => `600 ${s}px "Instrument Sans", system-ui, sans-serif`;
   ctx.font = font(size);
   while (ctx.measureText(text).width > w * 0.8 && size > 32) {
     size -= 4;
@@ -148,7 +148,7 @@ function Board({ skills, legends, layout, palette, reducedMotion, visibleRef, on
           w={k.w}
           legend={legends[i]}
           cap={i === hiKey ? palette.accent : palette.cap}
-          glow={i === hiKey ? palette.ink : palette.accent}
+          glow={i === hiKey ? palette.secondary : palette.accent}
           pressedAt={pressedAt}
           onPress={press}
           onTouch={touch}
@@ -161,7 +161,7 @@ function Board({ skills, legends, layout, palette, reducedMotion, visibleRef, on
 /**
  * The skills, as a mechanical keyboard you can play with: one keycap per skill,
  * pressed by pointer or by typing its first letter, tilted by dragging, and a
- * coral "Say hi" key that jumps to the contact form. The canvas is decorative;
+ * white "Say hi" key that jumps to the contact form. The canvas is decorative;
  * the same skills are listed in the markup beside it.
  */
 export default function KeyboardScene({ skills, onSayHi }) {
@@ -182,22 +182,22 @@ export default function KeyboardScene({ skills, onSayHi }) {
 
   const palette = useMemo(
     () => ({
-      cap: token("--base-2", "#05171b"),
-      secondary: token("--secondary", "#19333a"),
-      accent: token("--accent", "#fa8f78"),
-      base: token("--base", "#0a1f24"),
-      ink: token("--ink", "#eef5f7"),
+      cap: token("--base-2", "#111111"),
+      secondary: token("--secondary", "#6d001a"),
+      accent: token("--accent", "#ffffff"),
+      base: token("--base", "#000000"),
+      ink: token("--ink", "#ffffff"),
     }),
     [],
   );
 
   const layout = useMemo(() => layoutKeys(skills.length), [skills.length]);
 
-  // Legends are drawn once Archivo has loaded, so the canvas uses the real face.
+  // Legends are drawn once Instrument Sans has loaded, so the canvas uses the real face.
   useEffect(() => {
     let cancelled = false;
     let made = [];
-    const fontReady = document.fonts?.load('600 64px "Archivo"') ?? Promise.resolve();
+    const fontReady = document.fonts?.load('600 64px "Instrument Sans"') ?? Promise.resolve();
     fontReady
       .catch(() => {})
       .then(() => {
@@ -232,7 +232,7 @@ export default function KeyboardScene({ skills, onSayHi }) {
       <Canvas
         frameloop={visible ? "always" : "never"}
         dpr={lite ? [1, 1.5] : [1, 2]}
-        camera={{ position: [0, 5.2, 4.4], fov: 30 }}
+        camera={{ position: [0, 5.8, 5.1], fov: 30 }}
         onCreated={({ camera }) => camera.lookAt(0, -0.2, 0)}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
         aria-hidden="true"
