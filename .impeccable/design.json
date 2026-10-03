@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-04T00:00:00.000Z",
+  "title": "Design System: Archit Jain, developer portfolio",
+  "extensions": {
+    "colorMeta": {
+      "signature-burgundy": {
+        "role": "primary",
+        "displayName": "Signature Burgundy",
+        "canonical": "#6d001a",
+        "tonalRamp": ["oklch(15% 0.06 17)", "oklch(25% 0.1 17)", "oklch(33% 0.13 17)", "oklch(43% 0.15 17)", "oklch(55% 0.15 17)", "oklch(67% 0.12 17)", "oklch(80% 0.07 17)", "oklch(94% 0.02 17)"]
+      },
+      "burgundy-haze": { "role": "primary", "displayName": "Burgundy Haze", "canonical": "rgba(109, 0, 26, 0.35)" },
+      "studio-black": {
+        "role": "neutral",
+        "displayName": "Studio Black",
+        "canonical": "#000000",
+        "tonalRamp": ["oklch(0% 0 0)", "oklch(15% 0 0)", "oklch(25% 0 0)", "oklch(37% 0 0)", "oklch(50% 0 0)", "oklch(65% 0 0)", "oklch(80% 0 0)", "oklch(95% 0 0)"]
+      },
+      "well-black": { "role": "neutral", "displayName": "Well Black", "canonical": "#0d0d0d" },
+      "workbench-charcoal": {
+        "role": "neutral",
+        "displayName": "Workbench Charcoal",
+        "canonical": "#1a1a1a",
+        "tonalRamp": ["oklch(15% 0 0)", "oklch(21.6% 0 0)", "oklch(28% 0 0)", "oklch(38% 0 0)", "oklch(50% 0 0)", "oklch(65% 0 0)", "oklch(80% 0 0)", "oklch(95% 0 0)"]
+      },
+      "raised-charcoal": { "role": "neutral", "displayName": "Raised Charcoal", "canonical": "#262626" },
+      "chalk-white": {
+        "role": "neutral",
+        "displayName": "Chalk White",
+        "canonical": "#ffffff",
+        "tonalRamp": ["oklch(15% 0 0)", "oklch(28% 0 0)", "oklch(40% 0 0)", "oklch(52% 0 0)", "oklch(64% 0 0)", "oklch(76% 0 0)", "oklch(88% 0 0)", "oklch(100% 0 0)"]
+      },
+      "silver-ink": { "role": "neutral", "displayName": "Silver Ink", "canonical": "#d0d0d0" },
+      "ash-ink": { "role": "neutral", "displayName": "Ash Ink", "canonical": "#a6a6a6" },
+      "hairline": { "role": "neutral", "displayName": "Hairline", "canonical": "rgba(255, 255, 255, 0.12)" },
+      "hairline-strong": { "role": "neutral", "displayName": "Strong Hairline", "canonical": "rgba(255, 255, 255, 0.24)" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The first name in the hero only, as a wall of type with the one white-to-burgundy gradient." },
+      "headline": { "displayName": "Headline", "purpose": "Full-width section titles, set huge and tight like the name." },
+      "title": { "displayName": "Title", "purpose": "Section titles in a side column and the contact heading." },
+      "body": { "displayName": "Body", "purpose": "Reading text at normal spacing, about 65-75 characters a line." },
+      "label": { "displayName": "Label", "purpose": "Buttons, nav links and text links." },
+      "meta": { "displayName": "Meta", "purpose": "Dates, counts, tags and captions in Ash Ink." },
+      "accent-serif": { "displayName": "Accent Serif", "purpose": "Two or three italic phrases inside headings, rotated -4 degrees across the sans." }
+    },
+    "shadows": [
+      { "name": "lift", "value": "0 24px 48px -24px rgba(0, 0, 0, 0.9)", "purpose": "Standard elevation for cards, the scrolled nav pill and floating panels." },
+      { "name": "dialog", "value": "inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 40px 100px -30px rgba(0, 0, 0, 0.9)", "purpose": "The detail dialog, the highest surface." },
+      { "name": "burgundy-pull", "value": "0 16px 32px -16px rgba(109, 0, 26, 0.9)", "purpose": "Under a primary button while hovered." },
+      { "name": "well", "value": "inset 0 1px 2px rgba(0, 0, 0, 0.6)", "purpose": "Recessed wells." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "The one easing for arrivals, fills and state changes." },
+      { "name": "button-fill", "value": "0.5s", "purpose": "The fill rising inside a button on hover." },
+      { "name": "state", "value": "0.2s-0.4s", "purpose": "Colour, border and lift changes." },
+      { "name": "dialog-open", "value": "460ms", "purpose": "The detail dialog growing out of its card; closes in 340ms." },
+      { "name": "reduced-motion", "value": "transition-property: opacity, color, background-color, border-color, box-shadow", "purpose": "Under reduced motion, movement is removed and fades and colour changes stay." }
+    ],
+    "breakpoints": [
+      { "name": "phone", "value": "<768px" },
+      { "name": "tablet", "value": "768px" },
+      { "name": "desktop", "value": "1200px" },
+      { "name": "phone-landscape", "value": "landscape and max-height 520px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The main action. A burgundy pill whose white fill rises on hover.",
+      "html": "<button class=\"ds-btn ds-btn-primary\">See projects</button>",
+      "css": ".ds-btn { position: relative; isolation: isolate; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 8px 24px; border-radius: 999px; border: 1px solid transparent; font: 600 0.9375rem/1.4 'Instrument Sans', system-ui, sans-serif; letter-spacing: 0.01em; cursor: pointer; transition: color 0.4s cubic-bezier(0.16,1,0.3,1), border-color 0.4s cubic-bezier(0.16,1,0.3,1), translate 0.4s cubic-bezier(0.16,1,0.3,1), scale 0.2s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s cubic-bezier(0.16,1,0.3,1); } .ds-btn::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: #ffffff; scale: 1 0; transform-origin: 50% 100%; transition: scale 0.5s cubic-bezier(0.16,1,0.3,1); } .ds-btn:hover, .ds-btn:focus-visible { translate: 0 -2px; } .ds-btn:hover::before, .ds-btn:focus-visible::before { scale: 1 1; } .ds-btn:active { scale: 0.96; } .ds-btn:focus-visible { outline: 2px solid #ffffff; outline-offset: 4px; } .ds-btn-primary { background: #6d001a; border-color: #6d001a; color: #ffffff; } .ds-btn-primary:hover, .ds-btn-primary:focus-visible { color: #6d001a; border-color: #ffffff; box-shadow: 0 16px 32px -16px rgba(109,0,26,0.9); }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "The secondary action, such as downloading the CV. Outlined; fills white on hover.",
+      "html": "<button class=\"ds-btn-ghost\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><polyline points=\"7 10 12 15 17 10\"/><line x1=\"12\" y1=\"15\" x2=\"12\" y2=\"3\"/></svg> Download CV</button>",
+      "css": ".ds-btn-ghost { position: relative; isolation: isolate; overflow: hidden; display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 8px 24px; border-radius: 999px; background: transparent; border: 1px solid rgba(255,255,255,0.24); color: #ffffff; font: 600 0.9375rem/1.4 'Instrument Sans', system-ui, sans-serif; cursor: pointer; transition: color 0.4s cubic-bezier(0.16,1,0.3,1), border-color 0.4s, translate 0.4s cubic-bezier(0.16,1,0.3,1); } .ds-btn-ghost::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: #ffffff; scale: 1 0; transform-origin: 50% 100%; transition: scale 0.5s cubic-bezier(0.16,1,0.3,1); } .ds-btn-ghost:hover, .ds-btn-ghost:focus-visible { color: #000000; border-color: #ffffff; translate: 0 -2px; } .ds-btn-ghost:hover::before, .ds-btn-ghost:focus-visible::before { scale: 1 1; } .ds-btn-ghost:active { scale: 0.96; } .ds-btn-ghost:focus-visible { outline: 2px solid #ffffff; outline-offset: 4px; }"
+    },
+    {
+      "name": "Text Link",
+      "kind": "custom",
+      "description": "Inline actions such as Open live site or Source. A hairline underneath; a white rule draws in from the left on hover.",
+      "html": "<a class=\"ds-link\" href=\"#\">Open live site</a>",
+      "css": ".ds-link { display: inline-flex; align-items: center; gap: 8px; color: #ffffff; font: 600 0.9375rem/1.4 'Instrument Sans', system-ui, sans-serif; text-decoration: none; background: linear-gradient(#ffffff, #ffffff) 0 100% / 0 1px no-repeat, linear-gradient(rgba(255,255,255,0.24), rgba(255,255,255,0.24)) 0 100% / 100% 1px no-repeat; transition: background-size 0.45s cubic-bezier(0.16,1,0.3,1); } .ds-link:hover, .ds-link:focus-visible { background-size: 100% 1px, 100% 1px; } .ds-link:focus-visible { outline: 2px solid #ffffff; outline-offset: 4px; }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "A lifted charcoal surface for experience, education and repositories; clickable cards raise a tone on hover.",
+      "html": "<button class=\"ds-card\"><span class=\"ds-card-meta\">Aug 2023 - Aug 2024</span><span class=\"ds-card-title\">Web Developer Intern</span><span class=\"ds-card-body\">Built and maintained the brand's e-commerce websites with Shopify and React.</span></button>",
+      "css": ".ds-card { display: grid; gap: 8px; width: 100%; max-width: 420px; padding: 32px; text-align: left; border: 0; border-radius: 16px; background: #1a1a1a; color: #d0d0d0; font: 400 1.0625rem/1.65 'Instrument Sans', system-ui, sans-serif; box-shadow: 0 24px 48px -24px rgba(0,0,0,0.9); cursor: pointer; transition: background 0.3s cubic-bezier(0.16,1,0.3,1); } .ds-card:hover { background: #262626; } .ds-card:active { scale: 0.99; } .ds-card:focus-visible { outline: 2px solid #ffffff; outline-offset: 4px; } .ds-card-meta { font-size: 0.8125rem; color: #a6a6a6; } .ds-card-title { font-size: 1.5rem; font-weight: 600; line-height: 1.2; letter-spacing: -0.02em; color: #ffffff; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "A recessed well with its label above; the edge turns burgundy with a soft haze on focus.",
+      "html": "<label class=\"ds-field\"><span>Email</span><input class=\"ds-input\" type=\"email\" placeholder=\"you@company.com\" /></label>",
+      "css": ".ds-field { display: grid; gap: 8px; max-width: 420px; font: 500 0.9375rem/1.4 'Instrument Sans', system-ui, sans-serif; color: #d0d0d0; } .ds-input { min-height: 48px; padding: 8px 16px; background: #0d0d0d; color: #ffffff; border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; font: 400 1.0625rem/1.4 'Instrument Sans', system-ui, sans-serif; transition: border-color 0.2s, box-shadow 0.2s; } .ds-input::placeholder { color: #a6a6a6; } .ds-input:focus { outline: none; border-color: #6d001a; box-shadow: 0 0 0 4px rgba(109,0,26,0.35); }"
+    },
+    {
+      "name": "Tag",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "Tech and meta labels on projects.",
+      "html": "<ul class=\"ds-tags\"><li>Next.js</li><li>TypeScript</li><li>Shopify</li></ul>",
+      "css": ".ds-tags { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; } .ds-tags li { padding: 0 16px; line-height: 32px; border-radius: 999px; background: #262626; color: #d0d0d0; font: 400 0.8125rem 'Instrument Sans', system-ui, sans-serif; }"
+    },
+    {
+      "name": "Topic Chip",
+      "kind": "chip",
+      "description": "A selectable choice on the contact page; turns burgundy haze when chosen.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip is-selected\">A job opportunity</button><button class=\"ds-chip\">Freelance work</button></div>",
+      "css": ".ds-chips { display: flex; flex-wrap: wrap; gap: 8px; } .ds-chip { padding: 0 16px; line-height: 40px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.12); background: #0d0d0d; color: #ffffff; font: 400 0.9375rem 'Instrument Sans', system-ui, sans-serif; cursor: pointer; transition: border-color 0.2s, background 0.2s, scale 0.15s; } .ds-chip:hover { border-color: rgba(255,255,255,0.24); } .ds-chip:active { scale: 0.97; } .ds-chip.is-selected { border-color: #6d001a; background: rgba(109,0,26,0.35); } .ds-chip:focus-visible { outline: 2px solid #ffffff; outline-offset: 4px; }"
+    },
+    {
+      "name": "Navigation Bar",
+      "kind": "nav",
+      "refersTo": "nav-bar",
+      "description": "The floating pill nav once scrolled; the current section keeps a white label and burgundy underline.",
+      "html": "<nav class=\"ds-nav\"><span class=\"ds-nav-brand\">Archit Jain</span><ul><li><a href=\"#\">About</a></li><li><a href=\"#\" aria-current=\"location\">Projects</a></li><li><a href=\"#\">Skills</a></li></ul></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 64px; padding: 0 8px 0 24px; border-radius: 999px; background: rgba(12,12,12,0.78); border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 24px 48px -24px rgba(0,0,0,0.9); backdrop-filter: blur(16px) saturate(120%); font-family: 'Instrument Sans', system-ui, sans-serif; } .ds-nav-brand { font-weight: 600; font-size: 1.375rem; color: #ffffff; } .ds-nav ul { display: flex; list-style: none; margin: 0; padding: 0; } .ds-nav a { position: relative; display: block; padding: 8px 16px; font-size: 0.9375rem; font-weight: 500; color: #d0d0d0; text-decoration: none; transition: color 0.2s; } .ds-nav a::after { content: ''; position: absolute; left: 16px; right: 16px; bottom: 0; height: 2px; border-radius: 2px; background: #6d001a; scale: 0 1; transition: scale 0.3s cubic-bezier(0.16,1,0.3,1); } .ds-nav a:hover, .ds-nav a[aria-current] { color: #ffffff; } .ds-nav a:hover::after, .ds-nav a[aria-current]::after { scale: 1 1; } .ds-nav a:focus-visible { outline: 2px solid #ffffff; outline-offset: 2px; border-radius: 999px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Night Studio",
+    "overview": "A dark workshop after hours. The room is black and quiet; the finished pieces sit under a single warm light and can be picked up and turned. Every page is that studio: a calm black ground, white type that speaks plainly and with confidence, and one burgundy light that falls on the work and on Archit himself. Nothing competes with the light, and nothing in the room is there for decoration.\n\nThe mood is calm, premium and crafted. At rest the page is still, spacious and expensive-feeling, with care visible in the edges, spacing and type. Under the hand it becomes tactile and playful: buttons fill as you reach for them, the 3D pieces turn when you move, the keyboard's keys go down. Calm is the resting state; play is the response to touch. The site never moves just to attract attention.\n\nScale does the talking instead of colour. The first name is set as a wall of type behind a background-removed portrait, section headings are set nearly as large and just as tight, and the reading text underneath relaxes to normal spacing. Burgundy is rare enough that wherever it appears, it means something.",
+    "keyCharacteristics": [
+      "Black page, white type, one accent: Signature Burgundy #6D001A, exactly as supplied.",
+      "A single burgundy light source, behind the portrait and behind each project device.",
+      "Huge, tightly tracked Instrument Sans for names and headings; a few phrases in Instrument Serif italic.",
+      "Full-width 12-column compositions on an 8-point spacing grid.",
+      "Generously rounded, lifted surfaces; pill-shaped controls.",
+      "Interactive 3D where it shows something real: the A logo, the project devices, the skills keyboard.",
+      "Dark only."
+    ],
+    "rules": [
+      { "name": "The Signature Rule", "body": "Burgundy appears only where Archit would sign: actions, the light, and the current or selected state. It is always #6D001A. If a burgundy element is too dark to read, change its size or what sits behind it, never its hex.", "section": "colors" },
+      { "name": "The White Leads Rule", "body": "\"Main colour\" means white, not the background. Headings, the name and every primary label are Chalk White on black.", "section": "colors" },
+      { "name": "The One Light Rule", "body": "There is one light in the studio: a radial burgundy glow with a solid core. It sits behind the portrait and behind each project device, and nowhere else. A second, differently coloured glow is a different room.", "section": "colors" },
+      { "name": "The Wall of Type Rule", "body": "Tight tracking belongs only to huge type (display and headline). Everything a visitor reads at length uses normal spacing; tight tracking at reading size reads as cramped.", "section": "typography" },
+      { "name": "The Sparing Serif Rule", "body": "The serif italic appears in two or three headings across the whole site, never all of them, and never for body text.", "section": "typography" },
+      { "name": "The Eight-Point Rule", "body": "Every margin, padding, gap and offset is a multiple of 8 (8, 16, 24, 32, 40, 48, 64, 80, 96, 128). A test fails the build if one slips. Positions anchored to fluid type go through a named variable, never a raw vw offset.", "section": "layout" },
+      { "name": "The Full-Width Rule", "body": "No section lives in a narrow centred column. If a layout could be a single column down the middle, compose it across the grid instead.", "section": "layout" },
+      { "name": "The Downward Light Rule", "body": "Shadows always fall down and away (a positive y offset with a negative spread). Zero-offset glows and hard offset shadows don't belong in the studio.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use #6D001A exactly for every burgundy element, and Burgundy Haze (the same colour at 35%) for soft fills.",
+      "Do let white lead: headings, the name and primary labels in Chalk White on Studio Black.",
+      "Do keep every spacing value on the 8-point scale, and compose sections across the 12-column grid.",
+      "Do set names and section headings huge and tight, and reading text at normal spacing.",
+      "Do keep the portrait in full colour, background-removed, standing in front of the name.",
+      "Do make interactive things answer the hand: rising fills, presses to 96%, keys that go down, an A that turns to the cursor.",
+      "Do give every animation a reduced-motion path that removes movement but keeps fades and colour changes."
+    ],
+    "donts": [
+      "Don't invent lighter, brighter or greyed variants of the burgundy.",
+      "Don't add a light theme or a second accent colour.",
+      "Don't use gradients as decoration. The hero name's white-to-burgundy sweep is the only gradient text on the site.",
+      "Don't put glass and blur on every surface. Blur is for the scrolled nav and the dialog scrim only.",
+      "Don't use Arial, Inter, Poppins, Space Grotesk or Bricolage Grotesque, or tight tracking at reading sizes.",
+      "Don't give every section the same title-plus-subtitle header, add skill percentage bars, or append \"→\" to links.",
+      "Don't desaturate or greyscale the portrait.",
+      "Don't use near-square 2–4px corners.",
+      "Don't bring back the hold-to-charge hero: no page tilt, trembling text, lightning or strike."
+    ]
+  }
+}

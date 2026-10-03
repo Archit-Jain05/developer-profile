@@ -289,3 +289,42 @@
   color: var(--ink-3);
   font-variant-numeric: tabular-nums;
 }
+
+/* ---------- Sending feedback ----------
+   While the message is on its way the paper plane flies out of the button and
+   comes back round; the result line and any field error ease in rather than
+   popping, so the change is noticed. */
+.contact-form .btn[data-state="sending"] svg {
+  animation: send-fly 0.9s var(--ease-out) infinite;
+}
+
+.contact-form__status > span,
+.field__error {
+  animation: status-in 0.32s var(--ease-out) both;
+}
+
+@keyframes send-fly {
+  0% {
+    translate: 0 0;
+    opacity: 1;
+  }
+  45% {
+    translate: 16px -16px;
+    opacity: 0;
+  }
+  46% {
+    translate: -16px 16px;
+    opacity: 0;
+  }
+  100% {
+    translate: 0 0;
+    opacity: 1;
+  }
+}
+
+@keyframes status-in {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}

@@ -311,6 +311,26 @@ h3 {
   background-size: 100% 1px, 100% 1px;
 }
 
+/* On touch screens, short text links get an invisible pad around them so a
+   fingertip can hit them; the layout does not move. */
+@media (pointer: coarse) {
+  .link-out,
+  .link-in,
+  .contact__details a,
+  .footer__nav a {
+    position: relative;
+  }
+
+  .link-out::before,
+  .link-in::before,
+  .contact__details a::before,
+  .footer__nav a::before {
+    content: "";
+    position: absolute;
+    inset: calc(-1 * var(--sp-1));
+  }
+}
+
 .tags {
   display: flex;
   flex-wrap: wrap;
@@ -405,6 +425,15 @@ h3 {
       animation-range: entry calc(var(--i, 0) * 8%) entry calc(64% + var(--i, 0) * 8%);
     }
 
+    /* On narrow screens a sideways entrance pushes content past the edge of
+       the screen while it plays, so everything rises in instead. */
+    @media (max-width: 767px) {
+      .reveal--left,
+      .reveal--right {
+        animation-name: reveal-up;
+      }
+    }
+
     .scroll-progress {
       display: block;
       position: fixed;
@@ -487,12 +516,14 @@ h3 {
   html {
     scroll-behavior: auto;
   }
+  /* Movement goes; fades and colour changes stay, so hover, focus and
+     selected states still visibly respond. */
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-property: opacity, color, background-color, border-color, box-shadow !important;
   }
 }
 

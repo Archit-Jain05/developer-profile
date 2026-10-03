@@ -138,6 +138,7 @@ export default function ContactForm({ fallbackEmail, topics }) {
       <button
         type="submit"
         className="btn btn--primary"
+        data-state={status}
         disabled={status === "sending" || coolingDown}
       >
         {status === "sending" ? "Sending…" : "Send message"} <FiSend aria-hidden="true" />

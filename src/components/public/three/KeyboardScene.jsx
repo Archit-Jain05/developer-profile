@@ -90,7 +90,7 @@ function Key({ index, x, z, w, legend, cap, glow, pressedAt, onPress, onTouch })
   );
 }
 
-function Board({ skills, legends, layout, palette, reducedMotion, visibleRef, onSayHi }) {
+function Board({ skills, legends, layout, palette, reducedMotion, visibleRef, onSayHi, onKeyPress }) {
   const clock = useThree((s) => s.clock);
   const count = layout.keys.length;
   const hiKey = count - 1;
@@ -108,8 +108,9 @@ function Board({ skills, legends, layout, palette, reducedMotion, visibleRef, on
       if (!byUser) return;
       lastTouch.current = clock.elapsedTime;
       if (i === hiKey) onSayHi?.();
+      else onKeyPress?.(i);
     },
-    [clock, hiKey, onSayHi],
+    [clock, hiKey, onSayHi, onKeyPress],
   );
 
   // Idle, it types to itself. Any hover or press pauses that for a few seconds.
@@ -164,7 +165,7 @@ function Board({ skills, legends, layout, palette, reducedMotion, visibleRef, on
  * white "Say hi" key that jumps to the contact form. The canvas is decorative;
  * the same skills are listed in the markup beside it.
  */
-export default function KeyboardScene({ skills, onSayHi }) {
+export default function KeyboardScene({ skills, onSayHi, onKeyPress }) {
   const wrapper = useRef(null);
   const visibleRef = useRef(false);
   const [visible, setVisible] = useState(false);
@@ -256,6 +257,7 @@ export default function KeyboardScene({ skills, onSayHi }) {
               reducedMotion={reducedMotion}
               visibleRef={visibleRef}
               onSayHi={onSayHi}
+              onKeyPress={onKeyPress}
             />
           </PresentationControls>
         )}

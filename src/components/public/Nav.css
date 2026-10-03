@@ -123,6 +123,17 @@
   scale: 1 1;
 }
 
+/* The section you are reading keeps its underline; as you scroll on, it hands
+   over to the next link (Nav.jsx sets aria-current). */
+.nav__menu ul a[aria-current] {
+  color: var(--ink);
+}
+
+.nav__menu ul a[aria-current]::after {
+  scale: 1 1;
+  transition-duration: 0.5s;
+}
+
 .nav__toggle {
   display: none;
   width: 48px;

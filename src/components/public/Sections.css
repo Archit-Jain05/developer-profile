@@ -113,7 +113,7 @@
   border: 3px solid var(--ink);
   opacity: 0;
   scale: 0;
-  transition: scale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s;
+  transition: scale 0.5s var(--ease-out), opacity 0.2s;
   pointer-events: none;
 }
 
@@ -563,6 +563,20 @@
   gap: var(--sp-2);
   padding-block: var(--sp-2);
   border-bottom: 1px solid var(--line);
+  position: relative;
+  isolation: isolate;
+}
+
+/* Lit for a moment when its key is pressed on the 3D keyboard (Skills.jsx). */
+.skill::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0 calc(-1 * var(--sp-2));
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, var(--accent-soft), transparent 80%);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .skill__icon {
@@ -1028,4 +1042,12 @@
 .card-button:hover .edu__logo {
   scale: 1.06;
   rotate: -3deg;
+}
+
+/* Touch screens scroll when you drag a device, so only offer the drag where a
+   mouse can do it. */
+@media (hover: none) {
+  .hint-drag {
+    display: none;
+  }
 }

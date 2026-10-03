@@ -49,6 +49,7 @@ export default function PublicSite() {
         name={profile?.full_name}
         githubUrl={profile?.github_url}
         linkedinUrl={profile?.linkedin_url}
+        sectionsReady={status !== "loading"}
       />
       {status === "loading" ? (
         <LoadingSkeleton />

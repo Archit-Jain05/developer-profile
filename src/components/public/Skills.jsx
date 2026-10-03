@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { getSkillIcon } from "../../data/iconMap.js";
 import { supportsWebGL } from "../../lib/webgl.js";
 import SceneBoundary from "./SceneBoundary.jsx";
@@ -12,17 +12,32 @@ function usedIn(skill, projects) {
   return projects.filter((p) => (p.tech ?? []).some((t) => t.trim().toLowerCase() === name));
 }
 
-function SkillRow({ skill, projects, index }) {
+function SkillRow({ skill, projects, index, rowRef }) {
   const { icon: Icon, color } = getSkillIcon(skill.icon);
 
   return (
-    <li className="skill" style={{ "--i": index }}>
+    <li ref={rowRef} className="skill" style={{ "--i": index }}>
       <span className="skill__icon" style={{ color }}>
         <Icon aria-hidden="true" />
       </span>
       <span className="skill__name">{skill.name}</span>
       {projects.length > 0 && <span className="skill__where">{projects.map((p) => p.title).join(", ")}</span>}
     </li>
+  );
+}
+
+/** A key pressed on the 3D keyboard lights up its row, so the two read as one set. */
+function lightUp(row) {
+  if (!row) return;
+  row.animate([{ opacity: 1 }, { opacity: 0 }], { pseudoElement: "::before", duration: 1100, easing: "ease-out" });
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  row.querySelector(".skill__icon")?.animate(
+    [
+      { scale: 1, rotate: "0deg" },
+      { scale: 1.3, rotate: "-10deg", offset: 0.3 },
+      { scale: 1, rotate: "0deg" },
+    ],
+    { duration: 520, easing: "cubic-bezier(0.16, 1, 0.3, 1)" },
   );
 }
 
@@ -41,6 +56,13 @@ export default function Skills({ skills, projects = [] }) {
   useEffect(() => {
     setWebgl(supportsWebGL());
   }, []);
+
+  const rows = useRef(new Map());
+  const rowRef = (id) => (el) => {
+    if (el) rows.current.set(id, el);
+    else rows.current.delete(id);
+  };
+  const onKeyPress = useCallback((i) => lightUp(rows.current.get(skills[i]?.id)), [skills]);
 
   const shipped = [];
   const working = [];
@@ -66,7 +88,7 @@ export default function Skills({ skills, projects = [] }) {
                 <h3 className="skills-group__title">Shipped with</h3>
                 <ul className="skills stagger">
                   {shipped.map(({ skill, used }, i) => (
-                    <SkillRow key={skill.id} skill={skill} projects={used} index={i} />
+                    <SkillRow key={skill.id} skill={skill} projects={used} index={i} rowRef={rowRef(skill.id)} />
                   ))}
                 </ul>
               </div>
@@ -77,7 +99,7 @@ export default function Skills({ skills, projects = [] }) {
                 <h3 className="skills-group__title">Working with</h3>
                 <ul className="skills stagger">
                   {working.map(({ skill }, i) => (
-                    <SkillRow key={skill.id} skill={skill} projects={[]} index={i} />
+                    <SkillRow key={skill.id} skill={skill} projects={[]} index={i} rowRef={rowRef(skill.id)} />
                   ))}
                 </ul>
               </div>
@@ -88,7 +110,7 @@ export default function Skills({ skills, projects = [] }) {
             <div className="skills-stage reveal reveal--scale" aria-hidden="true">
               <SceneBoundary fallback={null}>
                 <Suspense fallback={null}>
-                  <KeyboardScene skills={skills} onSayHi={sayHi} />
+                  <KeyboardScene skills={skills} onSayHi={sayHi} onKeyPress={onKeyPress} />
                 </Suspense>
               </SceneBoundary>
             </div>

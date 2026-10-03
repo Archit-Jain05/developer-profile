@@ -5,9 +5,39 @@ import logo from "../../assets/pfp.svg";
 import { LINKS } from "./navLinks.js";
 import "./Nav.css";
 
-export default function Nav({ resumeUrl, name = "Archit Jain", githubUrl, linkedinUrl }) {
+const SECTION_IDS = LINKS.filter((link) => !link.route).map((link) => link.href.slice(1));
+
+export default function Nav({ resumeUrl, name = "Archit Jain", githubUrl, linkedinUrl, sectionsReady = false }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [current, setCurrent] = useState("");
+  const { pathname } = useLocation();
+  const onHome = pathname === "/";
+
+  // Marks the link for whichever section crosses the middle of the viewport,
+  // so the bar always says where you are on the page.
+  useEffect(() => {
+    if (!onHome || !sectionsReady) return;
+    const crossing = new Set();
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) crossing.add(e.target.id);
+          else crossing.delete(e.target.id);
+        }
+        setCurrent(SECTION_IDS.find((id) => crossing.has(id)) ?? "");
+      },
+      { rootMargin: "-45% 0px -54% 0px" },
+    );
+    for (const id of SECTION_IDS) {
+      const el = document.getElementById(id);
+      if (el) io.observe(el);
+    }
+    return () => {
+      io.disconnect();
+      setCurrent("");
+    };
+  }, [onHome, sectionsReady]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -23,8 +53,6 @@ export default function Nav({ resumeUrl, name = "Archit Jain", githubUrl, linked
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  const { pathname } = useLocation();
-  const onHome = pathname === "/";
   const close = () => setOpen(false);
   // The logo is a capital A, so it stands in for the first letter of the name.
   const wordmark = name.startsWith("A") ? name.slice(1) : name;
@@ -47,7 +75,11 @@ export default function Nav({ resumeUrl, name = "Archit Jain", githubUrl, linked
                     {link.label}
                   </Link>
                 ) : (
-                  <a href={onHome ? link.href : "/" + link.href} onClick={close}>
+                  <a
+                    href={onHome ? link.href : "/" + link.href}
+                    aria-current={current === link.href.slice(1) ? "location" : undefined}
+                    onClick={close}
+                  >
                     {link.label}
                   </a>
                 )}

@@ -79,10 +79,6 @@ export default function Hero({ profile }) {
           </p>
         )}
 
-        <p className="hero__corner hero__hint" aria-hidden="true">
-          Press and hold to charge the A, then let go.
-        </p>
-
         <div className="hero__corner hero__corner--right">
           <p className="hero__tagline">{profile.tagline}</p>
           <a href="#projects" className="btn btn--primary">

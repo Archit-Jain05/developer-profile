@@ -16,10 +16,6 @@
   position: relative;
   height: 100%;
   overflow: hidden;
-  /* Holding to charge the lines must not select text or pop an image menu. */
-  -webkit-user-select: none;
-  user-select: none;
-  -webkit-touch-callout: none;
 }
 
 /* The 3D field (three/HeroField.jsx), between the light and the name. It
@@ -29,51 +25,6 @@
   inset: 0;
   pointer-events: none;
   animation: fade-in 1.2s var(--ease-out) both;
-}
-
-/* While charging, the whole hero tilts in 3D like a card being bent — --charge
-   runs from 0 to 1 and is set by HeroField. On release it springs back flat,
-   with a little overshoot. */
-.hero__stage {
-  transform: perspective(1400px) rotateX(calc(var(--charge, 0) * 9deg)) rotateY(calc(var(--charge, 0) * -12deg))
-    rotateZ(calc(var(--charge, 0) * -2.5deg));
-}
-
-.hero__stage:not([data-charging]) {
-  transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* While charging, the light swells and the name trembles. */
-.hero__light {
-  transition: scale 1.2s var(--ease-out), opacity 1.2s var(--ease-out);
-}
-
-.hero__stage[data-charging] .hero__light {
-  scale: 1.25;
-}
-
-/* On the heading wrapper, not the word: the word's own entrance animation
-   must keep running, or it falls back to its hidden starting state. */
-.hero__stage[data-charging] .hero__name {
-  animation: tremble 0.12s linear infinite;
-}
-
-@keyframes tremble {
-  25% {
-    translate: 1px -1px;
-  }
-  75% {
-    translate: -1px 1px;
-  }
-}
-
-.hero__hint {
-  left: var(--gutter);
-  max-width: 20ch;
-  margin: 0;
-  font-size: var(--step--1);
-  line-height: 1.4;
-  color: var(--ink-3);
 }
 
 /* Burgundy light behind the person, so the cutout reads as lit rather than
@@ -313,7 +264,20 @@
   }
 }
 
+/* Phones, upright. There is no room beside the figure, so the words stack in
+   the band between the name and the head: the surname signs off under the
+   end of "Archit", the pitch sits under it on the left, and the buttons sit
+   at the bottom within thumb reach. The figure shrinks on short phones so its
+   head always stays below that band. Heights in vw track the name, which is
+   sized in vw. */
 @media (max-width: 767px) {
+  /* --name-end: where the name's glyphs stop (30vw type at 0.8 leading).
+     --band-end: below the surname, which is 14vw tall. */
+  .hero__stage {
+    --name-end: calc(112px + 24vw);
+    --band-end: calc(120px + 38vw);
+  }
+
   .hero__name {
     inset: 112px 0 auto;
   }
@@ -323,34 +287,80 @@
   }
 
   .hero__person {
-    height: 52svh;
+    height: min(52svh, calc(100svh - 64px - var(--band-end)));
   }
 
   .hero__last {
-    left: var(--gutter);
-    top: 60%;
-  }
-
-  .hero__tagline,
-  .hero__hint {
-    display: none;
+    left: auto;
+    right: var(--gutter);
+    top: var(--name-end);
+    font-size: 14vw;
   }
 
   .hero__corner--right {
     left: var(--gutter);
-    flex-direction: row;
-    justify-content: center;
-    bottom: 24px;
+    top: var(--band-end);
+    bottom: var(--sp-3);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr auto;
+    align-items: end;
+    gap: var(--sp-2);
+    /* The box spans the figure; only its contents take touches. */
+    pointer-events: none;
+  }
+
+  .hero__corner--right > * {
+    pointer-events: auto;
+  }
+
+  .hero__tagline {
+    grid-column: 1 / -1;
+    align-self: start;
+    max-width: 16ch;
+    margin: 0;
+    font-size: clamp(1.375rem, 6.4vw, 1.75rem);
+    text-align: left;
   }
 
   .hero__corner--right .btn {
-    flex: 1 1 0;
+    grid-row: 3;
   }
 }
 
-/* The lines do not react under reduced motion, so the hint would mislead. */
-@media (prefers-reduced-motion: reduce) {
-  .hero__hint {
-    display: none;
+/* Phones held sideways: the screen is wide but barely taller than the name,
+   so everything is sized from the height instead of the width. */
+@media (orientation: landscape) and (max-height: 520px) {
+  .hero__name {
+    inset: 80px 0 auto;
+  }
+
+  .hero__first {
+    font-size: 40svh;
+  }
+
+  .hero__person {
+    height: 56svh;
+  }
+
+  .hero__last {
+    top: auto;
+    bottom: var(--sp-3);
+    left: var(--gutter);
+    font-size: 14svh;
+  }
+
+  .hero__corner--right {
+    bottom: var(--sp-3);
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    max-width: 40%;
+  }
+
+  .hero__tagline {
+    flex-basis: 100%;
+    margin: 0;
+    font-size: 1.5rem;
   }
 }

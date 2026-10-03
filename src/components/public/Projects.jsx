@@ -30,8 +30,8 @@ export default function Projects({ items, experience = [], githubUrl }) {
               Projects <span className="serif">that shipped</span>
             </h2>
             <p className="section-lede">
-              Storefronts, apps and experiments, from client work and my own time. Scroll to move through them, and
-              drag a device to turn it.
+              Storefronts, apps and experiments, from client work and my own time. Scroll to move through them
+              <span className="hint-drag">, and drag a device to turn it</span>.
             </p>
           </div>
 
