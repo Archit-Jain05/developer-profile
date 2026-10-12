@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { useContent } from "../../hooks/useContent.js";
 import { useSmoothScroll } from "../../hooks/useSmoothScroll.js";
 import Backdrop from "./Backdrop.jsx";
@@ -30,6 +30,13 @@ export default function PublicSite() {
   const { status, content } = useContent();
   const profile = content?.profile;
   useSmoothScroll();
+
+  // Start at the top once the page is built, unless the address points at a
+  // section (a link like /#projects from another page).
+  const ready = status !== "loading";
+  useLayoutEffect(() => {
+    if (ready && !window.location.hash) window.scrollTo(0, 0);
+  }, [ready]);
 
   useEffect(() => {
     if (profile?.full_name) {

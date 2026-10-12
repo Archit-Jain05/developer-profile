@@ -6,6 +6,10 @@ import "./styles/base.css";
 import PublicSite from "./components/public/PublicSite.jsx";
 import ContactPage from "./components/public/ContactPage.jsx";
 
+// The home page opens with a scroll-driven scene, so a reload should start at
+// the top, not wherever the browser remembers the visitor was.
+if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
+
 // The admin bundle is only downloaded when someone visits /admin.
 const AdminApp = lazy(() => import("./components/admin/AdminApp.jsx"));
 
