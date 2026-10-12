@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { firstName, formatDateRange, formatMonth, formatYearRange, swapOrder, toParagraphs } from "./format.js";
+import { firstName, formatDateRange, formatMonth, formatYearRange, splitAccents, swapOrder, toParagraphs } from "./format.js";
 
 describe("formatMonth", () => {
   it("formats ISO dates as short month + year", () => {
@@ -79,5 +79,24 @@ describe("swapOrder", () => {
   it("still produces a change when both rows share a sort_order", () => {
     const [moved, other] = swapOrder([{ id: "x", sort_order: 0 }, { id: "y", sort_order: 0 }], 0, 1);
     expect(moved.sort_order).toBeGreaterThan(other.sort_order);
+  });
+});
+
+describe("splitAccents", () => {
+  it("marks phrases wrapped in single asterisks", () => {
+    expect(splitAccents("I build for *real clients* and *friends*.")).toEqual([
+      { text: "I build for ", accent: false },
+      { text: "real clients", accent: true },
+      { text: " and ", accent: false },
+      { text: "friends", accent: true },
+      { text: ".", accent: false },
+    ]);
+  });
+
+  it("leaves text without markers, and stray asterisks, as plain text", () => {
+    expect(splitAccents("Plain text.")).toEqual([{ text: "Plain text.", accent: false }]);
+    expect(splitAccents("5 * 3 is 15")).toEqual([{ text: "5 * 3 is 15", accent: false }]);
+    expect(splitAccents("")).toEqual([]);
+    expect(splitAccents(null)).toEqual([]);
   });
 });

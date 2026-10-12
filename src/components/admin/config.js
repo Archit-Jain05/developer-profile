@@ -79,8 +79,8 @@ export const ENTITY_CONFIGS = [
     fields: [
       { name: "title", label: "Title", type: "text", required: true },
       { name: "description", label: "Description", type: "textarea" },
-      { name: "image_url", label: "Screenshot (shown on the 3D laptop or phone screen)", type: "image", folder: "projects" },
-      { name: "tech", label: "Tech tags (Flutter or Dart shows it on a phone, anything else on a laptop)", type: "tags" },
+      { name: "image_url", label: "Screenshot (shown in the hover preview and on the curved project wall)", type: "image", folder: "projects" },
+      { name: "tech", label: "Tech tags (match a skill's name exactly to list it under “Shipped with”)", type: "tags" },
       { name: "github_url", label: "GitHub URL", type: "url" },
       { name: "live_url", label: "Live URL", type: "url" },
       {

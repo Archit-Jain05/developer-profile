@@ -1,210 +1,305 @@
-/* The hero is pinned: it stays in place while the rest of the page (the
-   .sheet) slides up over it on a slanted edge. */
-.hero {
-  position: sticky;
-  top: 0;
-  z-index: 0;
-  height: 100svh;
-  margin-top: -80px;
+/* The opening: the hero, then a frame that opens out of the gap in the name.
+   Every spacing value is on the 8-point grid. Without scroll-driven animation,
+   or under reduced motion, the hero and the frame stack as two screens. */
+.opening {
+  position: relative;
+  margin-top: -80px; /* runs up under the transparent nav */
 }
 
-/* --mx / --my run from -1 to 1 with the pointer; each layer moves by a
-   different amount, nearest layers the most. */
-.hero__stage {
-  --mx: 0;
-  --my: 0;
+.opening__hero,
+.opening__frame {
   position: relative;
-  height: 100%;
+  height: 100svh;
   overflow: hidden;
 }
 
-/* The 3D field (three/HeroField.jsx), between the light and the name. It
-   fades in once loaded, and takes no pointer events itself. */
-.hero__field {
+.opening__hero {
+  isolation: isolate;
+  background: var(--base);
+}
+
+.opening__light {
   position: absolute;
   inset: 0;
-  pointer-events: none;
-  animation: fade-in 1.2s var(--ease-out) both;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
 }
 
-/* Burgundy light behind the person, so the cutout reads as lit rather than
-   pasted on. It is the only light in the scene. */
-.hero__light {
+/* ---------- The hero ---------- */
+.opening__intro {
   position: absolute;
-  left: 50%;
-  top: 16%;
-  width: min(96vw, 1120px);
-  aspect-ratio: 1;
-  translate: -50% 0;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgb(109, 0, 26) 0%, rgb(109, 0, 26) 26%, rgba(109, 0, 26, 0.5) 46%, transparent 68%);
-  transform: translate3d(calc(var(--mx) * -16px), calc(var(--my) * -16px), 0);
-  pointer-events: none;
-}
-
-/* ---------- The name ---------- */
-.hero__name {
-  position: absolute;
-  inset: 96px 0 auto;
-  z-index: 1;
+  top: 128px;
+  left: var(--gutter);
+  max-width: 22ch;
   margin: 0;
-  text-align: center;
+  font-size: var(--step-1);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+/* First name and surname across the foot of the screen, pushed to either
+   side so the portrait stands in the gap between them. */
+.opening__name {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: 128px;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 0;
+  font-size: clamp(5rem, 15vw, 18rem);
+  line-height: 0.8;
+  color: var(--ink);
   pointer-events: none;
 }
 
-/* One gradient across the whole word — white into the lighter burgundy (the
-   palette burgundy is too dark to read on black). inline-block so the
-   gradient spans the word rather than the full width of the hero; the padding
-   (cancelled by an equal negative margin) keeps overhanging glyph edges inside
-   the painted area. */
-.hero__first {
-  display: inline-block;
-  padding: 0.12em 0.08em;
-  margin: -0.12em -0.08em;
-  color: transparent;
-  background: linear-gradient(90deg, var(--ink) 20%, var(--accent) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  font-size: clamp(6rem, 29vw, 30rem);
-  font-weight: 700;
-  line-height: 0.8;
-  letter-spacing: -0.055em;
-  white-space: nowrap;
-  transform: translate3d(calc(var(--mx) * -24px), calc(var(--my) * -8px), 0);
+.opening__first {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.065em;
 }
 
-/* ---------- The person ---------- */
-.hero__person {
+.opening__last {
+  letter-spacing: -0.035em;
+  /* The italic's swash tail needs room, or it is clipped on the right. */
+  padding-right: 0.08em;
+}
+
+.opening__person {
   position: absolute;
   z-index: 2;
   left: 50%;
   bottom: 0;
-  height: min(62svh, 680px);
-  translate: -50% 0;
-  transform: translate3d(calc(var(--mx) * 8px), calc(var(--my) * 8px), 0);
-}
-
-.hero__cutout {
-  display: block;
   width: auto;
-  height: 100%;
+  height: min(70svh, 760px);
   max-width: none;
-  transform-origin: 50% 100%;
+  translate: -50% 0;
   filter: drop-shadow(0 32px 64px rgba(0, 0, 0, 0.6));
+  pointer-events: none;
+  user-select: none;
 }
 
-/* The surname, as the reference sets it: level, in the serif italic, low on
-   the left, starting beside the figure and crossing the lower torso — clear
-   of the face. */
-.hero__last {
+/* A hairline bar along the bottom, behind the portrait. */
+.opening__bar {
   position: absolute;
-  z-index: 3;
-  left: 20%;
-  top: 70%;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: 32px;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--sp-3);
+  padding-top: var(--sp-2);
+  border-top: 1px solid var(--line-strong);
+  font-size: var(--step--1);
+  font-weight: 500;
+}
+
+.opening__role {
   margin: 0;
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: clamp(3.5rem, 8.4vw, 8.5rem);
-  line-height: 1;
+  color: var(--ink-2);
+}
+
+.opening__links {
+  display: flex;
+  gap: var(--sp-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.opening__links a {
   color: var(--ink);
-  transform: translate3d(calc(var(--mx) * 32px), calc(var(--my) * 16px), 0);
-  text-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+  transition: color 0.2s;
+}
+
+.opening__links a:hover {
+  color: var(--ink-3);
+}
+
+/* ---------- The frame ---------- */
+.opening__frame {
+  background: var(--base);
+}
+
+.shards {
+  position: absolute;
+  inset: 0;
+}
+
+/* Registration marks in the corners: the same "+" as on the loading screen. */
+.opening__mark {
+  position: absolute;
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  background:
+    linear-gradient(var(--ink), var(--ink)) center / 1px 100% no-repeat,
+    linear-gradient(var(--ink), var(--ink)) center / 100% 1px no-repeat;
+  opacity: 0.7;
+}
+
+.opening__mark--tl {
+  top: 24px;
+  left: 24px;
+}
+
+.opening__mark--tr {
+  top: 24px;
+  right: 24px;
+}
+
+.opening__mark--bl {
+  bottom: 24px;
+  left: 24px;
+}
+
+.opening__mark--br {
+  bottom: 24px;
+  right: 24px;
+}
+
+/* The heading sits low on the left, clear of the A in the middle. */
+.opening__line {
+  position: absolute;
+  z-index: 1;
+  left: var(--gutter);
+  bottom: 80px;
+  max-width: 14ch;
+  margin: 0;
+  font-size: clamp(2.25rem, 5vw, 5.5rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  text-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
   pointer-events: none;
 }
 
-/* ---------- Corners ----------
-   The words and actions sit in the two lower corners, clear of the figure. */
-.hero__corner {
-  position: absolute;
-  z-index: 4;
-  bottom: 40px;
-}
-
-.hero__corner--right {
-  right: var(--gutter);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: var(--sp-2);
-}
-
-/* The one-line pitch on the right, in the serif, as the reference does. */
-.hero__tagline {
-  max-width: 14ch;
-  margin-bottom: var(--sp-1);
-  font-family: var(--font-serif);
-  font-size: clamp(1.75rem, 2.6vw, 2.5rem);
-  line-height: 1.1;
-  text-align: right;
-  color: var(--ink);
+.opening__line .serif {
+  letter-spacing: -0.02em;
 }
 
 /* ---------- Motion ---------- */
 @media (prefers-reduced-motion: no-preference) {
-  /* Load: the letters rise one by one as the loading screen lifts (the
-     loader sets data-revealed on <html>), then the person, then the rest. */
-  .hero__first,
-  .hero__person,
-  .hero__last,
-  .hero__corner {
+  /* The hero arrives as the loading screen lifts (it sets data-revealed). */
+  .opening__first,
+  .opening__last,
+  .opening__person,
+  .opening__intro,
+  .opening__bar {
     opacity: 0;
   }
 
-  /* The word is uncovered left to right, so it still reads letter by letter. */
-  html[data-revealed] .hero__first {
-    animation: name-in 1.4s var(--ease-out) both;
+  html[data-revealed] .opening__first {
+    animation: name-rise 1.3s var(--ease-out) both;
   }
 
-  html[data-revealed] .hero__person {
-    animation: person-in 1.4s var(--ease-out) 240ms both;
+  html[data-revealed] .opening__last {
+    animation: name-rise 1.3s var(--ease-out) 120ms both;
   }
 
-  html[data-revealed] .hero__last {
-    animation: slide-in 1.2s var(--ease-out) 640ms both;
+  html[data-revealed] .opening__person {
+    animation: person-rise 1.4s var(--ease-out) 240ms both;
   }
 
-  html[data-revealed] .hero__corner {
-    animation: fade-in 1s var(--ease-out) 880ms both;
+  html[data-revealed] .opening__intro,
+  html[data-revealed] .opening__bar {
+    animation: fade-rise 1s var(--ease-out) 720ms both;
   }
 
-  /* Scroll: as the sheet slides over, the name lifts away faster than the
-     person, the surname drifts off, and the whole scene recedes. */
-  @supports (animation-timeline: scroll()) {
-    .hero__stage {
-      animation: recede linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 100svh;
+  /* Scrolling: the section is tall and its inside stays pinned while the
+     name parts, the portrait steps back and the frame opens. */
+  @supports (animation-timeline: view()) {
+    .opening {
+      height: 360svh;
+      view-timeline: --opening block;
+      /* Measured from the true screen edges, not the scroll padding that
+         keeps anchors clear of the nav. */
+      view-timeline-inset: 0px;
     }
 
-    /* The entrance and the scroll lift run together on the same element. */
-    html[data-revealed] .hero__first {
-      animation: name-in 1.4s var(--ease-out) both, lift linear both;
-      animation-timeline: auto, scroll(root);
-      animation-range: normal, 0 100svh;
+    .opening__pin {
+      position: sticky;
+      top: 0;
+      height: 100svh;
+      overflow: hidden;
     }
 
-    .hero__cutout {
-      animation: rise linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 100svh;
+    .opening__hero,
+    .opening__frame {
+      position: absolute;
+      inset: 0;
+      height: auto;
+    }
+
+    .opening__frame {
+      animation: frame-open linear both;
+      animation-timeline: --opening;
+      animation-range: contain 0% contain 48%;
+    }
+
+    html[data-revealed] .opening__first {
+      animation:
+        name-rise 1.3s var(--ease-out) both,
+        part-left linear both;
+      animation-timeline: auto, --opening;
+      animation-range: normal, contain 0% contain 32%;
+    }
+
+    html[data-revealed] .opening__last {
+      animation:
+        name-rise 1.3s var(--ease-out) 120ms both,
+        part-right linear both;
+      animation-timeline: auto, --opening;
+      animation-range: normal, contain 0% contain 32%;
+    }
+
+    html[data-revealed] .opening__person {
+      animation:
+        person-rise 1.4s var(--ease-out) 240ms both,
+        person-away linear both;
+      animation-timeline: auto, --opening;
+      animation-range: normal, contain 0% contain 28%;
+    }
+
+    html[data-revealed] .opening__intro,
+    html[data-revealed] .opening__bar {
+      animation:
+        fade-rise 1s var(--ease-out) 720ms both,
+        fade-away linear both;
+      animation-timeline: auto, --opening;
+      animation-range: normal, contain 0% contain 10%;
+    }
+
+    .opening__line .word {
+      animation: word-in linear both;
+      animation-timeline: --opening;
+      animation-range: contain calc(54% + var(--i) * 4%) contain calc(62% + var(--i) * 4%);
     }
   }
 }
 
-@keyframes name-in {
+@keyframes name-rise {
   from {
     opacity: 0;
-    clip-path: inset(0 100% 0 0);
-    filter: blur(16px);
+    translate: 0 24%;
+    clip-path: inset(0 0 100% 0);
   }
   to {
     opacity: 1;
-    clip-path: inset(-24% -16% -24% -16%);
-    filter: blur(0);
+    translate: 0 0;
+    clip-path: inset(-24% -8% -48% -8%);
   }
 }
 
-@keyframes person-in {
+@keyframes person-rise {
   from {
     opacity: 0;
     translate: -50% 16%;
@@ -215,10 +310,10 @@
   }
 }
 
-@keyframes fade-in {
+@keyframes fade-rise {
   from {
     opacity: 0;
-    translate: 0 24px;
+    translate: 0 16px;
   }
   to {
     opacity: 1;
@@ -226,141 +321,119 @@
   }
 }
 
-@keyframes slide-in {
-  from {
+/* A small window in the gap between the names, opening out to the edges. */
+@keyframes frame-open {
+  0% {
     opacity: 0;
-    translate: -48px 0;
+    clip-path: inset(42% 45% round 8px);
   }
-  to {
+  4% {
     opacity: 1;
-    translate: 0 0;
+  }
+  100% {
+    opacity: 1;
+    clip-path: inset(0% 0% round 0px);
   }
 }
 
-@keyframes recede {
+@keyframes part-left {
   to {
-    scale: 0.94;
-    opacity: 0.35;
+    translate: -48vw 0;
+    opacity: 0;
   }
 }
 
-@keyframes lift {
+@keyframes part-right {
   to {
-    translate: 0 -128px;
+    translate: 48vw 0;
+    opacity: 0;
   }
 }
 
-@keyframes rise {
+@keyframes person-away {
   to {
-    translate: 0 -48px;
-    scale: 1.05;
+    scale: 0.86;
+    translate: -50% 12%;
+    opacity: 0;
   }
 }
 
-/* ---------- Smaller screens ---------- */
-@media (max-width: 1199px) {
-  .hero__person {
-    height: min(53svh, 560px);
+@keyframes fade-away {
+  to {
+    opacity: 0;
   }
 }
 
-/* Phones, upright. There is no room beside the figure, so the words stack in
-   the band between the name and the head: the surname signs off under the
-   end of "Archit", the pitch sits under it on the left, and the buttons sit
-   at the bottom within thumb reach. The figure shrinks on short phones so its
-   head always stays below that band. Heights in vw track the name, which is
-   sized in vw. */
-@media (max-width: 767px) {
-  /* --name-end: where the name's glyphs stop (30vw type at 0.8 leading).
-     --band-end: below the surname, which is 14vw tall. */
-  .hero__stage {
-    --name-end: calc(112px + 24vw);
-    --band-end: calc(120px + 38vw);
+/* ---------- Tablets and phones ----------
+   The name moves to the top in two lines, with the pitch under it, and the
+   portrait stands below them. */
+@media (max-width: 1023px) {
+  .opening__hero {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 120px var(--gutter) 0;
   }
 
-  .hero__name {
-    inset: 112px 0 auto;
+  .opening__name {
+    position: relative;
+    inset: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-1);
+    font-size: clamp(4.5rem, 23vw, 11rem);
+    line-height: 0.85;
   }
 
-  .hero__first {
-    font-size: 30vw;
+  .opening__last {
+    align-self: flex-end;
   }
 
-  .hero__person {
-    height: min(52svh, calc(100svh - 64px - var(--band-end)));
+  .opening__intro {
+    position: relative;
+    inset: auto;
+    margin-top: var(--sp-3);
+    font-size: var(--step-0);
   }
 
-  .hero__last {
-    left: auto;
-    right: var(--gutter);
-    top: var(--name-end);
-    font-size: 14vw;
+  .opening__person {
+    height: min(52svh, 560px);
   }
 
-  .hero__corner--right {
-    left: var(--gutter);
-    top: var(--band-end);
-    bottom: var(--sp-3);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr auto;
-    align-items: end;
-    gap: var(--sp-2);
-    /* The box spans the figure; only its contents take touches. */
-    pointer-events: none;
+  .opening__role {
+    display: none;
   }
 
-  .hero__corner--right > * {
-    pointer-events: auto;
-  }
-
-  .hero__tagline {
-    grid-column: 1 / -1;
-    align-self: start;
-    max-width: 16ch;
-    margin: 0;
-    font-size: clamp(1.375rem, 6.4vw, 1.75rem);
-    text-align: left;
-  }
-
-  .hero__corner--right .btn {
-    grid-row: 3;
-  }
-}
-
-/* Phones held sideways: the screen is wide but barely taller than the name,
-   so everything is sized from the height instead of the width. */
-@media (orientation: landscape) and (max-height: 520px) {
-  .hero__name {
-    inset: 80px 0 auto;
-  }
-
-  .hero__first {
-    font-size: 40svh;
-  }
-
-  .hero__person {
-    height: 56svh;
-  }
-
-  .hero__last {
-    top: auto;
-    bottom: var(--sp-3);
-    left: var(--gutter);
-    font-size: 14svh;
-  }
-
-  .hero__corner--right {
-    bottom: var(--sp-3);
-    flex-direction: row;
-    flex-wrap: wrap;
+  /* On a phone the links sit over the portrait's jacket, in front of it. */
+  .opening__bar {
+    bottom: 24px;
+    z-index: 3;
     justify-content: flex-end;
-    max-width: 40%;
+    border-top: 0;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.8);
   }
 
-  .hero__tagline {
-    flex-basis: 100%;
-    margin: 0;
-    font-size: 1.5rem;
+  .opening__line {
+    bottom: 64px;
+  }
+}
+
+/* Phones held sideways: everything is sized from the height. */
+@media (orientation: landscape) and (max-height: 520px) {
+  .opening__hero {
+    padding-top: 80px;
+  }
+
+  .opening__name {
+    font-size: 26svh;
+  }
+
+  .opening__intro {
+    display: none;
+  }
+
+  .opening__person {
+    height: 72svh;
+    left: 72%;
   }
 }

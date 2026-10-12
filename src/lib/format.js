@@ -18,6 +18,20 @@ export function formatYearRange(start, end) {
   return String(start || end || "");
 }
 
+/**
+ * Split text into plain and accented runs. A phrase wrapped in single asterisks
+ * ("for *real clients*") is accented; a lone asterisk stays as typed.
+ */
+export function splitAccents(text) {
+  if (!text) return [];
+  return text
+    .split(/(\*[^*\n]+\*)/)
+    .filter(Boolean)
+    .map((run) =>
+      run.length > 2 && run.startsWith("*") && run.endsWith("*") ? { text: run.slice(1, -1), accent: true } : { text: run, accent: false },
+    );
+}
+
 /** Split text into paragraphs on blank lines, dropping empty ones. */
 export function toParagraphs(text) {
   if (!text) return [];

@@ -95,12 +95,10 @@ h3 {
 /* Everything after the hero is one sheet that slides up over the pinned hero,
    its leading edge cut on a slant. It is opaque, so the hero disappears
    beneath it rather than scrolling away. */
+/* Transparent, so the backdrop's drifting glows light every section. */
 .sheet {
   position: relative;
   z-index: 1;
-  padding-top: var(--sp-8);
-  background: var(--base);
-  clip-path: polygon(0 0, 100% var(--sp-8), 100% 100%, 0 100%);
   /* Elements waiting to slide in from the side must not widen the page. */
   overflow-x: clip;
 }
@@ -140,15 +138,13 @@ h3 {
 
 /* An occasional phrase in the serif italic, set at a slight angle across the
    heavy sans — used in a couple of headings, not all of them. */
+/* A phrase set in the serif italic inside sans text, marked *like this* in
+   the content (see Accented.jsx). */
 .serif {
-  display: inline-block;
   font-family: var(--font-serif);
   font-style: italic;
   font-weight: 400;
-  letter-spacing: 0;
-  color: var(--ink-2);
-  rotate: -4deg;
-  translate: 0 0.08em;
+  letter-spacing: -0.01em;
 }
 
 .section-lede {
@@ -386,10 +382,6 @@ h3 {
    up. Browsers without support, and anyone who asks for reduced motion, get
    the finished state: content is never hidden behind an animation that
    cannot run. */
-.scroll-progress {
-  display: none;
-}
-
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
     .reveal {
@@ -432,18 +424,6 @@ h3 {
       .reveal--right {
         animation-name: reveal-up;
       }
-    }
-
-    .scroll-progress {
-      display: block;
-      position: fixed;
-      z-index: 100;
-      inset: 0 0 auto;
-      height: 3px;
-      background: var(--accent);
-      transform-origin: 0 50%;
-      animation: grow-x linear both;
-      animation-timeline: scroll(root);
     }
   }
 }
@@ -500,6 +480,17 @@ h3 {
   to {
     clip-path: inset(0 0 -16px 0);
     translate: 0 0;
+  }
+}
+
+/* Words in a heading light up in turn as their section scrolls (Accented.jsx
+   numbers them in --i). */
+@keyframes word-in {
+  from {
+    opacity: 0.12;
+  }
+  to {
+    opacity: 1;
   }
 }
 

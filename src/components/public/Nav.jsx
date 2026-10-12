@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FiDownload, FiGithub, FiLinkedin, FiMenu, FiX } from "react-icons/fi";
 import logo from "../../assets/pfp.svg";
+import { useCurrentSection } from "../../hooks/useCurrentSection.js";
 import { LINKS } from "./navLinks.js";
 import "./Nav.css";
 
@@ -10,34 +11,10 @@ const SECTION_IDS = LINKS.filter((link) => !link.route).map((link) => link.href.
 export default function Nav({ resumeUrl, name = "Archit Jain", githubUrl, linkedinUrl, sectionsReady = false }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [current, setCurrent] = useState("");
   const { pathname } = useLocation();
   const onHome = pathname === "/";
-
-  // Marks the link for whichever section crosses the middle of the viewport,
-  // so the bar always says where you are on the page.
-  useEffect(() => {
-    if (!onHome || !sectionsReady) return;
-    const crossing = new Set();
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) crossing.add(e.target.id);
-          else crossing.delete(e.target.id);
-        }
-        setCurrent(SECTION_IDS.find((id) => crossing.has(id)) ?? "");
-      },
-      { rootMargin: "-45% 0px -54% 0px" },
-    );
-    for (const id of SECTION_IDS) {
-      const el = document.getElementById(id);
-      if (el) io.observe(el);
-    }
-    return () => {
-      io.disconnect();
-      setCurrent("");
-    };
-  }, [onHome, sectionsReady]);
+  // The link for the section in view keeps its underline.
+  const current = useCurrentSection(SECTION_IDS, onHome && sectionsReady);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -109,7 +86,7 @@ export default function Nav({ resumeUrl, name = "Archit Jain", githubUrl, linked
               rel="noopener noreferrer"
               onClick={close}
             >
-              Resume <FiDownload aria-hidden="true" />
+              Résumé <FiDownload aria-hidden="true" />
             </a>
           )}
         </nav>

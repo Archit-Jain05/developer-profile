@@ -64,14 +64,14 @@
   --radius-pill: 999px;
 
   /* ---------------------------------------------------------------------
-     Type. Instrument Sans throughout: heavy and tightly tracked at display
-     sizes, normal spacing for reading. Instrument Serif italic is kept for a
-     few contrasting phrases. Hierarchy comes from clear size steps and three
-     text colours.
+     Type. Inter throughout: medium weight and tightly tracked at display
+     sizes, normal spacing for reading. Bodoni Moda italic, a high-contrast
+     serif, sets the surname and a few contrasting phrases. Hierarchy comes
+     from clear size steps and three text colours.
      --------------------------------------------------------------------- */
-  --font: "Instrument Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-display: "Instrument Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: "Bodoni Moda", "Didot", Georgia, "Times New Roman", serif;
   --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
 
   --step--2: 0.8125rem;                 /* 13  meta */

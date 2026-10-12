@@ -1,6 +1,6 @@
 ---
 name: Archit Jain, developer portfolio
-description: A night studio in black, white and Signature Burgundy, where finished work sits under one warm light.
+description: A night studio in black, white and Signature Burgundy, where finished work sits in a warm burgundy light.
 colors:
   signature-burgundy: "#6d001a"
   burgundy-haze: "rgba(109, 0, 26, 0.35)"
@@ -15,42 +15,42 @@ colors:
   hairline-strong: "rgba(255, 255, 255, 0.24)"
 typography:
   display:
-    fontFamily: "Instrument Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
-    fontSize: "clamp(6rem, 29vw, 30rem)"
-    fontWeight: 700
+    fontFamily: "Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
+    fontSize: "clamp(5rem, 15vw, 18rem)"
+    fontWeight: 500
     lineHeight: 0.8
-    letterSpacing: "-0.055em"
+    letterSpacing: "-0.065em"
   headline:
-    fontFamily: "Instrument Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
-    fontSize: "clamp(3rem, 7.5vw, 8rem)"
-    fontWeight: 600
+    fontFamily: "Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
+    fontSize: "clamp(3rem, 7vw, 7.5rem)"
+    fontWeight: 500
     lineHeight: 0.95
-    letterSpacing: "-0.045em"
+    letterSpacing: "-0.05em"
   title:
-    fontFamily: "Instrument Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
+    fontFamily: "Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
     fontSize: "clamp(2rem, 3.4vw, 3rem)"
     fontWeight: 600
     lineHeight: 1.2
     letterSpacing: "-0.02em"
   body:
-    fontFamily: "Instrument Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif"
+    fontFamily: "Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif"
     fontSize: "1.0625rem"
     fontWeight: 400
     lineHeight: 1.65
     letterSpacing: "0"
   label:
-    fontFamily: "Instrument Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
+    fontFamily: "Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
     fontSize: "0.9375rem"
     fontWeight: 600
     lineHeight: 1.4
     letterSpacing: "0.01em"
   meta:
-    fontFamily: "Instrument Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
+    fontFamily: "Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
     fontSize: "0.8125rem"
     fontWeight: 400
     lineHeight: 1.5
   accent-serif:
-    fontFamily: "Instrument Serif, Georgia, Times New Roman, serif"
+    fontFamily: "Bodoni Moda, Didot, Georgia, Times New Roman, serif"
     fontWeight: 400
     lineHeight: 1
     letterSpacing: "0"
@@ -125,19 +125,19 @@ components:
 
 **Creative North Star: "The Night Studio"**
 
-A dark workshop after hours. The room is black and quiet; the finished pieces sit under a single warm light and can be picked up and turned. Every page is that studio: a calm black ground, white type that speaks plainly and with confidence, and one burgundy light that falls on the work and on Archit himself. Nothing competes with the light, and nothing in the room is there for decoration.
+A dark workshop after hours. The room is black and quiet; the finished pieces sit under a single warm light and can be picked up and turned. Every page is that studio: a calm black ground, white type that speaks plainly and with confidence, and burgundy light that drifts through the room, gathering on the work and on Archit himself. Nothing competes with it, and nothing in the room is there for decoration.
 
-The mood is **calm, premium and crafted**. At rest the page is still, spacious and expensive-feeling, with care visible in the edges, spacing and type. Under the hand it becomes **tactile and playful**: buttons fill as you reach for them, the 3D pieces turn when you move, the keyboard's keys go down. Calm is the resting state; play is the response to touch. The site never moves just to attract attention.
+The mood is **calm, premium and crafted**. At rest the page is still, spacious and expensive-feeling, with care visible in the edges, spacing and type. Under the hand it becomes **tactile and playful**: buttons fill as you reach for them, the shattered A pulls itself together as you scroll, rows wipe white under the pointer. Calm is the resting state; play is the response to touch. The site never moves just to attract attention.
 
-Scale does the talking instead of colour. The first name is set as a wall of type behind a background-removed portrait, section headings are set nearly as large and just as tight, and the reading text underneath relaxes to normal spacing. Burgundy is rare enough that wherever it appears, it means something.
+Scale does the talking instead of colour. The name is set as a wall of type across the foot of the hero, with the background-removed portrait standing in the gap between first name and surname; section headings are set nearly as large and just as tight, and the reading text underneath relaxes to normal spacing. Burgundy is rare enough that wherever it appears, it means something.
 
 **Key Characteristics:**
 - Black page, white type, one accent: Signature Burgundy `#6D001A`, exactly as supplied.
-- A single burgundy light source, behind the portrait and behind each project device.
-- Huge, tightly tracked Instrument Sans for names and headings; a few phrases in Instrument Serif italic.
+- Burgundy light everywhere, never flat: a moving fluid light in the hero, a glow behind the portrait, and two faint glows behind every other section that drift as you scroll.
+- Huge, tightly tracked Inter for names and headings; the surname and a few phrases in Bodoni Moda italic.
 - Full-width 12-column compositions on an 8-point spacing grid.
 - Generously rounded, lifted surfaces; pill-shaped controls.
-- Interactive 3D where it shows something real: the A logo, the project devices, the skills keyboard.
+- Interactive 3D where it earns its place: the A in stone shards that reassembles inside the opening frame, and a curved wall of projects.
 - Dark only.
 
 ## Colors
@@ -145,13 +145,13 @@ Scale does the talking instead of colour. The first name is set as a wall of typ
 A near-monochrome studio, white over black, with one deep burgundy reserved for actions and light.
 
 ### Primary
-- **Signature Burgundy** (`signature-burgundy`): the only accent. Primary buttons, the end of the hero name's gradient, timeline lines and dots, the "Now" badge, the current-section underline in the nav, form focus edges and the radial light behind the portrait and devices. Always the exact supplied value.
-- **Burgundy Haze** (`burgundy-haze`): the same burgundy at 35% for soft fills, such as the focus glow on inputs, a selected topic chip, or a skill row lighting up when its key is pressed. It is a transparency of Signature Burgundy, never a new tint.
+- **Signature Burgundy** (`signature-burgundy`): the only accent. Primary buttons, the "Now" badge, the current-section underline in the nav, form focus edges, the cracks inside the stone A, and every light on the page: the hero's fluid light, the glow behind the portrait and the drifting glows behind the sections. Always the exact supplied value.
+- **Burgundy Haze** (`burgundy-haze`): the same burgundy at 35% for soft fills, such as the focus glow on inputs, a selected topic chip, or the glow inside a project's preview card. It is a transparency of Signature Burgundy, never a new tint.
 
 ### Neutral
 - **Studio Black** (`studio-black`): the page itself, about 80% of every screen.
 - **Well Black** (`well-black`): recessed wells: input fields, the contribution calendar.
-- **Workbench Charcoal** (`workbench-charcoal`): cards, panels, device stages and the form card, roughly 15% of the page. It is 9 L* above the page so it reads as its own surface.
+- **Workbench Charcoal** (`workbench-charcoal`): preview cards, the wall's project covers, dialogs and the form card, roughly 15% of the page. It is 9 L* above the page so it reads as its own surface.
 - **Raised Charcoal** (`raised-charcoal`): something raised inside a card, card hover, tags.
 - **Chalk White** (`chalk-white`): the lead colour: headings, the name, primary text, the keyboard focus ring.
 - **Silver Ink** (`silver-ink`): body text (11.9:1 on a card).
@@ -163,35 +163,35 @@ A near-monochrome studio, white over black, with one deep burgundy reserved for 
 
 **The White Leads Rule.** "Main colour" means white, not the background. Headings, the name and every primary label are Chalk White on black.
 
-**The One Light Rule.** There is one light in the studio: a radial burgundy glow with a solid core. It sits behind the portrait and behind each project device, and nowhere else. A second, differently coloured glow is a different room.
+**The Burgundy Light Rule.** All light in the studio is Signature Burgundy: the hero's fluid light, the solid-cored glow behind the portrait, and two faint glows (60% at the core, fading to nothing) fixed behind the rest of the page and drifting as it scrolls. No section is ever flat black, and no light is ever another colour.
 
 ## Typography
 
-**Display Font:** Instrument Sans (with -apple-system, Segoe UI, sans-serif)
-**Body Font:** Instrument Sans (same stack)
-**Accent Font:** Instrument Serif, italic (with Georgia, serif)
+**Display Font:** Inter (with -apple-system, Segoe UI, sans-serif)
+**Body Font:** Inter (same stack)
+**Accent Font:** Bodoni Moda, italic (with Didot, Georgia, serif)
 
-**Character:** A clean, formal grotesk that turns monumental when set huge and tight, paired with a soft serif italic that adds one human, handwritten note. Modern and composed, never quirky.
+**Character:** Inter, clean and neutral, turns monumental when set huge and tight; Bodoni Moda italic, high-contrast and elegant, sets the surname and a few phrases as the human counterpoint. Modern and composed, never quirky.
 
 ### Hierarchy
-- **Display** (700, `clamp(6rem, 29vw, 30rem)`, 0.8): the first name in the hero, and nothing else. It carries the one gradient on the site, white into Signature Burgundy across the whole word.
-- **Headline** (600, `clamp(3rem, 7.5vw, 8rem)`, 0.95, -0.045em): full-width section titles, set like the name.
-- **Title** (600, `clamp(2rem, 3.4vw, 3rem)`, 1.2): section titles in a side column, and the contact heading.
+- **Display** (500, `clamp(5rem, 15vw, 18rem)`, 0.8, -0.065em): the first name across the foot of the hero, with the surname beside it in the accent serif at the same size.
+- **Headline** (500, `clamp(3rem, 7vw, 7.5rem)`, 0.95, -0.05em): section titles and the project names in the index, set like the name. The contact heading goes larger still.
+- **Title** (600, `clamp(2rem, 3.4vw, 3rem)`, 1.2): smaller section titles, such as GitHub. The heading inside the opening frame and the line on the project wall sit between Title and Headline, at medium weight.
 - **Body** (400, 1.0625rem / 17px, 1.65): reading text, capped around 65–75 characters a line.
 - **Label** (600, 0.9375rem / 15px, +0.01em): buttons, nav links, text links.
 - **Meta** (400, 0.8125rem / 13px): dates, counts, tags and captions, in Ash Ink.
-- **Accent serif** (Instrument Serif italic, 400): a phrase inside a heading, such as "Jain", "that shipped" or "so far". It is set in Silver Ink, rotated -4° and dropped slightly, crossing the heavy sans.
+- **Accent serif** (Bodoni Moda italic, 400): the surname in the hero, and phrases marked with *asterisks* in the content (the tagline, the intro, the frame heading, the wall line, the skills statement). Set inline on the same baseline, in the colour of the text around it.
 
 ### Named Rules
 **The Wall of Type Rule.** Tight tracking belongs only to huge type (display and headline). Everything a visitor reads at length uses normal spacing; tight tracking at reading size reads as cramped.
 
-**The Sparing Serif Rule.** The serif italic appears in two or three headings across the whole site, never all of them, and never for body text.
+**The Sparing Serif Rule.** The serif italic appears in a phrase or two per section at most, marked in the content with asterisks, and never for whole paragraphs.
 
 ## Layout
 
-The page uses the full width with gutters (24px, 48px from 768px, 80px from 1200px) on a **12-column grid** with 24/32/40px gaps. Width is capped at 1760px only so lines don't run absurdly long on ultra-wide screens. Sections use real compositions such as side titles, splits, a bento of education cards, an alternating timeline and a pinned horizontal gallery, rather than one centred column. Section spacing is 96px, 128px from 768px, and 160px from 1200px.
+The page uses the full width with gutters (24px, 48px from 768px, 80px from 1200px) on a **12-column grid** with 24/32/40px gaps. Width is capped at 1760px only so lines don't run absurdly long on ultra-wide screens. Sections use real compositions: the parted name in the hero, a statement beside an arched portrait, a full-width index of project names, rows that read across the whole width, and a sticky statement beside the skills groups, rather than one centred column. Section spacing is 96px, 128px from 768px, and 160px from 1200px.
 
-The hero is pinned: it fills the screen while the rest of the page slides up over it on a slanted edge. Projects pin too, and scrolling moves the track sideways. Below 768px every composition collapses to one column, side-sliding entrances become rising ones, and the hero stacks name, surname, tagline and buttons in the band above the portrait. On a phone held sideways, the hero is sized from the screen height.
+The opening is pinned for about three and a half screens: the name parts, the portrait steps back and a frame opens out of the gap until it fills the screen. The project wall pins for about two and a half screens while it turns. Below 1024px the hero stacks the name and tagline above the portrait, with the links at its foot; below 768px every composition is one column and side-sliding entrances become rising ones. On a phone held sideways, the hero is sized from the screen height.
 
 **The Eight-Point Rule.** Every margin, padding, gap and offset is a multiple of 8 (8, 16, 24, 32, 40, 48, 64, 80, 96, 128). A test fails the build if one slips. Positions anchored to fluid type go through a named variable, never a raw `vw` offset.
 
@@ -199,9 +199,9 @@ The hero is pinned: it fills the screen while the rest of the page slides up ove
 
 ## Elevation & Depth
 
-Surfaces are **lifted**: cards, panels and floating controls sit above the black page on a soft, deep, downward shadow. The shadow is diffuse and dark, never a crisp outline or a coloured halo. On top of that, depth comes from the One Light: the burgundy glow behind the portrait and devices gives the studio its z-axis, and the 3D scenes add real perspective.
+Surfaces are **lifted**: cards, panels and floating controls sit above the black page on a soft, deep, downward shadow. The shadow is diffuse and dark, never a crisp outline or a coloured halo. On top of that, depth comes from the burgundy light: the light behind the portrait and behind every section gives the studio its z-axis, and the 3D scenes add real perspective.
 
-Current state: the scrolled nav and dialogs already use the lifted shadow, but content cards are still flat tones. Bring them into line with this rule when cards are next touched.
+Current state: the scrolled nav, dialogs and the project preview card use the lifted shadow; the contact form card is still flat. Bring it into line when it is next touched.
 
 ### Shadow Vocabulary
 - **Lift** (`box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.9)`): the standard elevation for cards, the scrolled nav pill and floating panels.
@@ -214,7 +214,7 @@ Current state: the scrolled nav and dialogs already use the lifted shadow, but c
 
 ## Shapes
 
-Forms are generously rounded on the 8-point scale, with corner size growing with the surface: 8px for fields and small media, 16px for cards and wells, 24px for big panels, device stages and the form card, and fully round pills for every button, tag, chip and the nav bar. White logo tiles (80px square, 16px corners; 56px on phones) hold company and school marks that were drawn for white pages. Sections meet the pinned hero on a slanted edge. Near-square 2–4px corners were rejected and don't return.
+Forms are generously rounded on the 8-point scale, with corner size growing with the surface: 8px for fields and small media, 16px for cards and wells, 24px for big panels and the form card, and fully round pills for every button, tag, chip and the nav bar. White logo tiles (48px square with 8px corners in the rows, 72px in dialogs) hold company and school marks that were drawn for white pages. The portrait in About sits in an arch: fully round at the top, 24px corners at the foot. Near-square 2–4px corners were rejected and don't return.
 
 ## Components
 
@@ -235,7 +235,7 @@ A label in Chalk White resting on a faint hairline; on hover a white rule draws 
 - **Shadow Strategy:** Lift (see Elevation & Depth).
 - **Border:** none on content cards; hairline on dialogs and wells.
 - **Internal Padding:** 32px, 24px on phones.
-- Clickable cards open a detail dialog that grows out of the card and shrinks back into it.
+- Rows open a detail dialog that grows out of the row and shrinks back into it.
 
 ### Inputs / Fields
 - **Style:** Well Black, a 1px Hairline border, 8px corners, 48px minimum height. Labels sit above in Silver Ink.
@@ -248,11 +248,23 @@ Pills in Raised Charcoal with Silver Ink meta text, 32px tall. A selectable topi
 ### Navigation
 A pill bar 64px tall. Over the hero it is transparent, on a black fade; once you scroll it becomes a floating Lift pill in translucent charcoal with a light blur. Links are labels in Silver Ink, turning white on hover with a burgundy underline that grows from the centre. The section currently in view keeps its link white and underlined. On phones the links fold into a round menu button that opens a staggered drawer.
 
-### The lit device stage (signature)
-Each project is shown on a 3D laptop or phone (Flutter and Dart projects get a phone) inside a 24px Workbench Charcoal panel lit from behind by the One Light. The devices turn when dragged with a mouse, and all of them share a single 3D canvas.
+### The opening (signature)
+The hero and the frame are one pinned scene. A slow fluid light in Signature Burgundy moves behind the page and leans toward the pointer; the name runs across the foot of the screen, first name in Inter and surname in Bodoni Moda italic, with the portrait standing in the gap between them and a hairline bar of links behind it. Scrolling parts the name to the edges, the portrait steps back, and a frame with "+" marks in its corners opens out of the gap until it fills the screen. Inside, the A logo in stone shards (flat burgundy at every crack) pulls itself together, and the heading lights up word by word. It never needs a click.
 
-### The magnetic A (signature)
-Behind the hero, the A logo is a white wireframe among drifting dark shards, light streaks and long orbital lines. It turns and leans toward the cursor like a magnet, its edges brighten while the cursor moves, and circling the cursor around it sets the shards swirling. It never needs a click.
+### Project index
+The project names set large, one per row between hairlines. The row nearest the middle of the screen is brightest and the others dim. With a mouse, a preview card trails the pointer (the screenshot, or the project's description and stack under the burgundy light) and the hovered name slides 16px right; on touch, the description shows under each name. A row opens the project's dialog.
+
+### Project wall
+The projects on bent panels around the inside of a cylinder, seen from its centre and turning as you scroll, with one line set in front on a soft dark pool so it stays readable.
+
+### Record rows
+Experience and education as rows reading across the full width: mark, name, detail, dates and a last column ("Now", "Details" or the score). On hover a white fill wipes in from the left (and out to the right after) and the text turns black. A row opens its dialog.
+
+### Skills groups
+"Shipped with" and "Working with" as groups that open and close, the height easing where the browser supports it and a plus turning into a cross. Shipped skills list the projects they were used in.
+
+### Scroll guide
+On large screens with a mouse: a tick per section down the right edge, the current one long and white, beside a line that fills as the page scrolls. Labels appear when the guide is pointed at or focused.
 
 ## Do's and Don'ts
 
@@ -262,16 +274,17 @@ Behind the hero, the A logo is a white wireframe among drifting dark shards, lig
 - **Do** keep every spacing value on the 8-point scale, and compose sections across the 12-column grid.
 - **Do** set names and section headings huge and tight, and reading text at normal spacing.
 - **Do** keep the portrait in full colour, background-removed, standing in front of the name.
-- **Do** make interactive things answer the hand: rising fills, presses to 96%, keys that go down, an A that turns to the cursor.
+- **Do** make interactive things answer the hand: rising fills, presses to 96%, rows that wipe white, a preview that follows the pointer, a frame and an A that respond to scroll.
 - **Do** give every animation a reduced-motion path that removes movement but keeps fades and colour changes.
 
 ### Don't:
 - **Don't** invent lighter, brighter or greyed variants of the burgundy.
 - **Don't** add a light theme or a second accent colour.
-- **Don't** use gradients as decoration. The hero name's white-to-burgundy sweep is the only gradient text on the site.
+- **Don't** use gradient text, or any gradient other than the burgundy lights.
 - **Don't** put glass and blur on every surface. Blur is for the scrolled nav and the dialog scrim only.
-- **Don't** use Arial, Inter, Poppins, Space Grotesk or Bricolage Grotesque, or tight tracking at reading sizes.
+- **Don't** use Arial, Poppins, Space Grotesk or Bricolage Grotesque, or tight tracking at reading sizes.
 - **Don't** give every section the same title-plus-subtitle header, add skill percentage bars, or append "→" to links.
 - **Don't** desaturate or greyscale the portrait.
 - **Don't** use near-square 2–4px corners.
 - **Don't** bring back the hold-to-charge hero: no page tilt, trembling text, lightning or strike.
+- **Don't** leave a section on flat black: some burgundy light always sits behind the content.

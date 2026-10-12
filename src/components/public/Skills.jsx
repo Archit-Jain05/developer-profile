@@ -1,10 +1,7 @@
-import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
+import { FiPlus } from "react-icons/fi";
 import { getSkillIcon } from "../../data/iconMap.js";
-import { supportsWebGL } from "../../lib/webgl.js";
-import SceneBoundary from "./SceneBoundary.jsx";
+import Accented from "./Accented.jsx";
 import "./Sections.css";
-
-const KeyboardScene = lazy(() => import("./three/KeyboardScene.jsx"));
 
 /** Case-insensitive match between a skill name and a project's tech row. */
 function usedIn(skill, projects) {
@@ -12,11 +9,10 @@ function usedIn(skill, projects) {
   return projects.filter((p) => (p.tech ?? []).some((t) => t.trim().toLowerCase() === name));
 }
 
-function SkillRow({ skill, projects, index, rowRef }) {
+function SkillRow({ skill, projects }) {
   const { icon: Icon, color } = getSkillIcon(skill.icon);
-
   return (
-    <li ref={rowRef} className="skill" style={{ "--i": index }}>
+    <li className="skill">
       <span className="skill__icon" style={{ color }}>
         <Icon aria-hidden="true" />
       </span>
@@ -26,44 +22,29 @@ function SkillRow({ skill, projects, index, rowRef }) {
   );
 }
 
-/** A key pressed on the 3D keyboard lights up its row, so the two read as one set. */
-function lightUp(row) {
-  if (!row) return;
-  row.animate([{ opacity: 1 }, { opacity: 0 }], { pseudoElement: "::before", duration: 1100, easing: "ease-out" });
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  row.querySelector(".skill__icon")?.animate(
-    [
-      { scale: 1, rotate: "0deg" },
-      { scale: 1.3, rotate: "-10deg", offset: 0.3 },
-      { scale: 1, rotate: "0deg" },
-    ],
-    { duration: 520, easing: "cubic-bezier(0.16, 1, 0.3, 1)" },
+function Group({ title, entries, open = false }) {
+  if (!entries.length) return null;
+  return (
+    <details className="skill-group" open={open}>
+      <summary>
+        <span>{title}</span>
+        <span className="skill-group__count">{entries.length}</span>
+        <FiPlus className="skill-group__icon" aria-hidden="true" />
+      </summary>
+      <ul className="skill-group__list">
+        {entries.map(({ skill, used }) => (
+          <SkillRow key={skill.id} skill={skill} projects={used} />
+        ))}
+      </ul>
+    </details>
   );
 }
 
-function sayHi() {
-  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-}
-
 /**
- * Skills grouped by whether they have actually shipped, derived from the tech
- * rows on the projects themselves — what a recruiter wants to know is where a
- * skill was used, not a percentage. Beside the list, the same skills as a
- * keyboard you can play with.
+ * The tools, split by whether they have shipped in a project yet (derived from
+ * the projects' own tech rows), in groups that open and close.
  */
-export default function Skills({ skills, projects = [] }) {
-  const [webgl, setWebgl] = useState(false);
-  useEffect(() => {
-    setWebgl(supportsWebGL());
-  }, []);
-
-  const rows = useRef(new Map());
-  const rowRef = (id) => (el) => {
-    if (el) rows.current.set(id, el);
-    else rows.current.delete(id);
-  };
-  const onKeyPress = useCallback((i) => lightUp(rows.current.get(skills[i]?.id)), [skills]);
-
+export default function Skills({ skills, projects = [], statement }) {
   const shipped = [];
   const working = [];
   for (const skill of skills) {
@@ -72,49 +53,19 @@ export default function Skills({ skills, projects = [] }) {
   }
 
   return (
-    <section id="skills" className="section">
-      <div className="container">
-        <div className="section-head">
-          <h2 className="section-title reveal-title">Skills</h2>
-          <p className="section-lede reveal">
-            What I've shipped with, and what I'm working with now. Press the keys, or type the first letter of a skill.
-          </p>
-        </div>
-
-        <div className="skills-layout">
-          <div className="skills-groups">
-            {shipped.length > 0 && (
-              <div className="skills-group">
-                <h3 className="skills-group__title">Shipped with</h3>
-                <ul className="skills stagger">
-                  {shipped.map(({ skill, used }, i) => (
-                    <SkillRow key={skill.id} skill={skill} projects={used} index={i} rowRef={rowRef(skill.id)} />
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {working.length > 0 && (
-              <div className="skills-group">
-                <h3 className="skills-group__title">Working with</h3>
-                <ul className="skills stagger">
-                  {working.map(({ skill }, i) => (
-                    <SkillRow key={skill.id} skill={skill} projects={[]} index={i} rowRef={rowRef(skill.id)} />
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-
-          {webgl && skills.length > 0 && (
-            <div className="skills-stage reveal reveal--scale" aria-hidden="true">
-              <SceneBoundary fallback={null}>
-                <Suspense fallback={null}>
-                  <KeyboardScene skills={skills} onSayHi={sayHi} onKeyPress={onKeyPress} />
-                </Suspense>
-              </SceneBoundary>
-            </div>
+    <section id="skills" className="section skills">
+      <div className="container skills__grid">
+        <div className="skills__intro">
+          <h2 className="skills__title">Skills</h2>
+          {statement && (
+            <p className="skills__statement">
+              <Accented text={statement} />
+            </p>
           )}
+        </div>
+        <div className="skills__groups">
+          <Group title="Shipped with" entries={shipped} open />
+          <Group title="Working with" entries={working} />
         </div>
       </div>
     </section>

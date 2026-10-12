@@ -21,6 +21,13 @@ describe("loadContent", () => {
     expect(result).toEqual({ status: "ready", content: live });
   });
 
+  it("fills profile fields the database does not have yet from the fallback", async () => {
+    const withNewField = { profile: { full_name: "Fallback", wall_line: "Bundled line", tagline: "Bundled" } };
+    const live = { profile: { full_name: "Live", tagline: "" }, skills: [] };
+    const result = await loadContent({ loader: async () => live, fallback: withNewField });
+    expect(result.content).toEqual({ profile: { full_name: "Live", tagline: "", wall_line: "Bundled line" }, skills: [] });
+  });
+
   it("falls back when the loader throws", async () => {
     vi.spyOn(console, "warn").mockImplementation(() => {});
     const result = await loadContent({

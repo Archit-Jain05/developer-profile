@@ -87,8 +87,7 @@
   padding-right: var(--sp-5);
 }
 
-.detail-head .timeline__logo,
-.detail-head .edu__logo {
+.detail-head .logo-tile {
   flex: none;
   width: 72px;
   height: 72px;
@@ -236,8 +235,7 @@
     gap: var(--sp-2);
   }
 
-  .detail-head .timeline__logo,
-  .detail-head .edu__logo {
+  .detail-head .logo-tile {
     width: 56px;
     height: 56px;
     border-radius: 14px;

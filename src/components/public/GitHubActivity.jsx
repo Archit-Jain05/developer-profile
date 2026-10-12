@@ -3,7 +3,7 @@ import { FiGithub, FiGitCommit } from "react-icons/fi";
 import { fetchContributions, fetchGithubActivity, githubUsername, languageColor, toCalendar } from "../../lib/github.js";
 import { timeAgo } from "../../lib/format.js";
 import { useInView } from "../../hooks/useInView.js";
-import "./Sections.css";
+import "./GitHub.css";
 
 const DAY_LABELS = ["", "Mon", "", "Wed", "", "Fri", ""];
 

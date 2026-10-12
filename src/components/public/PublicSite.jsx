@@ -6,12 +6,13 @@ import Loader from "./Loader.jsx";
 import Nav from "./Nav.jsx";
 import Hero from "./Hero.jsx";
 import About from "./About.jsx";
+import Work from "./Work.jsx";
+import Wall from "./Wall.jsx";
+import { EducationRecord, ExperienceRecord } from "./Record.jsx";
 import Skills from "./Skills.jsx";
-import Experience from "./Experience.jsx";
-import Education from "./Education.jsx";
-import Projects from "./Projects.jsx";
 import GitHubActivity from "./GitHubActivity.jsx";
 import Contact from "./Contact.jsx";
+import ScrollGuide from "./ScrollGuide.jsx";
 import "./PublicSite.css";
 
 function LoadingSkeleton() {
@@ -43,7 +44,6 @@ export default function PublicSite() {
           content, which held first paint behind WebGL for no reason. It now
           tracks the content only; the scene fades in when it is ready. */}
       <Loader ready={status !== "loading"} />
-      <div className="scroll-progress" aria-hidden="true" />
       <Nav
         resumeUrl={profile?.resume_url}
         name={profile?.full_name}
@@ -55,18 +55,20 @@ export default function PublicSite() {
         <LoadingSkeleton />
       ) : (
         <main>
-          <Hero profile={profile} />
+          <Hero profile={profile} experience={content.experience} />
           <div className="sheet">
             <About profile={profile} />
-            <Education items={content.education} />
-            <Experience items={content.experience} projects={content.projects} />
-            <Projects items={content.projects} experience={content.experience} githubUrl={profile.github_url} />
-            <Skills skills={content.skills} projects={content.projects} />
+            <Work items={content.projects} experience={content.experience} githubUrl={profile.github_url} />
+            <Wall items={content.projects} line={profile.wall_line} />
+            <ExperienceRecord items={content.experience} projects={content.projects} />
+            <EducationRecord items={content.education} />
+            <Skills skills={content.skills} projects={content.projects} statement={profile.skills_statement} />
             <GitHubActivity githubUrl={profile.github_url} />
             <Contact profile={profile} />
           </div>
         </main>
       )}
+      <ScrollGuide ready={status !== "loading"} />
     </>
   );
 }

@@ -7,13 +7,14 @@ export const fallbackContent = {
   profile: {
     full_name: "Archit Jain",
     eyebrow: "Software Developer",
-    tagline: "I build apps for web and mobile.",
+    tagline: "I build apps for *web and mobile*.",
     intro:
-      "I'm an IT student at DJSCE in Mumbai who builds for real clients alongside my degree: Shopify storefronts, Next.js platforms and a Flutter app. Right now I'm a software developer at ZootechX.",
-    about_heading: "Building real products since my diploma",
+      "I'm an IT student at DJSCE in Mumbai who builds for *real clients* alongside my degree: Shopify storefronts, Next.js platforms and a Flutter app. Right now I'm a software developer at ZootechX.",
+    about_heading: "Building real products *since my diploma*",
     about_body:
       "I started building for clients during my diploma in Information Technology: a website for Dcyber Techlabs' Africa region, then a year looking after Hophead.co's Shopify and React storefronts. Today I'm studying for my B.Tech at DJSCE and working as a software developer at ZootechX, where I build client platforms like Velora and talk to clients directly about what they need.\n\nI freelance too. ASMAAN, a 3D Shopify storefront for a botanical drink brand, is in pre-launch now. And I build things to learn from, like a capture-the-flag platform set on a 3D island and MoneyMind, a Flutter app that scans bills and turns them into invoices. Next, I want to bring machine learning into the apps I make. If you have a project, or a role where that fits, I'd like to hear about it.",
     hero_image_url: "/seed/archit-cutout.webp",
+    about_image_url: "/seed/archit.jpg",
     resume_url: "/seed/resume.pdf",
     email: "architjain2005@gmail.com",
     phone: "+91 7710990629",
@@ -22,6 +23,9 @@ export const fallbackContent = {
     linkedin_url: "https://www.linkedin.com/in/archit-jain-6021711aa",
     contact_blurb:
       "Tell me what you're building and when you need it. I reply by email, usually within a day or two.",
+    hiring_note: "Hiring for an internship or a developer role? Send me the details.",
+    skills_statement: "Shopify for stores, Next.js for platforms, *Flutter for apps*.",
+    wall_line: "Some for clients. Some *to learn something new*.",
     stats: [
       { value: "4+", label: "Years building", icon: "calendar" },
       { value: "3", label: "Roles", icon: "briefcase" },

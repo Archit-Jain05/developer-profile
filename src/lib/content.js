@@ -39,7 +39,9 @@ export async function loadContent({ loader, fallback, timeoutMs = 8000, configur
   if (!configured) return { status: "fallback", content: fallback, reason: "not-configured" };
   try {
     const content = await withTimeout(loader(), timeoutMs);
-    return { status: "ready", content };
+    // A profile column the database does not have yet (a newer site field
+    // before its migration has been run) takes the bundled value.
+    return { status: "ready", content: { ...content, profile: { ...fallback.profile, ...content.profile } } };
   } catch (error) {
     console.warn("[content] Falling back to bundled content:", error?.message ?? error);
     return { status: "fallback", content: fallback, reason: error?.message ?? "error" };

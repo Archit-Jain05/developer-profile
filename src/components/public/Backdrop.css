@@ -1,5 +1,7 @@
-/* The page's ground: the base colour, flat, with a faint fibre so large areas
-   have some tooth. No glows — gradients used as decoration are out. */
+/* The page's ground: black, lit by two soft burgundy glows. They are fixed to
+   the screen and drift across it as the page scrolls (a CSS scroll-driven
+   animation), so every section sits in a little light without any section
+   carrying its own decoration. Under reduced motion they hold still. */
 .backdrop {
   position: fixed;
   inset: 0;
@@ -7,6 +9,70 @@
   overflow: hidden;
   pointer-events: none;
   background: var(--base);
+}
+
+.backdrop__glow {
+  --size: 72vmax;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--size);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(109, 0, 26, 0.6) 0%, rgba(109, 0, 26, 0.24) 38%, transparent 70%);
+}
+
+/* translate places a glow's centre at a point on the screen. */
+.backdrop__glow--a {
+  translate: calc(88vw - var(--size) / 2) calc(12vh - var(--size) / 2);
+}
+
+.backdrop__glow--b {
+  translate: calc(8vw - var(--size) / 2) calc(96vh - var(--size) / 2);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    .backdrop__glow--a {
+      animation: glow-drift-a linear both;
+      animation-timeline: scroll(root);
+    }
+
+    .backdrop__glow--b {
+      animation: glow-drift-b linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+}
+
+@keyframes glow-drift-a {
+  0% {
+    translate: calc(88vw - var(--size) / 2) calc(12vh - var(--size) / 2);
+  }
+  35% {
+    translate: calc(12vw - var(--size) / 2) calc(40vh - var(--size) / 2);
+  }
+  70% {
+    translate: calc(92vw - var(--size) / 2) calc(70vh - var(--size) / 2);
+  }
+  100% {
+    translate: calc(30vw - var(--size) / 2) calc(20vh - var(--size) / 2);
+  }
+}
+
+@keyframes glow-drift-b {
+  0% {
+    translate: calc(8vw - var(--size) / 2) calc(96vh - var(--size) / 2);
+  }
+  35% {
+    translate: calc(94vw - var(--size) / 2) calc(88vh - var(--size) / 2);
+  }
+  70% {
+    translate: calc(6vw - var(--size) / 2) calc(30vh - var(--size) / 2);
+  }
+  100% {
+    translate: calc(84vw - var(--size) / 2) calc(96vh - var(--size) / 2);
+  }
 }
 
 .backdrop__grain {

@@ -1,0 +1,295 @@
+/* GitHub activity: numbers, languages, recent repositories and the
+   contribution calendar. All spacing is on the 8-point grid. */
+
+.github__lede {
+  grid-column: 8 / span 5;
+  display: grid;
+  gap: var(--sp-2);
+  justify-items: start;
+}
+
+.github__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+  row-gap: var(--sp-3);
+}
+
+.github__stats {
+  grid-column: 1 / span 4;
+  display: grid;
+  gap: var(--sp-3);
+  align-content: start;
+}
+
+.github__numbers {
+  margin: 0;
+  border-top: 1px solid var(--line-strong);
+}
+
+.github__numbers div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding-block: var(--sp-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.github__numbers dt {
+  color: var(--ink-2);
+}
+
+.github__numbers dd {
+  margin: 0;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.langs {
+  display: grid;
+  gap: var(--sp-2);
+}
+
+.langs__title {
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}
+
+.langs__bar {
+  display: flex;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.langs__bar span {
+  min-width: 8px;
+  border-right: 2px solid var(--base);
+}
+
+.langs__bar span:last-child {
+  border-right: 0;
+}
+
+.langs__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1) var(--sp-3);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--step--1);
+}
+
+.langs__legend li,
+.repo__lang {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+.langs__legend span {
+  color: var(--ink-3);
+}
+
+.langs__legend i,
+.repo__lang i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.repo-feed {
+  grid-column: 5 / span 8;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: var(--sp-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.repo {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  height: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--radius-sm);
+  background: var(--secondary);
+  transition: background 0.24s;
+}
+
+.repo:hover {
+  background: var(--secondary-2);
+}
+
+.repo__icon {
+  flex: none;
+  font-size: 1.25rem;
+  color: var(--ink-3);
+}
+
+.repo__main {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.repo__main strong {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.repo__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--sp-2);
+  font-size: var(--step--2);
+  color: var(--ink-3);
+}
+
+.github__error {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-1);
+  color: var(--ink-2);
+}
+
+
+/* ---------- GitHub contribution calendar ----------
+   Fluid columns, so the year spans the full width of the page instead of
+   sitting at a fixed size in one corner. */
+.contrib {
+  margin: var(--sp-6) 0 0;
+  padding: var(--sp-4);
+  border-radius: var(--radius-lg);
+  background: var(--base-2);
+}
+
+.contrib__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-3);
+  color: var(--ink);
+  font-size: var(--step-0);
+}
+
+.contrib__scroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding-bottom: var(--sp-1);
+}
+
+.contrib__plot {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    ". months"
+    "days weeks";
+  gap: var(--sp-1);
+  min-width: 720px;
+}
+
+.contrib__months {
+  grid-area: months;
+  display: grid;
+  grid-template-columns: repeat(var(--weeks, 53), minmax(0, 1fr));
+  column-gap: var(--sp-1);
+  font-size: var(--step--2);
+  color: var(--ink-3);
+}
+
+.contrib__days {
+  grid-area: days;
+  display: grid;
+  grid-template-rows: repeat(7, minmax(0, 1fr));
+  row-gap: var(--sp-1);
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--step--2);
+  line-height: 1;
+  color: var(--ink-3);
+}
+
+.contrib__weeks {
+  grid-area: weeks;
+  display: grid;
+  grid-template-columns: repeat(var(--weeks, 53), minmax(0, 1fr));
+  column-gap: var(--sp-1);
+}
+
+.contrib__week {
+  display: grid;
+  row-gap: var(--sp-1);
+}
+
+.contrib__day {
+  aspect-ratio: 1;
+  border-radius: 4px;
+  background: var(--secondary);
+}
+
+.contrib__day[data-level="1"] {
+  background: #0e4429;
+}
+
+.contrib__day[data-level="2"] {
+  background: #006d32;
+}
+
+.contrib__day[data-level="3"] {
+  background: #26a641;
+}
+
+.contrib__day[data-level="4"] {
+  background: #39d353;
+}
+
+.contrib__day.is-empty {
+  background: transparent;
+}
+
+.contrib__legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--sp-1);
+  margin-top: var(--sp-2);
+  font-size: var(--step--2);
+  color: var(--ink-3);
+}
+
+.contrib__legend .contrib__day {
+  width: 16px;
+}
+
+
+@media (max-width: 1023px) {
+  .github__lede,
+  .github__stats,
+  .repo-feed {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 599px) {
+  .repo-feed {
+    grid-template-columns: 1fr;
+  }
+
+  .contrib {
+    padding: var(--sp-2);
+  }
+}

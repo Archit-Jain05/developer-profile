@@ -1,93 +1,128 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
-import { FiDownload } from "react-icons/fi";
 import { supportsWebGL } from "../../lib/webgl.js";
+import Accented, { AccentedWords } from "./Accented.jsx";
+import FluidLight from "./FluidLight.jsx";
 import SceneBoundary from "./SceneBoundary.jsx";
-
-const HeroField = lazy(() => import("./three/HeroField.jsx"));
 import "./Hero.css";
 
-/** Layers drift against the pointer by different amounts, so the scene has depth. */
-function usePointerDepth(ref) {
-  useEffect(() => {
-    const el = ref.current;
-    const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!el || !fine || calm) return;
-
-    let frame = 0;
-    const onMove = (e) => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        el.style.setProperty("--mx", ((e.clientX / window.innerWidth) * 2 - 1).toFixed(3));
-        el.style.setProperty("--my", ((e.clientY / window.innerHeight) * 2 - 1).toFixed(3));
-      });
-    };
-    window.addEventListener("pointermove", onMove, { passive: true });
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("pointermove", onMove);
-    };
-  }, [ref]);
-}
+const loadShards = () => import("./three/ShardScene.jsx");
+const ShardScene = lazy(loadShards);
 
 /**
- * The landing view: the first name as a wall of type, the portrait cut out and
- * standing in front of it, and the surname crossing in front of the portrait.
- * The hero stays pinned while the rest of the page slides up over it.
+ * The opening. First the hero: a moving burgundy light, the name across the
+ * foot of the screen and the portrait standing in the gap between first name
+ * and surname. Scrolling on, the name parts, the portrait steps back, and a
+ * frame opens out of the gap until it fills the screen: inside, the A in stone
+ * shards pulls itself together while the heading lights up word by word.
+ *
+ * The choreography is CSS scroll-driven animation on a pinned, tall section.
+ * Without it (or with reduced motion) the hero and the frame simply stack.
  */
-export default function Hero({ profile }) {
-  const stage = useRef(null);
-  const [webgl, setWebgl] = useState(false);
-  usePointerDepth(stage);
+export default function Hero({ profile, experience = [] }) {
+  const section = useRef(null);
+  const frame = useRef(null);
+  const [webgl] = useState(supportsWebGL);
+  const [armed, setArmed] = useState(false);
 
+  // The shard scene loads once the visitor starts to scroll; its code is
+  // fetched ahead of that while the browser is idle.
   useEffect(() => {
-    setWebgl(supportsWebGL());
+    const idle = window.requestIdleCallback ?? ((fn) => setTimeout(fn, 1500));
+    idle(() => loadShards());
+    const arm = () => {
+      if (window.scrollY > 8) setArmed(true);
+    };
+    arm();
+    window.addEventListener("scroll", arm, { passive: true });
+    return () => window.removeEventListener("scroll", arm);
   }, []);
 
   const [first, ...rest] = (profile.full_name ?? "").split(" ");
   const last = rest.join(" ");
+  const current = experience.find((job) => !job.end_date);
 
   return (
-    <section id="home" className="hero">
-      <div ref={stage} className="hero__stage">
-        <div className="hero__light" aria-hidden="true" />
-        {webgl && (
-          <SceneBoundary fallback={null}>
-            <Suspense fallback={null}>
-              <HeroField stageRef={stage} />
-            </Suspense>
-          </SceneBoundary>
-        )}
+    <section ref={section} id="home" className="opening" aria-label="Introduction">
+      <div className="opening__pin">
+        <div className="opening__hero">
+          <FluidLight className="opening__light" />
 
-        <h1 className="hero__name">
-          <span className="hero__first" aria-hidden="true">
-            {first}
-          </span>
-          <span className="visually-hidden">{profile.full_name}</span>
-        </h1>
+          <h1 className="opening__name">
+            <span className="opening__first" aria-hidden="true">
+              {first}
+            </span>
+            {last && (
+              <span className="opening__last serif" aria-hidden="true">
+                {last}
+              </span>
+            )}
+            <span className="visually-hidden">{profile.full_name}</span>
+          </h1>
 
-        <div className="hero__person">
+          {profile.tagline && (
+            <p className="opening__intro">
+              <Accented text={profile.tagline} />
+            </p>
+          )}
+
           <img
-            className="hero__cutout"
+            className="opening__person"
             src={profile.hero_image_url || "/seed/archit-cutout.webp"}
-            alt={profile.full_name} width="1171" height="1102" fetchPriority="high" draggable={false} />
+            alt={profile.full_name}
+            width="1171"
+            height="1102"
+            fetchPriority="high"
+            draggable={false}
+          />
+
+          <div className="opening__bar">
+            {current && (
+              <p className="opening__role">
+                {current.role} at {current.company}
+              </p>
+            )}
+            <ul className="opening__links">
+              {profile.github_url && (
+                <li>
+                  <a href={profile.github_url} target="_blank" rel="noopener noreferrer">
+                    GitHub
+                  </a>
+                </li>
+              )}
+              {profile.linkedin_url && (
+                <li>
+                  <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer">
+                    LinkedIn
+                  </a>
+                </li>
+              )}
+              {profile.resume_url && (
+                <li>
+                  <a href={profile.resume_url} target="_blank" rel="noopener noreferrer">
+                    Résumé
+                  </a>
+                </li>
+              )}
+            </ul>
+          </div>
         </div>
 
-        {last && (
-          <p className="hero__last" aria-hidden="true">
-            {last}
-          </p>
-        )}
-
-        <div className="hero__corner hero__corner--right">
-          <p className="hero__tagline">{profile.tagline}</p>
-          <a href="#projects" className="btn btn--primary">
-            See projects
-          </a>
-          {profile.resume_url && (
-            <a href={profile.resume_url} className="btn btn--ghost" target="_blank" rel="noopener noreferrer">
-              <FiDownload aria-hidden="true" /> Download CV
-            </a>
+        <div ref={frame} className="opening__frame">
+          {webgl && armed && (
+            <SceneBoundary fallback={null}>
+              <Suspense fallback={null}>
+                <ShardScene sectionRef={section} frameRef={frame} />
+              </Suspense>
+            </SceneBoundary>
+          )}
+          <span className="opening__mark opening__mark--tl" aria-hidden="true" />
+          <span className="opening__mark opening__mark--tr" aria-hidden="true" />
+          <span className="opening__mark opening__mark--bl" aria-hidden="true" />
+          <span className="opening__mark opening__mark--br" aria-hidden="true" />
+          {profile.about_heading && (
+            <h2 className="opening__line">
+              <AccentedWords text={profile.about_heading} />
+            </h2>
           )}
         </div>
       </div>
