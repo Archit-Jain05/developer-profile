@@ -1,5 +1,5 @@
 // Generates supabase/seed.sql from src/data/fallback.js so both stay in sync.
-// Usage: npm run seed:generate
+// Usage: pnpm run seed:generate
 import { writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { fallbackContent } from "../src/data/fallback.js";

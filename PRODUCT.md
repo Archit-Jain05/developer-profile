@@ -38,7 +38,7 @@ He is still studying but already ships for real, paying clients: ZootechX (curre
 
 ## Capabilities and Constraints
 
-- React 19 + Vite, React Three Fiber for 3D, Supabase for content, deployed on Vercel from `main`. npm is the package manager; `pnpm-lock.yaml` must stay untracked.
+- React 19 + Vite, React Three Fiber for 3D, Supabase for content, deployed on Vercel from `main`. pnpm is the package manager: `pnpm-lock.yaml` is committed, Vercel installs with it, and every package the code imports must be listed in `package.json` (pnpm does not hoist transitive dependencies).
 - If Supabase is unreachable, the site falls back to bundled copy in `src/data/fallback.js`; it must never break or show an empty page.
 - Only the public anon key is ever used. The `service_role` key must never enter this project.
 - A hidden heartbeat (`internal.heartbeat`, written twice a week by a GitHub Action) keeps the free Supabase project awake. It must stay invisible on the site and in `/admin`.

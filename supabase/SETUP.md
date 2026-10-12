@@ -39,13 +39,13 @@ Only users listed in `admins` can change content, even if someone else somehow g
 1. **Project Settings → API Keys**: copy the **Project URL** and the **anon / publishable** key.
    Never use the `service_role` / secret key in this project.
 2. In the project root, copy `.env.example` to `.env` and fill both values in.
-3. Restart `npm run dev`. The site now loads content from Supabase.
+3. Restart `pnpm run dev`. The site now loads content from Supabase.
 4. Go to <http://localhost:5173/admin>, sign in, and start replacing the placeholders.
 
 ## 5. Check the security rules
 
 ```bash
-npm run verify:rls
+pnpm run verify:rls
 ```
 
 Every line should say `PASS`. The check leaves one test message named "RLS check" in
@@ -84,15 +84,15 @@ Restore the project from the Supabase dashboard.
 If Docker Desktop is running you can use a throwaway local Supabase instead of the cloud project:
 
 ```bash
-npx supabase start          # applies the migration and seed automatically
-npx supabase status         # shows the local API URL and anon key for .env
+pnpm exec supabase start    # applies the migrations and seed automatically
+pnpm exec supabase status   # shows the local API URL and anon key for .env
 ```
 
 Create a local admin user in Studio at <http://127.0.0.1:54323>, then insert its id into `admins`
-as in step 3. `npx supabase stop` shuts it down.
+as in step 3. `pnpm exec supabase stop` shuts it down.
 
 ## Updating the seed
 
 `supabase/seed.sql` is generated from `src/data/fallback.js`. After editing that file, run
-`npm run seed:generate`. Content you edit in `/admin` lives in the database and is not written back
+`pnpm run seed:generate`. Content you edit in `/admin` lives in the database and is not written back
 to `fallback.js`.
