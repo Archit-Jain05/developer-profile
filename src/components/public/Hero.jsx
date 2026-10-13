@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { supportsWebGL } from "../../lib/webgl.js";
 import Accented, { AccentedWords } from "./Accented.jsx";
+import RollText from "./RollText.jsx";
 import FluidLight from "./FluidLight.jsx";
 import SceneBoundary from "./SceneBoundary.jsx";
 import "./Hero.css";
@@ -65,6 +66,10 @@ export default function Hero({ profile, experience = [] }) {
             </p>
           )}
 
+          <a className="opening__skip-top" href="#about">
+            <RollText>Skip intro</RollText>
+          </a>
+
           <img
             className="opening__person"
             src={profile.hero_image_url || "/seed/archit-cutout.webp"}
@@ -82,24 +87,29 @@ export default function Hero({ profile, experience = [] }) {
               </p>
             )}
             <ul className="opening__links">
+              <li className="opening__skip">
+                <a href="#about">
+                  <RollText>Skip intro</RollText>
+                </a>
+              </li>
               {profile.github_url && (
                 <li>
                   <a href={profile.github_url} target="_blank" rel="noopener noreferrer">
-                    GitHub
+                    <RollText>GitHub</RollText>
                   </a>
                 </li>
               )}
               {profile.linkedin_url && (
                 <li>
                   <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer">
-                    LinkedIn
+                    <RollText>LinkedIn</RollText>
                   </a>
                 </li>
               )}
               {profile.resume_url && (
                 <li>
                   <a href={profile.resume_url} target="_blank" rel="noopener noreferrer">
-                    Résumé
+                    <RollText>Résumé</RollText>
                   </a>
                 </li>
               )}

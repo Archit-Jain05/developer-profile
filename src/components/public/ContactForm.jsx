@@ -32,7 +32,13 @@ export default function ContactForm({ fallbackEmail, topics }) {
     e.preventDefault();
     const found = validateContact(values);
     setErrors(found);
-    if (Object.keys(found).length > 0) return;
+    const invalid = Object.keys(found);
+    if (invalid.length > 0) {
+      setStatus("invalid");
+      // Take the visitor to the first field that needs fixing.
+      requestAnimationFrame(() => document.getElementById(`cf-${invalid[0]}`)?.focus());
+      return;
+    }
 
     // Honeypot: real people never see or fill the "website" field.
     if (values.website) {
@@ -148,6 +154,7 @@ export default function ContactForm({ fallbackEmail, topics }) {
         {status === "success" && (
           <span className="is-success">Thanks! I'll get back to you soon.</span>
         )}
+        {status === "invalid" && <span className="is-error">Some details need fixing; see the highlighted fields.</span>}
         {status === "error" && (
           <span className="is-error">
             Couldn't send.{" "}

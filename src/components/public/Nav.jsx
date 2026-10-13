@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FiDownload, FiGithub, FiLinkedin, FiMenu, FiX } from "react-icons/fi";
 import logo from "../../assets/pfp.svg";
 import { useCurrentSection } from "../../hooks/useCurrentSection.js";
 import { LINKS } from "./navLinks.js";
+import RollText from "./RollText.jsx";
+import ThemeSwitch from "./ThemeSwitch.jsx";
 import "./Nav.css";
 
 const SECTION_IDS = LINKS.filter((link) => !link.route).map((link) => link.href.slice(1));
@@ -11,6 +13,8 @@ const SECTION_IDS = LINKS.filter((link) => !link.route).map((link) => link.href.
 export default function Nav({ resumeUrl, name = "Archit Jain", githubUrl, linkedinUrl, sectionsReady = false }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const menu = useRef(null);
+  const toggle = useRef(null);
   const { pathname } = useLocation();
   const onHome = pathname === "/";
   // The link for the section in view keeps its underline.
@@ -25,7 +29,15 @@ export default function Nav({ resumeUrl, name = "Archit Jain", githubUrl, linked
 
   useEffect(() => {
     if (!open) return;
-    const onKey = (e) => e.key === "Escape" && setOpen(false);
+    // The drawer comes before its button in the page, so focus is taken into
+    // it on open (Tab then runs through the links to the close button), and
+    // Escape hands it back to the button.
+    menu.current?.querySelector("a")?.focus();
+    const onKey = (e) => {
+      if (e.key !== "Escape") return;
+      setOpen(false);
+      toggle.current?.focus();
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
@@ -43,13 +55,13 @@ export default function Nav({ resumeUrl, name = "Archit Jain", githubUrl, linked
           <span className="visually-hidden">{name}, back to top</span>
         </Link>
 
-        <nav id="site-menu" className={`nav__menu ${open ? "is-open" : ""}`} aria-label="Main">
+        <nav ref={menu} id="site-menu" className={`nav__menu ${open ? "is-open" : ""}`} aria-label="Main">
           <ul>
             {LINKS.map((link) => (
               <li key={link.href}>
                 {link.route ? (
                   <Link to={link.href} onClick={close}>
-                    {link.label}
+                    <RollText>{link.label}</RollText>
                   </Link>
                 ) : (
                   <a
@@ -57,7 +69,7 @@ export default function Nav({ resumeUrl, name = "Archit Jain", githubUrl, linked
                     aria-current={current === link.href.slice(1) ? "location" : undefined}
                     onClick={close}
                   >
-                    {link.label}
+                    <RollText>{link.label}</RollText>
                   </a>
                 )}
               </li>
@@ -91,7 +103,10 @@ export default function Nav({ resumeUrl, name = "Archit Jain", githubUrl, linked
           )}
         </nav>
 
+        <ThemeSwitch />
+
         <button
+          ref={toggle}
           type="button"
           className="nav__toggle"
           aria-label={open ? "Close menu" : "Open menu"}

@@ -13,6 +13,15 @@ colors:
   ash-ink: "#a6a6a6"
   hairline: "rgba(255, 255, 255, 0.12)"
   hairline-strong: "rgba(255, 255, 255, 0.24)"
+  rose-paper: "#f6f0f1"
+  rose-well: "#fbf7f8"
+  rose-card: "#e9d9dd"
+  raised-rose: "#e2ccd1"
+  ink-black: "#000000"
+  burgundy-graphite: "#331f24"
+  burgundy-slate: "#604850"
+  day-hairline: "rgba(109, 0, 26, 0.16)"
+  day-hairline-strong: "rgba(109, 0, 26, 0.3)"
 typography:
   display:
     fontFamily: "Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
@@ -129,26 +138,28 @@ A dark workshop after hours. The room is black and quiet; the finished pieces si
 
 The mood is **calm, premium and crafted**. At rest the page is still, spacious and expensive-feeling, with care visible in the edges, spacing and type. Under the hand it becomes **tactile and playful**: buttons fill as you reach for them, the shattered A pulls itself together as you scroll, rows wipe white under the pointer. Calm is the resting state; play is the response to touch. The site never moves just to attract attention.
 
+The studio also has a day. By day the blinds are up: a rose paper (white with a little of the burgundy in it), black type, the italic phrases and the surname in burgundy, and the burgundy light drifting through the room like ink in water. Day is what a first visit shows; a switch in the nav turns the lights down to night, and the site remembers the choice. Both are the same room, the same swatch with black and white trading places.
+
 Scale does the talking instead of colour. The name is set as a wall of type across the foot of the hero, with the background-removed portrait standing in the gap between first name and surname; section headings are set nearly as large and just as tight, and the reading text underneath relaxes to normal spacing. Burgundy is rare enough that wherever it appears, it means something.
 
 **Key Characteristics:**
-- Black page, white type, one accent: Signature Burgundy `#6D001A`, exactly as supplied.
+- Two themes from one swatch: a rose paper page with black type by day (shown first) and a black page with white type at night. One accent in both: Signature Burgundy `#6D001A`, exactly as supplied.
 - Burgundy light everywhere, never flat: a moving fluid light in the hero, a glow behind the portrait, and two faint glows behind every other section that drift as you scroll.
 - Huge, tightly tracked Inter for names and headings; the surname and a few phrases in Bodoni Moda italic.
 - Full-width 12-column compositions on an 8-point spacing grid.
 - Generously rounded, lifted surfaces; pill-shaped controls.
 - Interactive 3D where it earns its place: the A in stone shards that reassembles inside the opening frame, and a curved wall of projects.
-- Dark only.
+- Day and night, swapped by a switch in the nav and remembered per visitor. The admin is always night.
 
 ## Colors
 
-A near-monochrome studio, white over black, with one deep burgundy reserved for actions and light.
+A near-monochrome studio in two themes, white over black at night and black over white by day, with one deep burgundy reserved for actions and light. Every colour is a token in `tokens.css`: day is `:root`, night is `[data-theme="dark"]`, and components only ever use the tokens. Two multipliers carry the difference in mood: `--glow` (burgundy light, 1 at night, 0.38 by day) and `--shade` (black shadows, 1 at night, 0.25 by day).
 
 ### Primary
 - **Signature Burgundy** (`signature-burgundy`): the only accent. Primary buttons, the "Now" badge, the current-section underline in the nav, form focus edges, the cracks inside the stone A, and every light on the page: the hero's fluid light, the glow behind the portrait and the drifting glows behind the sections. Always the exact supplied value.
 - **Burgundy Haze** (`burgundy-haze`): the same burgundy at 35% for soft fills, such as the focus glow on inputs, a selected topic chip, or the glow inside a project's preview card. It is a transparency of Signature Burgundy, never a new tint.
 
-### Neutral
+### Night neutrals
 - **Studio Black** (`studio-black`): the page itself, about 80% of every screen.
 - **Well Black** (`well-black`): recessed wells: input fields, the contribution calendar.
 - **Workbench Charcoal** (`workbench-charcoal`): preview cards, the wall's project covers, dialogs and the form card, roughly 15% of the page. It is 9 L* above the page so it reads as its own surface.
@@ -158,12 +169,31 @@ A near-monochrome studio, white over black, with one deep burgundy reserved for 
 - **Ash Ink** (`ash-ink`): meta such as dates, counts and captions (7.6:1 on a card).
 - **Hairline / Strong Hairline** (`hairline`, `hairline-strong`): dividers, field borders, ghost button outlines.
 
+### Day neutrals
+By day every neutral carries a little of the burgundy, so the page reads as one room in one light (pure white read as "too plain", as flat black did at night). Each is white or grey mixed with Signature Burgundy; the accent itself is never tinted.
+- **Rose Paper** (`rose-paper`): the page by day (white with 6% burgundy), about 80% of every screen.
+- **Rose Well** (`rose-well`): recessed wells: input fields, the contribution calendar (3%).
+- **Rose Card** (`rose-card`): cards, dialogs and the form card by day (15%), 7 L* below the page.
+- **Raised Rose** (`raised-rose`): raised inside a card, card hover, tags (20%).
+- **Ink Black** (`ink-black`): the lead colour by day: headings, the name, primary text, the keyboard focus ring.
+- **Burgundy Graphite** (`burgundy-graphite`): body text, a graphite tinted from the burgundy (11.3:1 on a card).
+- **Burgundy Slate** (`burgundy-slate`): meta (6.1:1 on a card).
+- **Day Hairlines** (`day-hairline`, `day-hairline-strong`): burgundy at 16% and 30%.
+
+### Fixed in both themes
+- Text on burgundy is always white (`--on-accent`).
+- The company and school logo tiles are always white (with a hairline edge by day), because the logos were drawn for white pages.
+- Text laid over the photo (the hero links on a phone) is set for the photo: white on a dark halo.
+- Monochrome technology logos (Next.js, GitHub, Vercel and the like) are drawn in the ink colour; the rest keep their brand colours. The contribution calendar uses GitHub's own greens for each theme.
+
 ### Named Rules
 **The Signature Rule.** Burgundy appears only where Archit would sign: actions, the light, and the current or selected state. It is always `#6D001A`. If a burgundy element is too dark to read, change its size or what sits behind it, never its hex.
 
-**The White Leads Rule.** "Main colour" means white, not the background. Headings, the name and every primary label are Chalk White on black.
+**The Emphasis Rule.** By day the italic phrases, the surname and a hovered project name are burgundy (`--emphasis`; 12.6:1 on the paper). At night they stay in the text colour, because burgundy is 1.67:1 on black.
 
-**The Burgundy Light Rule.** All light in the studio is Signature Burgundy: the hero's fluid light, the solid-cored glow behind the portrait, and two faint glows (60% at the core, fading to nothing) fixed behind the rest of the page and drifting as it scrolls. No section is ever flat black, and no light is ever another colour.
+**The Ink Leads Rule.** "Main colour" means the ink, not the background: Chalk White at night, Ink Black by day. Headings, the name and every primary label are set in it.
+
+**The Burgundy Light Rule.** All light in the studio is Signature Burgundy: the hero's fluid light, the solid-cored glow behind the portrait, and two faint glows (60% at the core, fading to nothing) fixed behind the rest of the page and drifting as it scrolls. No section is ever a flat page colour, and no light is ever another colour. By day the same light is burgundy ink in white, scaled by `--glow`.
 
 ## Typography
 
@@ -180,7 +210,7 @@ A near-monochrome studio, white over black, with one deep burgundy reserved for 
 - **Body** (400, 1.0625rem / 17px, 1.65): reading text, capped around 65–75 characters a line.
 - **Label** (600, 0.9375rem / 15px, +0.01em): buttons, nav links, text links.
 - **Meta** (400, 0.8125rem / 13px): dates, counts, tags and captions, in Ash Ink.
-- **Accent serif** (Bodoni Moda italic, 400): the surname in the hero, and phrases marked with *asterisks* in the content (the tagline, the intro, the frame heading, the wall line, the skills statement). Set inline on the same baseline, in the colour of the text around it.
+- **Accent serif** (Bodoni Moda italic, 400): the surname in the hero, and phrases marked with *asterisks* in the content (the tagline, the intro, the frame heading, the wall line, the skills statement). Set inline on the same baseline, in burgundy by day and the colour of the text around it at night. The surname is set at weight 500 and optical size 28: at display size the browser would choose Bodoni's largest optical size, whose hairlines all but vanish.
 
 ### Named Rules
 **The Wall of Type Rule.** Tight tracking belongs only to huge type (display and headline). Everything a visitor reads at length uses normal spacing; tight tracking at reading size reads as cramped.
@@ -191,7 +221,7 @@ A near-monochrome studio, white over black, with one deep burgundy reserved for 
 
 The page uses the full width with gutters (24px, 48px from 768px, 80px from 1200px) on a **12-column grid** with 24/32/40px gaps. Width is capped at 1760px only so lines don't run absurdly long on ultra-wide screens. Sections use real compositions: the parted name in the hero, a statement beside an arched portrait, a full-width index of project names, rows that read across the whole width, and a sticky statement beside the skills groups, rather than one centred column. Section spacing is 96px, 128px from 768px, and 160px from 1200px.
 
-The opening is pinned for about three and a half screens: the name parts, the portrait steps back and a frame opens out of the gap until it fills the screen. The project wall pins for about two and a half screens while it turns. Below 1024px the hero stacks the name and tagline above the portrait, with the links at its foot; below 768px every composition is one column and side-sliding entrances become rising ones. On a phone held sideways, the hero is sized from the screen height.
+The opening is pinned for about three screens: the name parts, the portrait steps back and a frame opens out of the gap until it fills the screen. The project wall pins for about four screens while its panels travel through. Below 1024px the hero stacks the name and tagline above the portrait, with the links at its foot; below 768px every composition is one column and side-sliding entrances become rising ones. On a phone held sideways, the hero is sized from the screen height.
 
 **The Eight-Point Rule.** Every margin, padding, gap and offset is a multiple of 8 (8, 16, 24, 32, 40, 48, 64, 80, 96, 128). A test fails the build if one slips. Positions anchored to fluid type go through a named variable, never a raw `vw` offset.
 
@@ -221,13 +251,15 @@ Forms are generously rounded on the 8-point scale, with corner size growing with
 ### Buttons
 Soft pills that are fun to press.
 - **Shape:** fully round (999px), at least 48px tall (40px for the small variant).
-- **Primary:** Signature Burgundy with Chalk White text and a burgundy border, padded 8px by 24px, in the label style.
-- **Hover / Focus:** a white fill rises from the bottom (0.5s ease-out), the label turns burgundy, the button lifts 2px and picks up the burgundy pull shadow, and any icon dips once. Pressing scales it to 96%. Focus uses the same fill plus the white focus ring.
-- **Ghost:** transparent with a Strong Hairline outline; on hover the same white fill rises and the text turns black.
+- **Primary:** Signature Burgundy with white text and a burgundy border in both themes, padded 8px by 24px, in the label style.
+- **Hover / Focus:** a fill in the ink colour rises from the bottom (0.5s ease-out), the button lifts 2px and picks up the burgundy pull shadow, and any icon dips once. At night the fill is white and the label turns burgundy; by day the fill is black and the label stays white, since burgundy on black is 1.67:1. Pressing scales it to 96%. Focus uses the same fill plus the focus ring.
+- **Ghost:** transparent with a Strong Hairline outline; on hover the ink fill rises and the text takes the page colour.
 - **Loading:** while sending, the label changes ("Sending…") and the paper-plane icon flies out of the button and loops back in.
 
 ### Text links
-A label in Chalk White resting on a faint hairline; on hover a white rule draws in from the left. They never get a trailing arrow. On touch screens they gain an invisible 8px hit area.
+A label in Chalk White resting on a faint hairline; on hover a white rule draws in from the left. They never get a trailing arrow. On touch screens they, and the links in the hero bar, gain an invisible 8px hit area.
+
+Short labels (the nav, the hero bar, the contact links) roll when pointed at or focused: each letter slides up and an identical copy rises in behind it, one letter after another, 16ms apart (`RollText.jsx`). Screen readers get the plain word. Under reduced motion they stay put.
 
 ### Cards / Containers
 - **Corner Style:** 16px (24px for large panels and the form card).
@@ -239,23 +271,32 @@ A label in Chalk White resting on a faint hairline; on hover a white rule draws 
 
 ### Inputs / Fields
 - **Style:** Well Black, a 1px Hairline border, 8px corners, 48px minimum height. Labels sit above in Silver Ink.
-- **Focus:** the border turns Signature Burgundy with a 4px Burgundy Haze ring.
-- **Error:** burgundy border, with the message in white below the field so it stays legible, easing in.
+- **Focus:** the border turns Signature Burgundy with a 4px Burgundy Haze ring, inside a 2px outline in the ink colour set 2px off the field, so focus is plain in either theme.
+- **Error:** a Silver Ink border with a Burgundy Haze ring, and the message in white below the field so it stays legible, easing in. On a failed send, focus moves to the first field to fix and the status line says so.
 
 ### Tags and chips
 Pills in Raised Charcoal with Silver Ink meta text, 32px tall. A selectable topic chip turns Burgundy Haze with a burgundy edge when chosen.
 
+### Day/night switch
+In the nav bar, after the Résumé button on desktop and beside the menu button on phones (never inside the drawer). An 80 by 40px pill with a Strong Hairline edge holding a sun and a moon; a 40px knob in the ink colour slides under the current one (0.5s ease-out) and its icon takes the page colour. It is a `role="switch"` labelled "Night mode". Switching opens the new theme as a circle growing out of the switch over the whole screen (a View Transition, 0.7s ease-out); without View Transitions, or under reduced motion, it swaps at once. The choice is stored per visitor and applied by a script in `index.html` before the first paint, so a reload never flashes the other theme. The 3D scenes read the theme every frame and change with the page: the fluid light turns to ink in water, the stone A darkens to stand off the white frame, and the project wall's far panels fade into the page instead of darkening.
+
 ### Navigation
-A pill bar 64px tall. Over the hero it is transparent, on a black fade; once you scroll it becomes a floating Lift pill in translucent charcoal with a light blur. Links are labels in Silver Ink, turning white on hover with a burgundy underline that grows from the centre. The section currently in view keeps its link white and underlined. On phones the links fold into a round menu button that opens a staggered drawer.
+A pill bar 64px tall. Over the hero it is transparent, on a black fade; once you scroll it becomes a floating Lift pill in translucent charcoal with a light blur. Links are labels in Silver Ink, turning white on hover with a burgundy underline that grows from the centre. The section currently in view keeps its link white and underlined. On phones the links fold into a round menu button that opens a staggered drawer; opening it moves focus to the first link, and Escape closes it and hands focus back to the button. The first Tab on any page shows a "Skip to content" pill at the top left.
+
+### The splash (Archit's signature)
+The first screen of a visit: Archit's own signature, traced from a photo of it, writes itself straight onto the page (no card behind it) in burgundy by day and white at night. The traced ink is revealed through a mask of 13 pen strokes that draw in his writing order (the A, its big loop, r, c, h, i and its dot, t, the loop over the top, the arrow swash, the underline last), each for its share of 2.2s by length with a short lift between strokes. His printed name fades in underneath as the signature finishes, the counter rolls to 100, and after a short hold the signature lifts a little and the screen fades into the hero. Under reduced motion the signature is shown whole. It plays once per visit.
 
 ### The opening (signature)
-The hero and the frame are one pinned scene. A slow fluid light in Signature Burgundy moves behind the page and leans toward the pointer; the name runs across the foot of the screen, first name in Inter and surname in Bodoni Moda italic, with the portrait standing in the gap between them and a hairline bar of links behind it. Scrolling parts the name to the edges, the portrait steps back, and a frame with "+" marks in its corners opens out of the gap until it fills the screen. Inside, the A logo in stone shards (flat burgundy at every crack) pulls itself together, and the heading lights up word by word. It never needs a click.
+The hero and the frame are one pinned scene. A slow fluid light in Signature Burgundy moves behind the page and leans toward the pointer; the name runs across the foot of the screen, first name in Inter and surname in Bodoni Moda italic, with the portrait standing in the gap between them (the surname passes in front of it) and a hairline bar of links behind it, led by "Skip intro". Scrolling parts the name to the edges, the portrait steps back, and once it has gone a frame with "+" marks in its corners opens out of the gap, under its own burgundy glow, until it fills the screen. Inside, the A logo in stone shards (flat burgundy at every crack) pulls itself together, and the heading lights up word by word. It never needs a click.
 
 ### Project index
-The project names set large, one per row between hairlines. The row nearest the middle of the screen is brightest and the others dim. With a mouse, a preview card trails the pointer (the screenshot, or the project's description and stack under the burgundy light) and the hovered name slides 16px right; on touch, the description shows under each name. A row opens the project's dialog.
+The project names set large, one per row between hairlines. The row nearest the middle of the screen is brightest and the others dim. With a mouse, a preview card trails the pointer (the screenshot, or the project's description and stack under the burgundy light) and the hovered name slides 16px right (turning burgundy by day); on touch, the description shows under each name and rows never dim below 60%. Rows with a screenshot carry a small thumbnail (112px wide, 96px on phones) that zooms a little on hover. The preview card stays below the nav and leans up to 6° toward the way it is moving, settling when it stops. A row opens the project's dialog.
 
 ### Project wall
-The projects on bent panels around the inside of a cylinder, seen from its centre and turning as you scroll, with one line set in front on a soft dark pool so it stays readable.
+The projects on bent panels that travel one path as you scroll: each comes in from the left along the foot of the screen, makes one loop round the line in the middle (front low, back high, so the line sits inside the loop) and leaves to the right, fading in and out at the ends. Panels further back are darker. They follow one another a fixed distance apart, and the loop is four and a half gaps long, so the panel finishing the loop and the one starting it never meet at the front (`spiralPath.test.js` holds this for any number of projects). The pointer leans the whole loop a touch; under reduced motion it holds still at mid-scroll. One line is set in front on a soft dark pool so it stays readable.
+
+### Scroll reveals
+All scroll-driven CSS, off under reduced motion. Section titles wipe up out of a clip. Project rows, record rows and skills arrive one after another. The About intro lights up word by word as it crosses the screen, and the About portrait comes into focus as it rises (16px blur to sharp, 114% to 100%).
 
 ### Record rows
 Experience and education as rows reading across the full width: mark, name, detail, dates and a last column ("Now", "Details" or the score). On hover a white fill wipes in from the left (and out to the right after) and the text turns black. A row opens its dialog.
@@ -273,7 +314,7 @@ On large screens with a mouse: a tick per section down the right edge, the curre
 - **Do** let white lead: headings, the name and primary labels in Chalk White on Studio Black.
 - **Do** keep every spacing value on the 8-point scale, and compose sections across the 12-column grid.
 - **Do** set names and section headings huge and tight, and reading text at normal spacing.
-- **Do** keep the portrait in full colour, background-removed, standing in front of the name.
+- **Do** keep the portrait in full colour, background-removed, standing in the gap in the name, with the surname passing in front of it so it stays whole.
 - **Do** make interactive things answer the hand: rising fills, presses to 96%, rows that wipe white, a preview that follows the pointer, a frame and an A that respond to scroll.
 - **Do** give every animation a reduced-motion path that removes movement but keeps fades and colour changes.
 

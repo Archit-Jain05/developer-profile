@@ -2,11 +2,16 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment, Lightformer } from "@react-three/drei";
 import { SVGLoader } from "three-stdlib";
-import { BufferGeometry, Float32BufferAttribute, MathUtils, ShapeUtils, Vector3 } from "three";
+import { BufferGeometry, Color, Float32BufferAttribute, MathUtils, ShapeUtils, Vector3 } from "three";
 import logoSvg from "../../../assets/pfp.svg?raw";
 import { scrollProgress } from "./scroll.js";
+import { getTheme } from "../../../hooks/useTheme.js";
 
 const BURGUNDY = "#6d001a";
+// The stone is pale on the night frame and dark on the day one, so the A
+// always stands off its ground.
+const NIGHT_STONE = new Color("#e8e8e8");
+const DAY_STONE = new Color("#2b2b2b");
 const CHUNKS = 56;
 const SUBDIVISIONS = 2;
 const HEIGHT = 5; // the assembled A, in world units
@@ -187,9 +192,11 @@ function Shards({ progressRef, pointer, calm }) {
   useFrame(({ clock }, dt) => {
     const t = clock.elapsedTime;
     const assembled = calm ? 1 : MathUtils.smoothstep(progressRef.current, 0.3, 0.74);
+    const stone = getTheme() === "light" ? DAY_STONE : NIGHT_STONE;
     shards.forEach((s, i) => {
       const mesh = meshes.current[i];
       if (!mesh) return;
+      mesh.material[0].color.copy(stone);
       const local = ease(MathUtils.clamp((assembled - s.delay * 0.35) / 0.65, 0, 1));
       const apart = 1 - local;
       mesh.position.copy(s.home).addScaledVector(s.scatter, apart);
@@ -203,7 +210,7 @@ function Shards({ progressRef, pointer, calm }) {
   });
 
   return (
-    <group ref={group} position={wide ? [1.8, 0.1, 0] : [0, 0.9, 0]} scale={Math.min(1, aspect * 1.29)}>
+    <group ref={group} position={wide ? [2.7, 0.15, 0] : [0, 0.9, 0]} scale={wide ? 0.9 : Math.min(1, aspect * 1.29)}>
       {shards.map((s, i) => (
         <mesh key={i} ref={(m) => (meshes.current[i] = m)} geometry={s.geometry}>
           <meshStandardMaterial attach="material-0" color="#e8e8e8" roughness={0.62} metalness={0.04} />

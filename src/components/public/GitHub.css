@@ -242,19 +242,19 @@
 }
 
 .contrib__day[data-level="1"] {
-  background: #0e4429;
+  background: var(--contrib-1);
 }
 
 .contrib__day[data-level="2"] {
-  background: #006d32;
+  background: var(--contrib-2);
 }
 
 .contrib__day[data-level="3"] {
-  background: #26a641;
+  background: var(--contrib-3);
 }
 
 .contrib__day[data-level="4"] {
-  background: #39d353;
+  background: var(--contrib-4);
 }
 
 .contrib__day.is-empty {

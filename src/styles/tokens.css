@@ -1,34 +1,70 @@
 :root {
   /* ---------------------------------------------------------------------
-     Palette: white leads, on a dark site.
+     Palette: two themes from one swatch, black, white and burgundy #6D001A,
+     with the roles of black and white swapped between them.
 
-     --ink          white — the main colour: headings, text, the name
-     --base         black — the page
-     --secondary    near-black cards and panels, 9 L* above the page so they
-                    read as a separate surface
-     --accent       burgundy #6D001A, exactly as supplied, everywhere the
-                    accent appears: buttons, tags, lines, the end of the name,
-                    the glows. (--accent-fill is kept as the same value.)
+     Light is the default (what a first visit shows); night is
+     [data-theme="dark"] below. The switch in the nav swaps them and the
+     choice is remembered; a script in index.html applies it before the first
+     paint. The admin is always night.
 
-     One exception, for accessibility: the keyboard focus ring is white.
-     #6D001A is 1.67:1 on black, under the 3:1 a focus indicator needs.
+     --ink          the main colour: headings, text, the name
+     --base         the page
+     --secondary    cards and panels, a clear step off the page so they read
+                    as a separate surface
+     --accent       burgundy #6D001A, exactly as supplied, in both themes:
+                    buttons, tags, lines, the glows. (--accent-fill is kept as
+                    the same value.)
+     --on-accent    text on a burgundy fill: white in both themes
+     --accent-on-ink  the accent's part on an --ink fill (a button's hover):
+                    burgundy on white at night, but white on black by day,
+                    where burgundy would be 1.67:1
+     --emphasis     the italic phrases, the surname and a hovered project:
+                    burgundy by day (12.6:1 on the paper), the text colour at
+                    night (burgundy is 1.67:1 on black)
+     --glow         strength of the burgundy light: glows, the fluid light
+     --shade        strength of black shadows
+     --mark-filter  the A logo is a white SVG image; by day it is inverted
 
-     Technology logos keep their own brand colours.
+     The keyboard focus ring is --ink: black by day, white at night (burgundy
+     is 1.67:1 on black, under the 3:1 a focus indicator needs).
+
+     Technology logos keep their own brand colours; the monochrome ones are
+     drawn in --ink.
+
+     By day every neutral is warmed with the burgundy itself: white or grey
+     mixed with a few percent of #6D001A, so the page reads as one room in
+     one light rather than plain white. The accent is never tinted.
+     --base stays a 6-digit hex in both themes: FluidLight.jsx reads it.
      --------------------------------------------------------------------- */
-  --base: #000000;
-  --base-2: #0d0d0d;      /* wells: inputs, the contribution calendar */
-  --secondary: #1a1a1a;
-  --secondary-2: #262626; /* raised inside a card, hover state */
+  color-scheme: light;
+  --base: #f6f0f1;        /* paper: white with 6% burgundy */
+  --base-2: #fbf7f8;      /* wells: inputs, the contribution calendar (3%) */
+  --secondary: #e9d9dd;   /* cards: 15% burgundy, 7 L* below the page */
+  --secondary-2: #e2ccd1; /* raised inside a card, hover state (20%) */
   --accent: #6d001a;
   --accent-fill: var(--accent);
-  --ink: #ffffff;
-  --ink-2: #d0d0d0;       /* body text — 11.9:1 on a card */
-  --ink-3: #a6a6a6;       /* meta: dates, counts, captions — 7.6:1 on a card */
+  --on-accent: #ffffff;
+  --accent-on-ink: #ffffff;
+  --emphasis: var(--accent);
+  --ink: #000000;
+  --ink-2: #331f24;       /* body text, a burgundy graphite — 11.3:1 on a card */
+  --ink-3: #604850;       /* meta: dates, counts, captions — 6.1:1 on a card */
 
-  --line: rgba(255, 255, 255, 0.12);
-  --line-strong: rgba(255, 255, 255, 0.24);
-  --accent-soft: rgba(109, 0, 26, 0.35);
-  --shadow-card: 0 24px 48px -24px rgba(0, 0, 0, 0.9);
+  --line: rgba(109, 0, 26, 0.16);
+  --line-strong: rgba(109, 0, 26, 0.3);
+  --accent-soft: rgba(109, 0, 26, 0.2);
+  --shadow-card: 0 24px 48px -24px rgba(64, 0, 16, 0.3);
+  --scrim: rgba(40, 0, 10, 0.4);
+  --glow: 0.38;
+  --shade: 0.25;
+  --mark-filter: invert(1);
+
+  /* GitHub's own contribution greens for each theme. */
+  --contrib-1: #9be9a8;
+  --contrib-2: #40c463;
+  --contrib-3: #30a14e;
+  --contrib-4: #216e39;
 
   /* Blur only where it means something: the sticky nav over moving content
      and the modal scrim. */
@@ -86,6 +122,34 @@
   --track-body: 0;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Night: a black page lit by burgundy, white type. */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --base: #000000;
+  --base-2: #0d0d0d;
+  --secondary: #1a1a1a;   /* 9 L* above the page */
+  --secondary-2: #262626;
+  --accent-on-ink: var(--accent);
+  --emphasis: currentColor;
+  --ink: #ffffff;
+  --ink-2: #d0d0d0;       /* body text — 11.9:1 on a card */
+  --ink-3: #a6a6a6;       /* meta — 7.6:1 on a card */
+
+  --line: rgba(255, 255, 255, 0.12);
+  --line-strong: rgba(255, 255, 255, 0.24);
+  --accent-soft: rgba(109, 0, 26, 0.35);
+  --shadow-card: 0 24px 48px -24px rgba(0, 0, 0, 0.9);
+  --scrim: rgba(5, 5, 7, 0.66);
+  --glow: 1;
+  --shade: 1;
+  --mark-filter: none;
+
+  --contrib-1: #0e4429;
+  --contrib-2: #006d32;
+  --contrib-3: #26a641;
+  --contrib-4: #39d353;
 }
 
 @media (min-width: 768px) {

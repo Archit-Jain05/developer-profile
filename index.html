@@ -4,9 +4,22 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- The site is dark only: tell the UA so form controls and scrollbars match. -->
-    <meta name="color-scheme" content="dark" />
-    <meta name="theme-color" content="#000000" />
+    <!-- Light by default, night when the visitor has chosen it (the admin is
+         always night). Set before the first paint so the page never flashes
+         the other theme; useTheme.js takes over from here. -->
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f6f0f1" />
+    <script>
+      (function () {
+        var theme = "light";
+        try {
+          if (localStorage.getItem("theme") === "dark") theme = "dark";
+        } catch (e) {}
+        if (location.pathname.indexOf("/admin") === 0) theme = "dark";
+        document.documentElement.dataset.theme = theme;
+        if (theme === "dark") document.querySelector('meta[name="theme-color"]').setAttribute("content", "#000000");
+      })();
+    </script>
     <meta name="description" content="Archit Jain is a software developer building apps for web and mobile." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

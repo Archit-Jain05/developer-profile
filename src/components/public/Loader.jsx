@@ -1,29 +1,14 @@
 import { useEffect, useState } from "react";
-import logoSvg from "../../assets/pfp.svg?raw";
+import { SIGNATURE_INK, SIGNATURE_PEN, SIGNATURE_VIEWBOX } from "./signature.js";
 import "./Loader.css";
 
-// Long enough for the mark to finish assembling before the screen lifts.
-const MIN_MS = 1600;
+// Long enough for the signature to be written (2.2s, see Loader.css) and held
+// for a moment before the screen lifts.
+const MIN_MS = 2900;
 const MAX_MS = 5000;
 const EXIT_MS = 1000;
 // How far the counter may creep before the thing it is waiting for actually arrives.
 const STAGE = { start: 0.08, documentReady: 0.7, done: 1 };
-// Each piece of the A gets its own fixed scatter offset, written straight into
-// the markup so it is there from the first paint.
-let piece = 0;
-// Merged into the style attribute each path already has (its fill): a second
-// style attribute on the same element would be dropped by the parser.
-const MARK = logoSvg.slice(logoSvg.indexOf("<svg")).replace(/style="fill: var(--logo-color, white)"/g, () => {
-  const i = piece++;
-  const dx = ((i * 37) % 11) * 8 - 40;
-  const dy = ((i * 53) % 9) * 8 - 32;
-  const r = ((i * 29) % 7) * 12 - 36;
-  return `style="fill: var(--logo-color, white); --i: ${i}; --dx: ${dx}px; --dy: ${dy}px; --r: ${r}deg"`;
-});
-// One object for the life of the page. The loader re-renders every frame to
-// move its counter, and React rewrites the markup whenever it is handed a new
-// { __html } object — which would restart every piece's animation each frame.
-const MARK_HTML = { __html: MARK };
 
 function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -43,12 +28,36 @@ function Digit({ value }) {
 }
 
 /**
- * Opening screen: the A assembles piece by piece inside a registration-marked
- * tile while the counter rolls up to 100. On the way out the tile swells to
- * fill the screen and fades, as the hero begins its own entrance underneath.
+ * Archit's signature, writing itself: the traced ink, revealed through a mask
+ * of pen strokes that draw one after another (see signature.js).
  */
+function Signature() {
+  return (
+    <svg className="loader__sign" viewBox={SIGNATURE_VIEWBOX}>
+      <defs>
+        <mask id="signature-pen" className="loader__pen">
+          {SIGNATURE_PEN.map((stroke, i) => (
+            <path key={i} d={stroke.d} pathLength="1" style={{ "--at": stroke.at, "--for": stroke.for }} />
+          ))}
+        </mask>
+      </defs>
+      <path d={SIGNATURE_INK} mask="url(#signature-pen)" />
+    </svg>
+  );
+}
+
+/**
+ * Opening screen: Archit's signature writes itself straight onto the page, his
+ * printed name follows, and the counter rolls up to 100. On the way out the
+ * signature lifts a little and fades, as the hero begins its own entrance
+ * underneath.
+ */
+// The loading screen plays once per visit: coming back to the home page from
+// another page in the same tab goes straight to the site.
+let played = false;
+
 export default function Loader({ ready }) {
-  const [phase, setPhase] = useState("loading");
+  const [phase, setPhase] = useState(() => (played ? "done" : "loading"));
   const [minElapsed, setMinElapsed] = useState(false);
   const [count, setCount] = useState(0);
 
@@ -95,6 +104,7 @@ export default function Loader({ ready }) {
 
   useEffect(() => {
     if (phase !== "exiting") return;
+    played = true;
     const t = setTimeout(() => setPhase("done"), EXIT_MS);
     return () => clearTimeout(t);
   }, [phase]);
@@ -114,7 +124,7 @@ export default function Loader({ ready }) {
     <div className={`loader ${phase === "exiting" ? "is-exiting" : ""}`} role="status" aria-live="polite">
       <div className="loader__frame" aria-hidden="true">
         <div className="loader__tile">
-          <div className="loader__mark" dangerouslySetInnerHTML={MARK_HTML} />
+          <Signature />
         </div>
       </div>
       <p className="loader__name" aria-hidden="true">

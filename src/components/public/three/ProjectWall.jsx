@@ -1,26 +1,56 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { CanvasTexture, DoubleSide, MathUtils, PlaneGeometry, SRGBColorSpace, TextureLoader } from "three";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { CanvasTexture, Color, DoubleSide, MathUtils, PlaneGeometry, SRGBColorSpace, ShaderChunk, TextureLoader, Vector3 } from "three";
 import { hasScreenshot } from "../Work.jsx";
 import { scrollProgress } from "./scroll.js";
+import { LOOP, PATH, pathPosition } from "./spiralPath.js";
+import { getTheme } from "../../../hooks/useTheme.js";
 
-const RADIUS = 7.5;
-const PANEL_W = 3.2;
-const PANEL_H = 2.1;
-const PANELS = 14;
-const HEIGHTS = [0.9, -0.8, 0.25, -1.2, 1.25, -0.25, 0.6];
+const PANEL_W = 2.3;
+const PANEL_H = 1.5;
+const MIN_PANELS = 8;
 
-/** A panel bent to sit on the inside of a cylinder around the camera. */
+/** A panel bent round the loop, so it bulges toward you at the front. */
 function bentPanel() {
-  const geometry = new PlaneGeometry(PANEL_W, PANEL_H, 32, 1);
+  const geometry = new PlaneGeometry(PANEL_W, PANEL_H, 24, 1);
   const position = geometry.attributes.position;
   for (let i = 0; i < position.count; i++) {
-    const theta = position.getX(i) / RADIUS;
-    position.setX(i, RADIUS * Math.sin(theta));
-    position.setZ(i, RADIUS * (1 - Math.cos(theta)));
+    const theta = position.getX(i) / LOOP;
+    position.setX(i, LOOP * Math.sin(theta));
+    position.setZ(i, -LOOP * (1 - Math.cos(theta)));
   }
   geometry.computeVertexNormals();
   return geometry;
+}
+
+/**
+ * Panels on the sides and back of the loop are seen from behind, where the
+ * picture would show mirrored. There the image is read right to left instead,
+ * so each panel shows it the right way round on both faces. (1 - x mirrors
+ * within the crop because cover() always centres it.)
+ */
+function bothSides(shader) {
+  shader.fragmentShader = shader.fragmentShader.replace(
+    "#include <map_fragment>",
+    ShaderChunk.map_fragment.replace("texture2D( map, vMapUv )", "texture2D( map, gl_FrontFacing ? vMapUv : vec2( 1.0 - vMapUv.x, vMapUv.y ) )"),
+  );
+}
+
+/** Crops a texture to fill the panel without stretching (like object-fit: cover). */
+function cover(texture) {
+  const image = texture.image;
+  const imageAspect = image.width / image.height;
+  const panelAspect = PANEL_W / PANEL_H;
+  if (imageAspect > panelAspect) {
+    texture.repeat.set(panelAspect / imageAspect, 1);
+    texture.offset.set((1 - texture.repeat.x) / 2, 0);
+  } else {
+    texture.repeat.set(1, imageAspect / panelAspect);
+    texture.offset.set(0, (1 - texture.repeat.y) / 2);
+  }
+  texture.colorSpace = SRGBColorSpace;
+  texture.anisotropy = 4;
+  return texture;
 }
 
 /** A cover for a project with no screenshot yet: its name and stack under the burgundy light. */
@@ -49,25 +79,30 @@ async function coverTexture(project) {
   if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
   ctx.fillText(project.tech?.join(", ") ?? "", 64, 600, canvas.width - 128);
 
-  const texture = new CanvasTexture(canvas);
-  texture.colorSpace = SRGBColorSpace;
-  texture.anisotropy = 4;
-  return texture;
+  return cover(new CanvasTexture(canvas));
 }
 
 function screenshotTexture(url) {
-  return new TextureLoader().loadAsync(url).then((texture) => {
-    texture.colorSpace = SRGBColorSpace;
-    texture.anisotropy = 4;
-    return texture;
-  });
+  return new TextureLoader().loadAsync(url).then(cover);
 }
 
-/** The ring of panels. Scrolling turns it; the pointer leans it a touch. */
-function Ring({ projects, sectionRef, calm }) {
+const point = new Vector3();
+const tangent = new Vector3();
+const shade = new Color();
+
+/**
+ * The panels on their spiral (see spiralPath.js). Scroll moves every panel
+ * along the path, each a fixed step behind the one before; the pointer leans
+ * the whole loop a touch. Under reduced motion it holds still at mid-scroll.
+ */
+function Spiral({ projects, sectionRef, calm }) {
   const [textures, setTextures] = useState(null);
   const geometry = useMemo(() => bentPanel(), []);
   const group = useRef();
+  const meshes = useRef([]);
+  const progress = useRef(0);
+  const count = Math.max(projects.length, MIN_PANELS);
+  const aspect = useThree((s) => s.size.width / s.size.height);
 
   useEffect(() => {
     let alive = true;
@@ -83,37 +118,69 @@ function Ring({ projects, sectionRef, calm }) {
 
   useFrame((state, dt) => {
     const g = group.current;
-    const turn = -0.5 + scrollProgress(sectionRef.current) * Math.PI * 1.1;
-    if (calm) {
-      g.rotation.y = 0.4;
-      return;
-    }
-    g.rotation.y = MathUtils.damp(g.rotation.y, turn + state.pointer.x * 0.08, 4, dt);
-    g.rotation.x = MathUtils.damp(g.rotation.x, -state.pointer.y * 0.04, 4, dt);
+    if (!g) return; // still loading the images
+    const target = scrollProgress(sectionRef.current);
+    progress.current = calm ? 0.5 : MathUtils.damp(progress.current, target, 6, dt);
+    const p = progress.current;
+    const day = getTheme() === "light";
+
+    meshes.current.forEach((mesh, i) => {
+      if (!mesh) return;
+      const u = pathPosition(i, p, count);
+      if (u <= 0 || u >= 1) {
+        mesh.visible = false;
+        return;
+      }
+      mesh.visible = true;
+      PATH.getPointAt(u, point);
+      PATH.getTangentAt(u, tangent);
+      mesh.position.copy(point);
+      // The panel's face points out of the loop: its width runs along the path.
+      mesh.rotation.set(0, Math.atan2(-tangent.z, tangent.x), 0);
+      const fade = MathUtils.smoothstep(u, 0, 0.06) * (1 - MathUtils.smoothstep(u, 0.94, 1));
+      // Further back recedes into the page, so the loop reads as depth: darker
+      // at night, paler (more see-through) by day.
+      const near = MathUtils.clamp((point.z + LOOP) / (2 * LOOP), 0, 1);
+      mesh.material.opacity = fade * (day ? 0.3 + 0.7 * near : 1);
+      mesh.material.color.copy(shade.setScalar(day ? 1 : 0.38 + 0.62 * near));
+    });
+
+    // Narrow screens shrink the loop to fit across them, but only so far: on a
+    // phone its sides run off the edges so the panels stay big enough to read.
+    g.scale.setScalar(Math.min(1, Math.max(aspect / 1.1, 0.6)));
+    if (calm) return;
+    g.rotation.y = MathUtils.damp(g.rotation.y, state.pointer.x * 0.12, 3, dt);
+    g.rotation.x = MathUtils.damp(g.rotation.x, -state.pointer.y * 0.06, 3, dt);
   });
 
-  if (!projects.length) return null;
+  // Wait for every image: a material compiled without its map and given one
+  // later renders as a blank white panel.
+  if (!projects.length || !textures) return null;
   return (
     <group ref={group}>
-      {Array.from({ length: PANELS }, (_, i) => (
-        <group key={i} rotation-y={(i / PANELS) * Math.PI * 2}>
-          <mesh geometry={geometry} position={[0, HEIGHTS[i % HEIGHTS.length], -RADIUS]}>
-            <meshBasicMaterial
-              map={textures?.[i % projects.length] ?? null}
-              color={textures ? "#ffffff" : "#1a1a1a"}
-              side={DoubleSide}
-              toneMapped={false}
-            />
-          </mesh>
-        </group>
+      {Array.from({ length: count }, (_, i) => (
+        <mesh key={i} ref={(m) => (meshes.current[i] = m)} geometry={geometry} visible={false}>
+          <meshBasicMaterial
+            map={textures[i % projects.length]}
+            color="#ffffff"
+            side={DoubleSide}
+            // One pass, so gl_FrontFacing tells the faces apart (see bothSides).
+            forceSinglePass
+            onBeforeCompile={bothSides}
+            transparent
+            opacity={0}
+            toneMapped={false}
+          />
+        </mesh>
       ))}
     </group>
   );
 }
 
 /**
- * The project wall: covers (or screenshots) on the inside of a slowly turning
- * cylinder, seen from its centre. It renders only while on screen.
+ * The project wall: covers (or screenshots) that come in from the left, loop
+ * once round the line in the middle of the screen and leave to the right as
+ * you scroll. It renders only while on screen.
  */
 export default function ProjectWall({ projects, sectionRef }) {
   const wrapper = useRef(null);
@@ -132,10 +199,10 @@ export default function ProjectWall({ projects, sectionRef }) {
       <Canvas
         frameloop={visible ? "always" : "never"}
         dpr={lite ? [1, 1.25] : [1, 1.75]}
-        camera={{ position: [0, 0, 0], fov: lite ? 70 : 55 }}
+        camera={{ position: [0, 0, 12], fov: lite ? 50 : 40 }}
         gl={{ antialias: !lite, alpha: true }}
       >
-        <Ring projects={projects} sectionRef={sectionRef} calm={calm} />
+        <Spiral projects={projects} sectionRef={sectionRef} calm={calm} />
       </Canvas>
     </div>
   );

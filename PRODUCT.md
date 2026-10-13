@@ -50,7 +50,7 @@ Stated by Archit as binding across earlier sessions:
 
 - Name **Archit Jain**; the **A** logo mark doubles as the first letter of the name.
 - His own photo, background-removed and always in colour, is the face of the site.
-- Palette from his own swatch: black `#000000`, burgundy **exactly `#6D001A`** (no derived tints), white. Dark only.
+- Palette from his own swatch: black `#000000`, burgundy **exactly `#6D001A`** (no derived tints), white. Two themes from it: light (shown first) and night, swapped by a switch in the nav; the admin is always night.
 - 8-point spacing throughout.
 - Voice: plain, first person, specific; describes real work without hype.
 
@@ -80,4 +80,4 @@ Absent, and not to be fabricated:
 
 ## Accessibility & Inclusion
 
-No external standard has been set. Established in the project so far: `prefers-reduced-motion` removes movement while keeping state feedback, the keyboard focus ring stays white for 3:1 contrast, and body text is kept readable on the dark ground.
+No external standard has been set. Established in the project so far: `prefers-reduced-motion` removes movement while keeping state feedback, the keyboard focus ring is the ink colour (white at night, black by day) for 3:1 contrast, and body text stays readable on both grounds.

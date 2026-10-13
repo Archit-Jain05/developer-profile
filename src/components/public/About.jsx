@@ -1,5 +1,5 @@
 import { toParagraphs } from "../../lib/format.js";
-import Accented from "./Accented.jsx";
+import Accented, { AccentedWords } from "./Accented.jsx";
 import "./Sections.css";
 
 // The full photo, background and all; the hero uses the cut-out version.
@@ -15,10 +15,11 @@ export default function About({ profile }) {
 
   return (
     <section id="about" className="section about">
+      <h2 className="visually-hidden">About</h2>
       <div className="container about__grid">
         {profile.intro && (
           <p className="about__statement">
-            <Accented text={profile.intro} />
+            <AccentedWords text={profile.intro} />
           </p>
         )}
 

@@ -1,4 +1,5 @@
-/* The page's ground: black, lit by two soft burgundy glows. They are fixed to
+/* The page's ground, lit by two soft burgundy glows (faint by day, deep at
+   night; see --glow). They are fixed to
    the screen and drift across it as the page scrolls (a CSS scroll-driven
    animation), so every section sits in a little light without any section
    carrying its own decoration. Under reduced motion they hold still. */
@@ -19,7 +20,12 @@
   width: var(--size);
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(109, 0, 26, 0.6) 0%, rgba(109, 0, 26, 0.24) 38%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgb(109 0 26 / calc(0.6 * var(--glow))) 0%,
+    rgb(109 0 26 / calc(0.24 * var(--glow))) 38%,
+    transparent 70%
+  );
 }
 
 /* translate places a glow's centre at a point on the screen. */

@@ -40,6 +40,29 @@
   color: var(--ink);
 }
 
+/* On wide screens "Skip intro" sits top right, opposite the tagline, where
+   the portrait never reaches (in the bar it would run under the portrait on a
+   laptop). On narrow screens it leads the links in the bar instead. */
+.opening__skip-top {
+  position: absolute;
+  z-index: 1;
+  top: 128px;
+  right: var(--gutter);
+  font-size: var(--step--1);
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.opening__skip-top:hover {
+  color: var(--ink-3);
+}
+
+@media (min-width: 1024px) {
+  .opening__skip {
+    display: none;
+  }
+}
+
 /* First name and surname across the foot of the screen, pushed to either
    side so the portrait stands in the gap between them. */
 .opening__name {
@@ -64,10 +87,18 @@
   letter-spacing: -0.065em;
 }
 
+/* The surname crosses in front of the portrait, so it never reads as "lain". */
 .opening__last {
+  position: relative;
+  z-index: 3;
   letter-spacing: -0.035em;
   /* The italic's swash tail needs room, or it is clipped on the right. */
   padding-right: 0.08em;
+  /* At this size the browser would pick Bodoni's largest optical size, whose
+     hairlines all but vanish; a text-size cut at a heavier weight keeps the
+     same letters with sturdier thin strokes. */
+  font-weight: 500;
+  font-variation-settings: "opsz" 28;
 }
 
 .opening__person {
@@ -79,7 +110,7 @@
   height: min(70svh, 760px);
   max-width: none;
   translate: -50% 0;
-  filter: drop-shadow(0 32px 64px rgba(0, 0, 0, 0.6));
+  filter: drop-shadow(0 32px 64px rgb(0 0 0 / calc(0.6 * var(--shade))));
   pointer-events: none;
   user-select: none;
 }
@@ -123,9 +154,18 @@
   color: var(--ink-3);
 }
 
-/* ---------- The frame ---------- */
+/* ---------- The frame ----------
+   Never a flat page colour: the burgundy light stands behind the A, as it
+   stands behind the portrait in the hero. */
 .opening__frame {
-  background: var(--base);
+  background:
+    radial-gradient(
+      ellipse 52% 64% at 68% 52%,
+      rgb(109 0 26 / calc(0.62 * var(--glow))),
+      rgb(109 0 26 / calc(0.18 * var(--glow))) 55%,
+      transparent 78%
+    ),
+    var(--base);
 }
 
 .shards {
@@ -178,7 +218,7 @@
   line-height: 1;
   letter-spacing: -0.04em;
   color: var(--ink);
-  text-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 8px 32px color-mix(in srgb, var(--base) 60%, transparent);
   pointer-events: none;
 }
 
@@ -193,6 +233,7 @@
   .opening__last,
   .opening__person,
   .opening__intro,
+  .opening__skip-top,
   .opening__bar {
     opacity: 0;
   }
@@ -210,6 +251,7 @@
   }
 
   html[data-revealed] .opening__intro,
+  html[data-revealed] .opening__skip-top,
   html[data-revealed] .opening__bar {
     animation: fade-rise 1s var(--ease-out) 720ms both;
   }
@@ -218,7 +260,7 @@
      name parts, the portrait steps back and the frame opens. */
   @supports (animation-timeline: view()) {
     .opening {
-      height: 360svh;
+      height: 320svh;
       view-timeline: --opening block;
       /* Measured from the true screen edges, not the scroll padding that
          keeps anchors clear of the nav. */
@@ -266,10 +308,11 @@
         person-rise 1.4s var(--ease-out) 240ms both,
         person-away linear both;
       animation-timeline: auto, --opening;
-      animation-range: normal, contain 0% contain 28%;
+      animation-range: normal, contain 0% contain 14%;
     }
 
     html[data-revealed] .opening__intro,
+    html[data-revealed] .opening__skip-top,
     html[data-revealed] .opening__bar {
       animation:
         fade-rise 1s var(--ease-out) 720ms both,
@@ -281,7 +324,7 @@
     .opening__line .word {
       animation: word-in linear both;
       animation-timeline: --opening;
-      animation-range: contain calc(54% + var(--i) * 4%) contain calc(62% + var(--i) * 4%);
+      animation-range: contain calc(50% + var(--i) * 4%) contain calc(58% + var(--i) * 4%);
     }
   }
 }
@@ -321,13 +364,18 @@
   }
 }
 
-/* A small window in the gap between the names, opening out to the edges. */
+/* A small window in the gap between the names, opening out to the edges. It
+   waits for the portrait to step away first, so it never lands on his face. */
 @keyframes frame-open {
   0% {
     opacity: 0;
     clip-path: inset(42% 45% round 8px);
   }
-  4% {
+  26% {
+    opacity: 0;
+    clip-path: inset(42% 45% round 8px);
+  }
+  32% {
     opacity: 1;
   }
   100% {
@@ -400,17 +448,26 @@
     height: min(52svh, 560px);
   }
 
-  .opening__role {
+  .opening__role,
+  .opening__skip-top {
     display: none;
   }
 
-  /* On a phone the links sit over the portrait's jacket, in front of it. */
+  /* On a phone the links sit over the portrait's jacket, in front of it, so
+     they are set for the photo (white on a dark halo) in both themes. */
   .opening__bar {
     bottom: 24px;
     z-index: 3;
     justify-content: flex-end;
     border-top: 0;
-    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.8);
+    /* A tight shadow under the glow, for the link that lands on the white shirt. */
+    text-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.9),
+      0 2px 16px rgba(0, 0, 0, 0.8);
+  }
+
+  .opening__links a {
+    color: #ffffff;
   }
 
   .opening__line {

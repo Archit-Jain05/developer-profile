@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect } from "react";
+import { useNavigationType } from "react-router-dom";
 import { useContent } from "../../hooks/useContent.js";
 import { useSmoothScroll } from "../../hooks/useSmoothScroll.js";
 import Backdrop from "./Backdrop.jsx";
@@ -14,6 +15,10 @@ import GitHubActivity from "./GitHubActivity.jsx";
 import Contact from "./Contact.jsx";
 import ScrollGuide from "./ScrollGuide.jsx";
 import "./PublicSite.css";
+
+// Where the visitor was on the home page, kept while they visit another page in
+// the same tab so Back can return them there. A reload starts afresh.
+let savedScroll = null;
 
 function LoadingSkeleton() {
   return (
@@ -31,12 +36,22 @@ export default function PublicSite() {
   const profile = content?.profile;
   useSmoothScroll();
 
-  // Start at the top once the page is built, unless the address points at a
-  // section (a link like /#projects from another page).
+  // Once the page is built: Back from another page returns to where the
+  // visitor was; anything else starts at the top, unless the address points at
+  // a section (a link like /#projects from another page).
   const ready = status !== "loading";
+  const navigation = useNavigationType();
   useLayoutEffect(() => {
-    if (ready && !window.location.hash) window.scrollTo(0, 0);
-  }, [ready]);
+    if (!ready) return;
+    if (navigation === "POP" && savedScroll !== null) window.scrollTo(0, savedScroll);
+    else if (!window.location.hash) window.scrollTo(0, 0);
+  }, [ready, navigation]);
+  useLayoutEffect(
+    () => () => {
+      savedScroll = window.scrollY;
+    },
+    [],
+  );
 
   useEffect(() => {
     if (profile?.full_name) {
@@ -51,6 +66,9 @@ export default function PublicSite() {
           content, which held first paint behind WebGL for no reason. It now
           tracks the content only; the scene fades in when it is ready. */}
       <Loader ready={status !== "loading"} />
+      <a className="skip-link" href="#about">
+        Skip to content
+      </a>
       <Nav
         resumeUrl={profile?.resume_url}
         name={profile?.full_name}

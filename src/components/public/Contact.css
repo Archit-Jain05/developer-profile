@@ -176,10 +176,13 @@
   padding-block: var(--sp-2);
 }
 
+/* Focus shows as a white ring (3:1 or better on the dark field) around the
+   burgundy edge and glow. */
 .field input:focus,
 .field textarea:focus,
 .field select:focus {
-  outline: none;
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
   border-color: var(--accent);
   box-shadow: 0 0 0 4px var(--accent-soft);
 }
@@ -187,7 +190,8 @@
 /* Errors use the accent with an icon and a sentence, rather than adding a
    fifth colour to the palette. */
 .field [aria-invalid="true"] {
-  border-color: var(--accent);
+  border-color: var(--ink-2);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 /* The field edge carries the colour; the message itself stays white so it
@@ -228,6 +232,10 @@
   margin-top: var(--sp-12);
   padding-block: var(--sp-3);
   border-top: 1px solid var(--line);
+}
+
+.footer__brand img {
+  filter: var(--mark-filter);
 }
 
 .footer__brand {

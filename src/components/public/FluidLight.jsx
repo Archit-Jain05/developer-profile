@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { getTheme, subscribeTheme } from "../../hooks/useTheme.js";
 
 const VERTEX = `
 attribute vec2 position;
@@ -19,6 +20,8 @@ uniform vec2 uResolution;
 uniform float uTime;
 uniform vec2 uPointer;
 uniform float uPresence;
+uniform float uDay;
+uniform vec3 uGround;
 
 const vec3 BURGUNDY = vec3(0.4275, 0.0, 0.1020);
 
@@ -58,12 +61,14 @@ void main() {
   float pull = exp(-dot(p - m, p - m) * 3.0) * uPresence;
 
   float mass = smoothstep(0.32, 0.92, f + 0.42 * uv.y + 0.38 * pull - 0.12);
-  vec3 colour = BURGUNDY * mass;
   float wisp = smoothstep(0.74, 0.98, f + 0.25 * pull) * mass;
-  colour += vec3(1.0) * wisp * 0.16;
-
   float vignette = smoothstep(1.35, 0.25, length((uv - vec2(0.5, 0.82)) * vec2(1.0, 1.25)));
-  colour *= vignette;
+
+  // Night: burgundy light on black, with faint white wisps.
+  vec3 night = (BURGUNDY * mass + vec3(1.0) * wisp * 0.16) * vignette;
+  // Day: the same smoke as burgundy ink drifting through the paper.
+  vec3 day = mix(uGround, BURGUNDY, (mass * 0.42 + wisp * 0.12) * vignette);
+  vec3 colour = mix(night, day, uDay);
   colour += (hash(gl_FragCoord.xy + uTime) - 0.5) / 160.0;
 
   gl_FragColor = vec4(colour, 1.0);
@@ -116,6 +121,14 @@ export default function FluidLight({ className }) {
     const uTime = gl.getUniformLocation(program, "uTime");
     const uPointer = gl.getUniformLocation(program, "uPointer");
     const uPresence = gl.getUniformLocation(program, "uPresence");
+    const uDay = gl.getUniformLocation(program, "uDay");
+    const uGround = gl.getUniformLocation(program, "uGround");
+    // The page colour (a 6-digit hex token), so the light's ground meets the page.
+    const readGround = () => {
+      const hex = getComputedStyle(document.documentElement).getPropertyValue("--base").trim();
+      return [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
+    };
+    let ground = readGround();
 
     const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const pointer = { x: 0.5, y: 0.7, tx: 0.5, ty: 0.7, presence: 0, target: 0 };
@@ -135,6 +148,8 @@ export default function FluidLight({ className }) {
       gl.uniform1f(uTime, calm ? 12 : time / 1000);
       gl.uniform2f(uPointer, pointer.x, pointer.y);
       gl.uniform1f(uPresence, pointer.presence);
+      gl.uniform1f(uDay, getTheme() === "light" ? 1 : 0);
+      gl.uniform3f(uGround, ground[0], ground[1], ground[2]);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
 
@@ -161,6 +176,11 @@ export default function FluidLight({ className }) {
       if (calm) draw(0);
     });
     resizer.observe(canvas);
+    // The moving light redraws every frame anyway; the still one needs telling.
+    const stopTheme = subscribeTheme(() => {
+      ground = readGround();
+      if (calm) draw(0);
+    });
 
     let observer;
     if (calm) {
@@ -179,6 +199,7 @@ export default function FluidLight({ className }) {
       cancelAnimationFrame(frame);
       observer?.disconnect();
       resizer.disconnect();
+      stopTheme();
       window.removeEventListener("pointermove", onMove);
       document.documentElement.removeEventListener("pointerleave", onLeave);
       gl.deleteBuffer(buffer);

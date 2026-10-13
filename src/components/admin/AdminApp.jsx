@@ -1,3 +1,4 @@
+import { useLayoutEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { isSupabaseConfigured } from "../../lib/supabase.js";
 import { useAuth, signOut } from "../../hooks/useAuth.js";
@@ -8,6 +9,7 @@ import CrudTab from "./CrudTab.jsx";
 import MessagesTab from "./MessagesTab.jsx";
 import { ENTITY_CONFIGS } from "./config.js";
 import Backdrop from "../public/Backdrop.jsx";
+import { applyTheme, storedTheme } from "../../hooks/useTheme.js";
 import "./Admin.css";
 
 function Centered({ children }) {
@@ -34,6 +36,13 @@ function NotConfigured() {
 }
 
 export default function AdminApp() {
+  // The admin is designed for night only: hold it there, and give the visitor
+  // their own theme back when they return to the site.
+  useLayoutEffect(() => {
+    applyTheme("dark");
+    return () => applyTheme(storedTheme());
+  }, []);
+
   return (
     <>
       <Backdrop />

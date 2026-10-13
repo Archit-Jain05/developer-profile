@@ -10,74 +10,47 @@
   transition: opacity 0.5s ease 0.5s;
 }
 
-/* The tile with a "+" registration mark just outside each corner. */
 .loader__frame {
   position: relative;
-  padding: var(--sp-1);
 }
 
-.loader__frame::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  /* Four small crosses, each a horizontal and a vertical stroke centred on a
-     point 8px outside the tile corner. */
-  background:
-    linear-gradient(var(--line-strong), var(--line-strong)) 0 8px / 16px 1px,
-    linear-gradient(var(--line-strong), var(--line-strong)) 8px 0 / 1px 16px,
-    linear-gradient(var(--line-strong), var(--line-strong)) 100% 8px / 16px 1px,
-    linear-gradient(var(--line-strong), var(--line-strong)) calc(100% - 8px) 0 / 1px 16px,
-    linear-gradient(var(--line-strong), var(--line-strong)) 0 calc(100% - 8px) / 16px 1px,
-    linear-gradient(var(--line-strong), var(--line-strong)) 8px 100% / 1px 16px,
-    linear-gradient(var(--line-strong), var(--line-strong)) 100% calc(100% - 8px) / 16px 1px,
-    linear-gradient(var(--line-strong), var(--line-strong)) calc(100% - 8px) 100% / 1px 16px;
-  background-repeat: no-repeat;
-  translate: -8px -8px;
-  width: calc(100% + 16px);
-  height: calc(100% + 16px);
-}
-
+/* The signature's space, straight on the page, in its proportions. */
 .loader__tile {
   display: grid;
   place-items: center;
-  width: 256px;
-  height: 256px;
-  background: var(--secondary);
-  transition:
-    scale 0.9s cubic-bezier(0.7, 0, 0.2, 1),
-    border-radius 0.9s cubic-bezier(0.7, 0, 0.2, 1);
+  width: min(512px, 88vw);
+  aspect-ratio: 8 / 5;
+  transition: scale 0.9s cubic-bezier(0.7, 0, 0.2, 1);
 }
 
-.loader__mark {
-  width: 160px;
-  height: 160px;
-  --logo-color: var(--ink);
-}
-
-.loader__mark svg {
+/* The signature, in burgundy by day and white at night (--emphasis). */
+.loader__sign {
+  --write: 2.2s;
   width: 100%;
   height: 100%;
   overflow: visible;
+  color: var(--emphasis);
+  fill: currentColor;
 }
 
-/* Each piece of the A arrives from its own scattered position and locks in. */
-.loader__mark path {
-  transform-box: fill-box;
-  transform-origin: center;
-  opacity: 0;
-  translate: var(--dx, 0) var(--dy, 0);
-  rotate: var(--r, 0deg);
-  scale: 0.6;
-  animation: piece-in 0.8s var(--ease-out) calc(160ms + var(--i, 0) * 48ms) forwards;
+/* The pen: each stroke of the mask draws in its turn (--at) for its share of
+   the writing time (--for). Its dash is as long as the stroke, its gap longer,
+   and it starts just past the stroke's start, so nothing shows (not even the
+   round cap) until the pen reaches it. */
+.loader__pen path {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 15;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1 2;
+  stroke-dashoffset: 1.01;
+  animation: sign-write calc(var(--for) * var(--write)) cubic-bezier(0.35, 0, 0.45, 1) calc(var(--at) * var(--write) + 150ms) forwards;
 }
 
-@keyframes piece-in {
+@keyframes sign-write {
   to {
-    opacity: 1;
-    translate: 0 0;
-    rotate: 0deg;
-    scale: 1;
+    stroke-dashoffset: 0;
   }
 }
 
@@ -86,7 +59,8 @@
   font-style: italic;
   font-size: var(--step-2);
   color: var(--ink-2);
-  animation: fade-up 0.8s var(--ease-out) 0.4s both;
+  /* The printed name arrives as the signature is finished. */
+  animation: fade-up 0.8s var(--ease-out) 1.6s both;
 }
 
 /* The counter, bottom centre, each digit a rolling wheel. */
@@ -130,33 +104,27 @@
 }
 
 /* ---------- Exit ----------
-   Everything but the tile fades; the tile swells past the edges of the screen,
+   The name and counter fade first; the signature lifts a little toward you,
    then the whole layer fades to reveal the hero. */
 .loader.is-exiting {
   opacity: 0;
   pointer-events: none;
 }
 
-.loader.is-exiting .loader__mark,
 .loader.is-exiting .loader__name,
-.loader.is-exiting .loader__count,
-.loader.is-exiting .loader__frame::before {
+.loader.is-exiting .loader__count {
   opacity: 0;
   transition: opacity 0.25s ease;
 }
 
 .loader.is-exiting .loader__tile {
-  scale: 9;
-  border-radius: 50%;
+  scale: 1.08;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .loader__mark path {
+  .loader__pen path {
     animation: none;
-    opacity: 1;
-    translate: 0 0;
-    rotate: 0deg;
-    scale: 1;
+    stroke-dashoffset: 0;
   }
 
   .loader.is-exiting .loader__tile {

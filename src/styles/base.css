@@ -5,8 +5,6 @@
 }
 
 html {
-  /* Dark only: no light theme is defined, so pin the UA theme too. */
-  color-scheme: dark;
   scroll-behavior: smooth;
   scroll-padding-top: 96px;
 }
@@ -41,7 +39,8 @@ select {
   color: inherit;
 }
 
-/* White, not the accent: burgundy is under the 3:1 a focus ring needs on black. */
+/* The ink colour, not the accent: burgundy is under the 3:1 a focus ring
+   needs on black. */
 :focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: 4px;
@@ -49,7 +48,15 @@ select {
 
 ::selection {
   background: var(--accent-fill);
-  color: var(--ink);
+  color: var(--on-accent);
+}
+
+/* The day/night switch (ThemeSwitch.jsx) opens the new theme as a circle
+   growing out of the switch; the browser's default cross-fade is off. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
 
 h1,
@@ -145,6 +152,7 @@ h3 {
   font-style: italic;
   font-weight: 400;
   letter-spacing: -0.01em;
+  color: var(--emphasis);
 }
 
 .section-lede {
@@ -176,17 +184,18 @@ h3 {
   background: var(--base-2);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / calc(0.6 * var(--shade)));
 }
 
 /* ---------- Buttons ----------
    The accent is for buttons and anything that needs direct attention — about
    5% of the page.
 
-   On hover (and keyboard focus) a white fill rises from the bottom of the
-   pill and the label swaps colour with it. The primary button is the palette
-   burgundy with a lighter burgundy edge, so its outline still reads on black. The button lifts slightly, its icon dips,
-   and pressing gives a small squash. */
+   On hover (and keyboard focus) a fill in the ink colour rises from the
+   bottom of the pill and the label swaps colour with it. The primary button
+   is the palette burgundy with white text; its hover label is burgundy on the
+   white fill at night and white on the black fill by day. The button lifts
+   slightly, its icon dips, and pressing gives a small squash. */
 .btn {
   --btn-fill: transparent;
   --btn-ink-hover: inherit;
@@ -250,15 +259,15 @@ h3 {
 
 .btn--primary {
   --btn-fill: var(--ink);
-  --btn-ink-hover: var(--accent-fill);
+  --btn-ink-hover: var(--accent-on-ink);
   background: var(--accent-fill);
   border-color: var(--accent);
-  color: var(--ink);
+  color: var(--on-accent);
 }
 
 .btn--primary:is(:hover, :focus-visible):not(:disabled) {
   border-color: var(--ink);
-  box-shadow: 0 16px 32px -16px rgba(109, 0, 26, 0.9);
+  box-shadow: 0 16px 32px -16px rgb(109 0 26 / calc(0.9 * var(--glow)));
 }
 
 .btn--ghost {
@@ -313,14 +322,16 @@ h3 {
   .link-out,
   .link-in,
   .contact__details a,
-  .footer__nav a {
+  .footer__nav a,
+  .opening__links a {
     position: relative;
   }
 
   .link-out::before,
   .link-in::before,
   .contact__details a::before,
-  .footer__nav a::before {
+  .footer__nav a::before,
+  .opening__links a::before {
     content: "";
     position: absolute;
     inset: calc(-1 * var(--sp-1));
@@ -365,6 +376,54 @@ h3 {
   font-variant-numeric: tabular-nums;
   font-size: var(--step--2);
   color: var(--ink-3);
+}
+
+/* Keyboard users can jump past the opening straight to the content. */
+.skip-link {
+  position: fixed;
+  z-index: 200;
+  top: 16px;
+  left: 16px;
+  padding: var(--sp-1) var(--sp-2);
+  border-radius: var(--radius-pill);
+  background: var(--ink);
+  color: var(--base);
+  font-size: var(--step--1);
+  font-weight: 600;
+  translate: 0 -200%;
+  transition: translate 0.3s var(--ease-out);
+}
+
+.skip-link:focus-visible {
+  translate: 0 0;
+}
+
+/* Rolling link text (RollText.jsx): each letter slides up and its copy rises
+   in from below, one after another, when the link is pointed at or focused. */
+.roll__letters {
+  display: inline-flex;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.roll__letter {
+  position: relative;
+  display: inline-block;
+  transition: translate 0.45s var(--ease-out);
+  transition-delay: calc(var(--i) * 16ms);
+}
+
+.roll__letter::after {
+  content: attr(data-ch);
+  position: absolute;
+  left: 0;
+  top: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :is(a, button):is(:hover, :focus-visible) .roll__letter {
+    translate: 0 -100%;
+  }
 }
 
 .visually-hidden {

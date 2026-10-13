@@ -134,10 +134,10 @@ function Record({ id, title, rows }) {
   return (
     <section id={id} className="section record">
       <div className="container">
-        <h2 className="record__title">{title}</h2>
-        <ol className="record__list">
-          {rows.map((row) => (
-            <li key={row.key}>
+        <h2 className="record__title reveal-title">{title}</h2>
+        <ol className="record__list stagger">
+          {rows.map((row, index) => (
+            <li key={row.key} style={{ "--i": index }}>
               <button
                 ref={(el) => (el ? buttons.current.set(row.key, el) : buttons.current.delete(row.key))}
                 type="button"

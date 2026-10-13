@@ -9,10 +9,10 @@ function usedIn(skill, projects) {
   return projects.filter((p) => (p.tech ?? []).some((t) => t.trim().toLowerCase() === name));
 }
 
-function SkillRow({ skill, projects }) {
+function SkillRow({ skill, projects, index }) {
   const { icon: Icon, color } = getSkillIcon(skill.icon);
   return (
-    <li className="skill">
+    <li className="skill" style={{ "--i": Math.min(index, 6) }}>
       <span className="skill__icon" style={{ color }}>
         <Icon aria-hidden="true" />
       </span>
@@ -31,9 +31,9 @@ function Group({ title, entries, open = false }) {
         <span className="skill-group__count">{entries.length}</span>
         <FiPlus className="skill-group__icon" aria-hidden="true" />
       </summary>
-      <ul className="skill-group__list">
-        {entries.map(({ skill, used }) => (
-          <SkillRow key={skill.id} skill={skill} projects={used} />
+      <ul className="skill-group__list stagger">
+        {entries.map(({ skill, used }, index) => (
+          <SkillRow key={skill.id} skill={skill} projects={used} index={index} />
         ))}
       </ul>
     </details>
@@ -56,7 +56,7 @@ export default function Skills({ skills, projects = [], statement }) {
     <section id="skills" className="section skills">
       <div className="container skills__grid">
         <div className="skills__intro">
-          <h2 className="skills__title">Skills</h2>
+          <h2 className="skills__title reveal-title">Skills</h2>
           {statement && (
             <p className="skills__statement">
               <Accented text={statement} />

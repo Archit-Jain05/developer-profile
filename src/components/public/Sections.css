@@ -15,7 +15,7 @@
   margin: 0;
   font-size: clamp(2rem, 3.5vw, 3.75rem);
   font-weight: 500;
-  line-height: 1.12;
+  line-height: 1.2;
   letter-spacing: -0.035em;
   color: var(--ink);
 }
@@ -34,7 +34,7 @@
   overflow: hidden;
   border-radius: 999px 999px var(--radius-lg) var(--radius-lg);
   background: var(--secondary);
-  box-shadow: 0 48px 120px -32px rgba(109, 0, 26, 0.9);
+  box-shadow: 0 48px 120px -32px rgb(109 0 26 / calc(0.9 * var(--glow)));
 }
 
 .about__portrait img {
@@ -144,7 +144,7 @@
 
 .work__row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: baseline;
   column-gap: var(--sp-4);
   row-gap: var(--sp-1);
@@ -169,17 +169,49 @@
   font-weight: 500;
   line-height: 1;
   letter-spacing: -0.05em;
-  transition: translate 0.5s var(--ease-out);
+  transition:
+    translate 0.5s var(--ease-out),
+    color 0.3s var(--ease-out);
 }
 
+/* By day the name also turns burgundy (at night --emphasis is the text colour). */
 .work__row:is(:hover, :focus-visible) .work__name {
   translate: var(--sp-2) 0;
+  color: var(--emphasis);
+}
+
+.work__name {
+  grid-column: 1;
 }
 
 .work__meta {
+  grid-column: 3;
   font-size: var(--step--1);
   color: var(--ink-3);
   text-align: right;
+}
+
+/* A small screenshot in each row that has one, so the proof shows without a
+   hover (and on touch screens). */
+.work__thumb {
+  grid-column: 2;
+  align-self: center;
+  width: 112px;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--secondary);
+}
+
+.work__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: scale 0.6s var(--ease-out);
+}
+
+.work__row:is(:hover, :focus-visible) .work__thumb img {
+  scale: 1.08;
 }
 
 /* Where there is no pointer to hover with, the line under each name says what
@@ -194,6 +226,11 @@
 @media (hover: none) {
   .work__desc {
     display: block;
+  }
+
+  /* Without a pointer to brighten them, rows never dim below this. */
+  .work__row {
+    --hover: 0.6;
   }
 }
 
@@ -246,7 +283,7 @@
   gap: var(--sp-2);
   padding: var(--sp-3);
   background:
-    radial-gradient(ellipse at 50% 130%, rgb(109, 0, 26) 0%, rgba(109, 0, 26, 0.55) 40%, transparent 75%),
+    radial-gradient(ellipse at 50% 130%, rgb(109 0 26 / var(--glow)) 0%, rgb(109 0 26 / calc(0.55 * var(--glow))) 40%, transparent 75%),
     var(--secondary);
 }
 
@@ -271,6 +308,39 @@
       animation-timeline: view();
       animation-range: cover 0% cover 100%;
     }
+  }
+}
+
+/* The About portrait comes into focus as it rises into view, and the intro
+   lights up word by word as it crosses the screen. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .about__portrait img {
+      animation: focus-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+
+    .about__statement {
+      view-timeline: --statement block;
+    }
+
+    .about__statement .word {
+      animation: word-in linear both;
+      animation-timeline: --statement;
+      animation-range: cover calc(10% + var(--i) * 0.9%) cover calc(20% + var(--i) * 0.9%);
+    }
+  }
+}
+
+@keyframes focus-in {
+  from {
+    filter: blur(16px);
+    scale: 1.14;
+  }
+  to {
+    filter: blur(0);
+    scale: 1;
   }
 }
 
@@ -306,12 +376,12 @@
   inset: 0;
 }
 
-/* A soft dark pool behind the line, so it reads over the panels. */
+/* A soft pool of the page colour behind the line, so it reads over the panels. */
 .wall__pin::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 48% 36% at 50% 50%, rgba(0, 0, 0, 0.82), transparent);
+  background: radial-gradient(ellipse 48% 36% at 50% 50%, color-mix(in srgb, var(--base) 82%, transparent), transparent);
   pointer-events: none;
 }
 
@@ -327,14 +397,15 @@
   letter-spacing: -0.04em;
   text-align: center;
   color: var(--ink);
-  text-shadow: 0 8px 40px rgba(0, 0, 0, 0.85);
+  text-shadow: 0 8px 40px color-mix(in srgb, var(--base) 85%, transparent);
   pointer-events: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
+    /* Long enough for each project to come in, loop once and leave. */
     .wall {
-      height: 260svh;
+      height: 420svh;
       view-timeline: --wall block;
       view-timeline-inset: 0px;
     }
@@ -347,7 +418,7 @@
     .wall__line .word {
       animation: word-in linear both;
       animation-timeline: --wall;
-      animation-range: contain calc(6% + var(--i) * 6%) contain calc(18% + var(--i) * 6%);
+      animation-range: contain calc(4% + var(--i) * 4%) contain calc(12% + var(--i) * 4%);
     }
   }
 }
@@ -361,8 +432,8 @@
   padding-top: var(--sp-12);
 }
 
-/* A white fill wipes in from the left on hover and out to the right after;
-   the text turns black on it. */
+/* A fill in the ink colour wipes in from the left on hover and out to the
+   right after; the text takes the page colour on it. */
 .record__row {
   position: relative;
   isolation: isolate;
@@ -426,14 +497,15 @@
   padding: 0 var(--sp-1);
   border-radius: var(--radius-pill);
   background: var(--accent);
-  color: var(--ink);
+  color: var(--on-accent);
   font-size: var(--step--2);
   font-weight: 600;
   line-height: 24px;
 }
 
-/* Company and school marks sit on white tiles: most were drawn for white
-   pages and disappear on black. */
+/* Company and school marks sit on white tiles in both themes: most were
+   drawn for white pages and disappear on black. By day a hairline keeps the
+   tile's edge on the white page. */
 .logo-tile {
   display: grid;
   place-items: center;
@@ -441,7 +513,8 @@
   height: 48px;
   overflow: hidden;
   border-radius: var(--radius-sm);
-  background: var(--ink);
+  background: #ffffff;
+  box-shadow: inset 0 0 0 1px var(--line);
 }
 
 .logo-tile img {
@@ -451,7 +524,7 @@
 }
 
 .logo-tile span {
-  color: var(--base);
+  color: #000000;
   font-weight: 600;
 }
 
@@ -477,7 +550,7 @@
   max-width: 18ch;
   font-size: clamp(1.5rem, 2.4vw, 2.25rem);
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 1.3;
   letter-spacing: -0.02em;
   color: var(--ink-2);
 }
@@ -628,10 +701,12 @@
 
 .guide__list a::after {
   content: "";
-  width: 12px;
+  width: 24px;
   height: 1px;
   background: currentColor;
-  transition: width 0.3s var(--ease-out);
+  scale: 0.5 1;
+  transform-origin: 100% 50%;
+  transition: scale 0.3s var(--ease-out);
 }
 
 .guide__list a:hover,
@@ -640,13 +715,13 @@
 }
 
 .guide__list a[aria-current]::after {
-  width: 24px;
+  scale: 1 1;
 }
 
 .guide__label {
   padding: 0 var(--sp-1);
   border-radius: var(--radius-pill);
-  background: rgba(0, 0, 0, 0.6);
+  background: color-mix(in srgb, var(--base) 60%, transparent);
   font-size: var(--step--2);
   font-weight: 500;
   line-height: 24px;
@@ -742,10 +817,17 @@
 
 @media (max-width: 767px) {
   .work__row {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .work__thumb {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    width: 96px;
   }
 
   .work__meta {
+    grid-column: 1;
     text-align: left;
   }
 

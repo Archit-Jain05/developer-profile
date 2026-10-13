@@ -1,5 +1,6 @@
 import ContactForm from "./ContactForm.jsx";
 import FooterBar from "./FooterBar.jsx";
+import RollText from "./RollText.jsx";
 import "./Contact.css";
 
 /**
@@ -8,9 +9,9 @@ import "./Contact.css";
  */
 export default function Contact({ profile }) {
   return (
-    <footer id="contact" className="contact">
+    <section id="contact" className="contact">
       <div className="container">
-        <h2 className="contact__heading">Contact</h2>
+        <h2 className="contact__heading reveal-title">Contact</h2>
 
         <div className="contact__grid">
           <div className="contact__notes">
@@ -32,21 +33,21 @@ export default function Contact({ profile }) {
               {profile.github_url && (
                 <li>
                   <a className="link-out" href={profile.github_url} target="_blank" rel="noopener noreferrer">
-                    GitHub
+                    <RollText>GitHub</RollText>
                   </a>
                 </li>
               )}
               {profile.linkedin_url && (
                 <li>
                   <a className="link-out" href={profile.linkedin_url} target="_blank" rel="noopener noreferrer">
-                    LinkedIn
+                    <RollText>LinkedIn</RollText>
                   </a>
                 </li>
               )}
               {profile.resume_url && (
                 <li>
                   <a className="link-out" href={profile.resume_url} target="_blank" rel="noopener noreferrer">
-                    Résumé
+                    <RollText>Résumé</RollText>
                   </a>
                 </li>
               )}
@@ -59,7 +60,9 @@ export default function Contact({ profile }) {
         </div>
       </div>
 
-      <FooterBar profile={profile} onHome />
-    </footer>
+      <footer>
+        <FooterBar profile={profile} onHome />
+      </footer>
+    </section>
   );
 }

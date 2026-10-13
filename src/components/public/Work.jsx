@@ -96,8 +96,11 @@ export default function Work({ items, experience = [], githubUrl }) {
       const w = el.offsetWidth;
       const h = el.offsetHeight;
       const x = at.tx + 32 + w > window.innerWidth ? at.x - w - 32 : at.x + 32;
-      const y = Math.min(Math.max(at.y - h / 2, 16), window.innerHeight - h - 16);
-      el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      // Kept clear of the nav bar at the top.
+      const y = Math.min(Math.max(at.y - h / 2, 96), window.innerHeight - h - 16);
+      // It leans into the direction it is moving, and settles when it stops.
+      const lean = calm ? 0 : Math.max(-6, Math.min(6, (at.tx - at.x) * 0.05));
+      el.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${lean}deg)`;
       frame = Math.abs(at.tx - at.x) + Math.abs(at.ty - at.y) > 0.5 ? requestAnimationFrame(step) : 0;
     };
     const onMove = (e) => {
@@ -118,11 +121,11 @@ export default function Work({ items, experience = [], githubUrl }) {
   return (
     <section id="projects" className="section work">
       <div className="container">
-        <h2 className="work__title">Projects</h2>
+        <h2 className="work__title reveal-title">Projects</h2>
 
-        <ol className="work__list" onPointerLeave={() => setActive(false)}>
-          {items.map((project) => (
-            <li key={project.id}>
+        <ol className="work__list stagger" onPointerLeave={() => setActive(false)}>
+          {items.map((project, index) => (
+            <li key={project.id} style={{ "--i": Math.min(index, 6) }}>
               <button
                 ref={(el) => (el ? rows.current.set(project.id, el) : rows.current.delete(project.id))}
                 type="button"
@@ -138,6 +141,11 @@ export default function Work({ items, experience = [], githubUrl }) {
                 }}
               >
                 <span className="work__name">{project.title}</span>
+                {hasScreenshot(project) && (
+                  <span className="work__thumb">
+                    <img src={project.image_url} alt="" loading="lazy" width="1440" height="900" />
+                  </span>
+                )}
                 <span className="work__meta">{project.tech?.join(", ")}</span>
                 {project.description && <span className="work__desc">{project.description}</span>}
               </button>
