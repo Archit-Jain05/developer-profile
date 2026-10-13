@@ -17,7 +17,6 @@ function SkillRow({ skill, projects, index }) {
         <Icon aria-hidden="true" />
       </span>
       <span className="skill__name">{skill.name}</span>
-      {projects.length > 0 && <span className="skill__where">{projects.map((p) => p.title).join(", ")}</span>}
     </li>
   );
 }

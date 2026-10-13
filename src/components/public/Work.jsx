@@ -68,9 +68,10 @@ function PreviewCard({ project, company }) {
 }
 
 /**
- * Projects as an index: the names set large, one per row. On a screen with a
- * mouse, a preview follows the pointer over the list; everywhere, a row opens
- * the project's details.
+ * Projects as an index: the names set large, one per row, with a small
+ * screenshot at the far right. On a screen with a mouse, pointing at that
+ * screenshot (and only that) opens a larger preview beside the pointer;
+ * everywhere, a row opens the project's details.
  */
 export default function Work({ items, experience = [], githubUrl }) {
   const companies = useMemo(() => new Map(experience.map((job) => [job.id, job.company])), [experience]);
@@ -123,7 +124,7 @@ export default function Work({ items, experience = [], githubUrl }) {
       <div className="container">
         <h2 className="work__title reveal-title">Projects</h2>
 
-        <ol className="work__list stagger" onPointerLeave={() => setActive(false)}>
+        <ol className="work__list stagger">
           {items.map((project, index) => (
             <li key={project.id} style={{ "--i": Math.min(index, 6) }}>
               <button
@@ -131,10 +132,6 @@ export default function Work({ items, experience = [], githubUrl }) {
                 type="button"
                 className="work__row"
                 aria-haspopup="dialog"
-                onPointerEnter={() => {
-                  setShownId(project.id);
-                  setActive(true);
-                }}
                 onClick={() => {
                   origin.current = rows.current.get(project.id);
                   setOpenId(project.id);
@@ -142,11 +139,17 @@ export default function Work({ items, experience = [], githubUrl }) {
               >
                 <span className="work__name">{project.title}</span>
                 {hasScreenshot(project) && (
-                  <span className="work__thumb">
+                  <span
+                    className="work__thumb"
+                    onPointerEnter={() => {
+                      setShownId(project.id);
+                      setActive(true);
+                    }}
+                    onPointerLeave={() => setActive(false)}
+                  >
                     <img src={project.image_url} alt="" loading="lazy" width="1440" height="900" />
                   </span>
                 )}
-                <span className="work__meta">{project.tech?.join(", ")}</span>
                 {project.description && <span className="work__desc">{project.description}</span>}
               </button>
             </li>

@@ -6,36 +6,31 @@ import FluidLight from "./FluidLight.jsx";
 import SceneBoundary from "./SceneBoundary.jsx";
 import "./Hero.css";
 
-const loadShards = () => import("./three/ShardScene.jsx");
-const ShardScene = lazy(loadShards);
+const loadScene = () => import("./three/TileFloor.jsx");
+const TileFloor = lazy(loadScene);
 
 /**
  * The opening. First the hero: a moving burgundy light, the name across the
  * foot of the screen and the portrait standing in the gap between first name
  * and surname. Scrolling on, the name parts, the portrait steps back, and a
- * frame opens out of the gap until it fills the screen: inside, the A in stone
- * shards pulls itself together while the heading lights up word by word.
+ * frame opens out of the gap until it fills the screen: inside, a floor of tiles shows
+ * the sites he has built while the heading lights up word by word.
  *
  * The choreography is CSS scroll-driven animation on a pinned, tall section.
  * Without it (or with reduced motion) the hero and the frame simply stack.
  */
-export default function Hero({ profile, experience = [] }) {
+export default function Hero({ profile, experience = [], projects = [] }) {
   const section = useRef(null);
   const frame = useRef(null);
   const [webgl] = useState(supportsWebGL);
-  const [armed, setArmed] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  // The shard scene loads once the visitor starts to scroll; its code is
-  // fetched ahead of that while the browser is idle.
+  // The tile floor (its code) loads as soon as the page is
+  // idle, so the frame already holds it when it opens.
   useEffect(() => {
-    const idle = window.requestIdleCallback ?? ((fn) => setTimeout(fn, 1500));
-    idle(() => loadShards());
-    const arm = () => {
-      if (window.scrollY > 8) setArmed(true);
-    };
-    arm();
-    window.addEventListener("scroll", arm, { passive: true });
-    return () => window.removeEventListener("scroll", arm);
+    const idle = window.requestIdleCallback ?? ((fn) => setTimeout(fn, 300));
+    const id = idle(() => setMounted(true));
+    return () => (window.cancelIdleCallback ?? clearTimeout)(id);
   }, []);
 
   const [first, ...rest] = (profile.full_name ?? "").split(" ");
@@ -118,10 +113,10 @@ export default function Hero({ profile, experience = [] }) {
         </div>
 
         <div ref={frame} className="opening__frame">
-          {webgl && armed && (
+          {webgl && mounted && (
             <SceneBoundary fallback={null}>
               <Suspense fallback={null}>
-                <ShardScene sectionRef={section} frameRef={frame} />
+                <TileFloor sectionRef={section} frameRef={frame} projects={projects} />
               </Suspense>
             </SceneBoundary>
           )}

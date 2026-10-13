@@ -150,7 +150,10 @@ h3 {
 .serif {
   font-family: var(--font-serif);
   font-style: italic;
-  font-weight: 400;
+  /* Bodoni's hairlines all but vanish at its largest optical size; a text cut
+     at a firmer weight keeps the letters and sturdies the thin strokes. */
+  font-weight: 500;
+  font-variation-settings: "opsz" 28;
   letter-spacing: -0.01em;
   color: var(--emphasis);
 }
@@ -375,6 +378,7 @@ h3 {
   font-variation-settings: "wdth" 88;
   font-variant-numeric: tabular-nums;
   font-size: var(--step--2);
+  font-weight: 500;
   color: var(--ink-3);
 }
 

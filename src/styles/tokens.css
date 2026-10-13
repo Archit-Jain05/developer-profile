@@ -38,25 +38,25 @@
      --base stays a 6-digit hex in both themes: FluidLight.jsx reads it.
      --------------------------------------------------------------------- */
   color-scheme: light;
-  --base: #f6f0f1;        /* paper: white with 6% burgundy */
-  --base-2: #fbf7f8;      /* wells: inputs, the contribution calendar (3%) */
-  --secondary: #e9d9dd;   /* cards: 15% burgundy, 7 L* below the page */
-  --secondary-2: #e2ccd1; /* raised inside a card, hover state (20%) */
-  --accent: #6d001a;
+  --base: #ffffff;
+  --base-2: #f4f7fd;      /* wells: inputs, the contribution calendar */
+  --secondary: #e8eefa;   /* cards: a pale blue, clearly off the page */
+  --secondary-2: #dae3f6; /* raised inside a card, hover state */
+  --accent: #1b3a9e;      /* blue by day (burgundy at night) */
   --accent-fill: var(--accent);
   --on-accent: #ffffff;
   --accent-on-ink: #ffffff;
-  --emphasis: var(--accent);
-  --ink: #000000;
-  --ink-2: #331f24;       /* body text, a burgundy graphite — 11.3:1 on a card */
-  --ink-3: #604850;       /* meta: dates, counts, captions — 6.1:1 on a card */
+  --emphasis: currentColor;
+  --ink: #0a0f24;
+  --ink-2: #1f2a44;       /* body text, a navy — 12:1 on a card */
+  --ink-3: #4a5878;       /* meta: dates, counts, captions — 5.6:1 on a card */
 
-  --line: rgba(109, 0, 26, 0.16);
-  --line-strong: rgba(109, 0, 26, 0.3);
-  --accent-soft: rgba(109, 0, 26, 0.2);
-  --shadow-card: 0 24px 48px -24px rgba(64, 0, 16, 0.3);
-  --scrim: rgba(40, 0, 10, 0.4);
-  --glow: 0.38;
+  --line: rgba(20, 40, 110, 0.14);
+  --line-strong: rgba(20, 40, 110, 0.28);
+  --accent-soft: rgba(27, 58, 158, 0.2);
+  --shadow-card: 0 24px 48px -24px rgba(0, 0, 0, 0.24);
+  --scrim: rgba(0, 0, 0, 0.4);
+  --glow: 0; /* no burgundy light by day: a plain white page */
   --shade: 0.25;
   --mark-filter: invert(1);
 
@@ -127,6 +127,7 @@
 /* Night: a black page lit by burgundy, white type. */
 [data-theme="dark"] {
   color-scheme: dark;
+  --accent: #6d001a;
   --base: #000000;
   --base-2: #0d0d0d;
   --secondary: #1a1a1a;   /* 9 L* above the page */

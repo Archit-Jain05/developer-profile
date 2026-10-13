@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { CanvasTexture, Color, DoubleSide, MathUtils, PlaneGeometry, SRGBColorSpace, ShaderChunk, TextureLoader, Vector3 } from "three";
+import { CanvasTexture, Color, DoubleSide, MathUtils, PlaneGeometry, SRGBColorSpace, ShaderChunk, TextureLoader } from "three";
 import { hasScreenshot } from "../Work.jsx";
 import { scrollProgress } from "./scroll.js";
-import { LOOP, PATH, pathPosition } from "./spiralPath.js";
+import { LOOP, panelPose } from "./wallMotion.js";
 import { getTheme } from "../../../hooks/useTheme.js";
 
 const PANEL_W = 2.3;
@@ -86,14 +86,13 @@ function screenshotTexture(url) {
   return new TextureLoader().loadAsync(url).then(cover);
 }
 
-const point = new Vector3();
-const tangent = new Vector3();
+const pose = {};
 const shade = new Color();
 
 /**
- * The panels on their spiral (see spiralPath.js). Scroll moves every panel
- * along the path, each a fixed step behind the one before; the pointer leans
- * the whole loop a touch. Under reduced motion it holds still at mid-scroll.
+ * The panels (see wallMotion.js): they enter from the left, gather into a
+ * circle, turn together, then leave to the right as you scroll; the pointer
+ * leans the whole circle a touch. Under reduced motion it holds still at mid-scroll.
  */
 function Spiral({ projects, sectionRef, calm }) {
   const [textures, setTextures] = useState(null);
@@ -126,22 +125,18 @@ function Spiral({ projects, sectionRef, calm }) {
 
     meshes.current.forEach((mesh, i) => {
       if (!mesh) return;
-      const u = pathPosition(i, p, count);
-      if (u <= 0 || u >= 1) {
+      panelPose(i, count, p, pose);
+      if (!pose.visible) {
         mesh.visible = false;
         return;
       }
       mesh.visible = true;
-      PATH.getPointAt(u, point);
-      PATH.getTangentAt(u, tangent);
-      mesh.position.copy(point);
-      // The panel's face points out of the loop: its width runs along the path.
-      mesh.rotation.set(0, Math.atan2(-tangent.z, tangent.x), 0);
-      const fade = MathUtils.smoothstep(u, 0, 0.06) * (1 - MathUtils.smoothstep(u, 0.94, 1));
-      // Further back recedes into the page, so the loop reads as depth: darker
+      mesh.position.set(pose.x, pose.y, pose.z);
+      mesh.rotation.set(0, pose.rotY, 0);
+      // Further back recedes into the page, so the circle reads as depth: darker
       // at night, paler (more see-through) by day.
-      const near = MathUtils.clamp((point.z + LOOP) / (2 * LOOP), 0, 1);
-      mesh.material.opacity = fade * (day ? 0.3 + 0.7 * near : 1);
+      const near = pose.near;
+      mesh.material.opacity = pose.opacity * (day ? 0.3 + 0.7 * near : 1);
       mesh.material.color.copy(shade.setScalar(day ? 1 : 0.38 + 0.62 * near));
     });
 

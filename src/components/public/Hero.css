@@ -210,7 +210,7 @@
   position: absolute;
   z-index: 1;
   left: var(--gutter);
-  bottom: 80px;
+  top: 128px;
   max-width: 14ch;
   margin: 0;
   font-size: clamp(2.25rem, 5vw, 5.5rem);
@@ -471,7 +471,7 @@
   }
 
   .opening__line {
-    bottom: 64px;
+    top: 104px;
   }
 }
 

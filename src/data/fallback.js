@@ -7,7 +7,7 @@ export const fallbackContent = {
   profile: {
     full_name: "Archit Jain",
     eyebrow: "Software Developer",
-    tagline: "I build apps for *web and mobile*.",
+    tagline: "You dream it, we *make it*.",
     intro:
       "I'm an IT student at DJSCE in Mumbai who builds for *real clients* alongside my degree: Shopify storefronts, Next.js platforms and a Flutter app. Right now I'm a software developer at ZootechX.",
     about_heading: "Building real products *since my diploma*",

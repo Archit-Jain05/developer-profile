@@ -30,17 +30,16 @@
   height: 100%;
   overflow: visible;
   color: var(--emphasis);
-  fill: currentColor;
 }
 
 /* The pen: each stroke of the mask draws in its turn (--at) for its share of
    the writing time (--for). Its dash is as long as the stroke, its gap longer,
    and it starts just past the stroke's start, so nothing shows (not even the
    round cap) until the pen reaches it. */
-.loader__pen path {
+.loader__sign path {
   fill: none;
-  stroke: #ffffff;
-  stroke-width: 15;
+  stroke: currentColor;
+  stroke-width: 6;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-dasharray: 1 2;
@@ -122,7 +121,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .loader__pen path {
+  .loader__sign path {
     animation: none;
     stroke-dashoffset: 0;
   }

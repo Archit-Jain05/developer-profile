@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SIGNATURE_INK, SIGNATURE_PEN, SIGNATURE_VIEWBOX } from "./signature.js";
+import { SIGNATURE_PEN, SIGNATURE_VIEWBOX } from "./signature.js";
 import "./Loader.css";
 
 // Long enough for the signature to be written (2.2s, see Loader.css) and held
@@ -28,20 +28,15 @@ function Digit({ value }) {
 }
 
 /**
- * Archit's signature, writing itself: the traced ink, revealed through a mask
- * of pen strokes that draw one after another (see signature.js).
+ * Archit's signature, writing itself: smooth pen strokes that draw one after
+ * another (see signature.js).
  */
 function Signature() {
   return (
     <svg className="loader__sign" viewBox={SIGNATURE_VIEWBOX}>
-      <defs>
-        <mask id="signature-pen" className="loader__pen">
-          {SIGNATURE_PEN.map((stroke, i) => (
-            <path key={i} d={stroke.d} pathLength="1" style={{ "--at": stroke.at, "--for": stroke.for }} />
-          ))}
-        </mask>
-      </defs>
-      <path d={SIGNATURE_INK} mask="url(#signature-pen)" />
+      {SIGNATURE_PEN.map((stroke, i) => (
+        <path key={i} d={stroke.d} pathLength="1" style={{ "--at": stroke.at, "--for": stroke.for }} />
+      ))}
     </svg>
   );
 }

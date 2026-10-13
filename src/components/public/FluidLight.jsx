@@ -21,9 +21,11 @@ uniform float uTime;
 uniform vec2 uPointer;
 uniform float uPresence;
 uniform float uDay;
+uniform sampler2D uField;
 uniform vec3 uGround;
 
 const vec3 BURGUNDY = vec3(0.4275, 0.0, 0.1020);
+const vec3 DEEP_BLUE = vec3(0.03, 0.06, 0.25);
 
 float hash(vec2 p) {
   return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
@@ -53,21 +55,24 @@ void main() {
   vec2 p = vec2(uv.x * aspect, uv.y);
   float t = uTime * 0.035;
 
-  vec2 q = vec2(fbm(p * 1.3 + vec2(0.0, t)), fbm(p * 1.3 + vec2(5.2, -t)));
-  vec2 r = vec2(fbm(p * 1.5 + 3.0 * q + vec2(1.7, 9.2) + t * 1.4), fbm(p * 1.5 + 3.0 * q + vec2(8.3, 2.8) - t));
-  float f = fbm(p * 1.1 + 2.6 * r);
+  // The pointer repels the smoke the way it repels dots: a grid of springy
+  // points (simulated in JS) is pushed away from the pointer, overshoots a
+  // little and settles back; the smoke is shifted by that displacement.
+  vec2 off = (texture2D(uField, uv).rg - 0.5) * 0.5;
+  vec2 w = p - off * vec2(1.0, 1.0);
 
-  vec2 m = vec2(uPointer.x * aspect, uPointer.y);
-  float pull = exp(-dot(p - m, p - m) * 3.0) * uPresence;
+  vec2 q = vec2(fbm(w * 1.3 + vec2(0.0, t)), fbm(w * 1.3 + vec2(5.2, -t)));
+  vec2 r = vec2(fbm(w * 1.5 + 3.0 * q + vec2(1.7, 9.2) + t * 1.4), fbm(w * 1.5 + 3.0 * q + vec2(8.3, 2.8) - t));
+  float f = fbm(w * 1.1 + 2.6 * r);
 
-  float mass = smoothstep(0.32, 0.92, f + 0.42 * uv.y + 0.38 * pull - 0.12);
-  float wisp = smoothstep(0.74, 0.98, f + 0.25 * pull) * mass;
+  float mass = smoothstep(0.32, 0.92, f + 0.42 * uv.y - 0.12);
+  float wisp = smoothstep(0.74, 0.98, f) * mass;
   float vignette = smoothstep(1.35, 0.25, length((uv - vec2(0.5, 0.82)) * vec2(1.0, 1.25)));
 
   // Night: burgundy light on black, with faint white wisps.
   vec3 night = (BURGUNDY * mass + vec3(1.0) * wisp * 0.16) * vignette;
-  // Day: the same smoke as burgundy ink drifting through the paper.
-  vec3 day = mix(uGround, BURGUNDY, (mass * 0.42 + wisp * 0.12) * vignette);
+  // Day: the same smoke as dark blue ink drifting through white.
+  vec3 day = mix(uGround, DEEP_BLUE, min(1.0, mass * 0.95 + wisp * 0.1) * vignette);
   vec3 colour = mix(night, day, uDay);
   colour += (hash(gl_FragCoord.xy + uTime) - 0.5) / 160.0;
 
@@ -122,6 +127,7 @@ export default function FluidLight({ className }) {
     const uPointer = gl.getUniformLocation(program, "uPointer");
     const uPresence = gl.getUniformLocation(program, "uPresence");
     const uDay = gl.getUniformLocation(program, "uDay");
+    const uField = gl.getUniformLocation(program, "uField");
     const uGround = gl.getUniformLocation(program, "uGround");
     // The page colour (a 6-digit hex token), so the light's ground meets the page.
     const readGround = () => {
@@ -131,6 +137,52 @@ export default function FluidLight({ className }) {
     let ground = readGround();
 
     const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // The springy grid: offsets and velocities in height units, one per point.
+    const GW = 40;
+    const GH = 24;
+    const off = new Float32Array(GW * GH * 2);
+    const vel = new Float32Array(GW * GH * 2);
+    const bytes = new Uint8Array(GW * GH * 4);
+    const mouse = { x: 0.5, y: 0.7 };
+    const texture = gl.createTexture();
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    for (const [k, v] of [[gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR], [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]]) gl.texParameteri(gl.TEXTURE_2D, k, v);
+    gl.uniform1i(uField, 0);
+    const RADIUS = 0.3; // how far from the pointer smoke is pushed (screen heights)
+    const STRENGTH = 0.006;
+    const SPRING = 0.03;
+    const DAMPING = 0.1;
+    const stepField = (aspect) => {
+      mouse.x += (pointer.tx - mouse.x) * 0.14;
+      mouse.y += (pointer.ty - mouse.y) * 0.14;
+      for (let j = 0; j < GH; j++) {
+        for (let i = 0; i < GW; i++) {
+          const n = (j * GW + i) * 2;
+          const rx = (i / (GW - 1)) * aspect;
+          const ry = j / (GH - 1);
+          const dx = rx - mouse.x * aspect;
+          const dy = ry - mouse.y;
+          const dist = Math.hypot(dx, dy) + 1e-4;
+          if (dist < RADIUS) {
+            const force = (1 - dist / RADIUS) ** 2 * STRENGTH * pointer.presence;
+            vel[n] += (dx / dist) * force;
+            vel[n + 1] += (dy / dist) * force;
+          }
+          vel[n] += -off[n] * SPRING;
+          vel[n + 1] += -off[n + 1] * SPRING;
+          vel[n] *= 1 - DAMPING;
+          vel[n + 1] *= 1 - DAMPING;
+          off[n] += vel[n];
+          off[n + 1] += vel[n + 1];
+          const m = (j * GW + i) * 4;
+          bytes[m] = Math.max(0, Math.min(255, 127.5 + (off[n] / 0.5) * 255));
+          bytes[m + 1] = Math.max(0, Math.min(255, 127.5 + (off[n + 1] / 0.5) * 255));
+          bytes[m + 3] = 255;
+        }
+      }
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, GW, GH, 0, gl.RGBA, gl.UNSIGNED_BYTE, bytes);
+    };
     const pointer = { x: 0.5, y: 0.7, tx: 0.5, ty: 0.7, presence: 0, target: 0 };
 
     const resize = () => {
@@ -144,6 +196,7 @@ export default function FluidLight({ className }) {
     const draw = (time) => {
       pointer.x += (pointer.tx - pointer.x) * 0.04;
       pointer.y += (pointer.ty - pointer.y) * 0.04;
+      if (!calm) stepField(canvas.width / canvas.height);
       pointer.presence += (pointer.target - pointer.presence) * 0.03;
       gl.uniform1f(uTime, calm ? 12 : time / 1000);
       gl.uniform2f(uPointer, pointer.x, pointer.y);

@@ -9,19 +9,40 @@ const root = () => document.documentElement;
 
 export const getTheme = () => (root().dataset.theme === "dark" ? "dark" : "light");
 
-/** The visitor's own choice, or light if they have not made one. */
+const deviceQuery = () => window.matchMedia("(prefers-color-scheme: dark)");
+
+/** The visitor's own choice, or else the device's setting. */
 export function storedTheme() {
   try {
-    return localStorage.getItem("theme") === "dark" ? "dark" : "light";
+    const saved = localStorage.getItem("theme");
+    if (saved === "dark" || saved === "light") return saved;
   } catch {
-    return "light";
+    // Storage can be refused; fall through to the device.
   }
+  return deviceQuery().matches ? "dark" : "light";
+}
+
+/** True once the visitor has picked a theme with the switch. */
+const hasChoice = () => {
+  try {
+    return ["dark", "light"].includes(localStorage.getItem("theme"));
+  } catch {
+    return false;
+  }
+};
+
+// Follow the device live (e.g. the OS switching to dark at sunset) until the
+// visitor has chosen. The admin holds itself at night and is left alone.
+if (typeof window !== "undefined") {
+  deviceQuery().addEventListener("change", () => {
+    if (!hasChoice() && !location.pathname.startsWith("/admin")) applyTheme(storedTheme());
+  });
 }
 
 /** Shows a theme without remembering it (the admin holds itself at night this way). */
 export function applyTheme(theme) {
   root().dataset.theme = theme;
-  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#000000" : "#f6f0f1");
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#000000" : "#ffffff");
 }
 
 /** Shows a theme and remembers it for the visitor's next visit. */

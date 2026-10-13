@@ -10,6 +10,12 @@
   align-items: start;
 }
 
+/* The text runs over the edge of the portrait, so it stays above it. */
+.about__grid > :not(.about__portrait) {
+  position: relative;
+  z-index: 1;
+}
+
 .about__statement {
   grid-column: 1 / span 7;
   margin: 0;
@@ -24,28 +30,52 @@
   letter-spacing: -0.015em;
 }
 
-/* The portrait in an arch, lit from below by the one burgundy light. */
+/* The portrait sits at the right of the section, out to the edge of the screen, its left side one big curve, with the text running over
+   its edge: washed in the accent colour so it belongs to the page. */
 .about__portrait {
-  grid-column: 9 / span 4;
-  grid-row: 1 / span 2;
-  position: relative;
+  position: absolute;
+  top: var(--sp-8);
+  right: 0;
+  /* Sized to the photo (a square), so it is shown whole rather than cropped
+     into a tall box. */
+  width: min(46vw, 800px);
+  aspect-ratio: 1 / 1.08;
   margin: 0;
-  aspect-ratio: 3 / 4;
   overflow: hidden;
-  border-radius: 999px 999px var(--radius-lg) var(--radius-lg);
+  border-radius: min(8vw, 160px) 0 0 min(20vw, 400px);
   background: var(--secondary);
-  box-shadow: 0 48px 120px -32px rgb(109 0 26 / calc(0.9 * var(--glow)));
 }
 
 .about__portrait img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 24%;
+  object-position: 50% 30%;
+  filter: saturate(0.8) contrast(1.05);
+}
+
+/* An accent wash over the photo, and a fade into the page where the text sits. */
+.about__portrait::before,
+.about__portrait::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.about__portrait::before {
+  background: var(--accent);
+  mix-blend-mode: color;
+  opacity: 0.6;
+}
+
+.about__portrait::after {
+  background: linear-gradient(90deg, var(--base) 0%, transparent 55%);
+  opacity: 0.85;
 }
 
 .about__body {
-  grid-column: 3 / span 5;
+  grid-column: 1 / span 6;
   display: grid;
   gap: var(--sp-3);
   max-width: 60ch;
@@ -69,7 +99,7 @@
 }
 
 .about__facts {
-  grid-column: 1 / span 8;
+  grid-column: 1 / span 6;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--sp-3);
@@ -144,8 +174,8 @@
 
 .work__row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  align-items: baseline;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
   column-gap: var(--sp-4);
   row-gap: var(--sp-1);
   width: 100%;
@@ -184,19 +214,13 @@
   grid-column: 1;
 }
 
-.work__meta {
-  grid-column: 3;
-  font-size: var(--step--1);
-  color: var(--ink-3);
-  text-align: right;
-}
-
 /* A small screenshot in each row that has one, so the proof shows without a
    hover (and on touch screens). */
 .work__thumb {
   grid-column: 2;
   align-self: center;
-  width: 112px;
+  justify-self: end;
+  width: 160px;
   aspect-ratio: 16 / 10;
   overflow: hidden;
   border-radius: var(--radius-sm);
@@ -210,7 +234,7 @@
   transition: scale 0.6s var(--ease-out);
 }
 
-.work__row:is(:hover, :focus-visible) .work__thumb img {
+.work__thumb:hover img {
   scale: 1.08;
 }
 
@@ -235,6 +259,7 @@
 }
 
 .work__more {
+  font-weight: 500;
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
@@ -450,7 +475,7 @@
   font-size: var(--step-1);
   text-align: left;
   cursor: pointer;
-  transition: color 0.45s var(--ease-out);
+  transition: color 0.7s cubic-bezier(0.45, 0, 0.15, 1);
 }
 
 .record__row::before {
@@ -461,7 +486,7 @@
   background: var(--ink);
   scale: 0 1;
   transform-origin: 100% 50%;
-  transition: scale 0.6s var(--ease-out);
+  transition: scale 0.95s cubic-bezier(0.65, 0, 0.2, 1);
 }
 
 .record__row:is(:hover, :focus-visible) {
@@ -801,9 +826,17 @@
     grid-column: 1 / -1;
   }
 
+  /* On narrower screens the portrait goes back to a card between the text. */
   .about__portrait {
+    position: relative;
     grid-row: auto;
     width: min(100%, 480px);
+    aspect-ratio: 3 / 4;
+    border-radius: 999px 999px var(--radius-lg) var(--radius-lg);
+  }
+
+  .about__portrait::after {
+    display: none;
   }
 
   .about__facts {
@@ -824,11 +857,6 @@
     grid-column: 2;
     grid-row: 1 / span 2;
     width: 96px;
-  }
-
-  .work__meta {
-    grid-column: 1;
-    text-align: left;
   }
 
   /* Rows stack: mark beside name and the last column, details below. */

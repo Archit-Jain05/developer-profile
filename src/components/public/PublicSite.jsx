@@ -80,7 +80,7 @@ export default function PublicSite() {
         <LoadingSkeleton />
       ) : (
         <main>
-          <Hero profile={profile} experience={content.experience} />
+          <Hero profile={profile} experience={content.experience} projects={content.projects} />
           <div className="sheet">
             <About profile={profile} />
             <Work items={content.projects} experience={content.experience} githubUrl={profile.github_url} />
