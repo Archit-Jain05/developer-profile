@@ -4,7 +4,8 @@ import { AccentedWords } from "./Accented.jsx";
 import SceneBoundary from "./SceneBoundary.jsx";
 import "./Sections.css";
 
-const ProjectWall = lazy(() => import("./three/ProjectWall.jsx"));
+const loadWall = () => import("./three/ProjectWall.jsx");
+const ProjectWall = lazy(loadWall);
 
 /**
  * A pause between the projects and the record: the projects on a curved wall
@@ -15,6 +16,22 @@ export default function Wall({ items, line }) {
   const section = useRef(null);
   const [webgl] = useState(supportsWebGL);
   const [near, setNear] = useState(false);
+
+  // Everything the wall needs starts loading as soon as the page is idle: its
+  // code, and the screenshots (into the browser cache), so by the time the
+  // section is reached they are already there.
+  useEffect(() => {
+    if (!webgl) return;
+    const idle = window.requestIdleCallback ?? ((fn) => setTimeout(fn, 800));
+    const id = idle(() => {
+      loadWall();
+      items.forEach((p) => {
+        if (p.image_url) new Image().src = p.image_url;
+      });
+      setNear(true);
+    });
+    return () => (window.cancelIdleCallback ?? clearTimeout)(id);
+  }, [webgl, items]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

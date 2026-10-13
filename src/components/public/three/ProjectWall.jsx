@@ -103,11 +103,22 @@ function Spiral({ projects, sectionRef, calm }) {
   const count = Math.max(projects.length, MIN_PANELS);
   const aspect = useThree((s) => s.size.width / s.size.height);
 
+  // Every panel starts with a drawn cover (name and stack), so the wall is full
+  // at once; each real screenshot replaces its cover the moment it has loaded.
   useEffect(() => {
     let alive = true;
-    Promise.all(projects.map((p) => (hasScreenshot(p) ? screenshotTexture(p.image_url).catch(() => coverTexture(p)) : coverTexture(p)))).then(
-      (list) => alive && setTextures(list),
-    );
+    const covers = [];
+    Promise.all(projects.map((p) => coverTexture(p))).then((list) => {
+      if (!alive) return;
+      covers.push(...list);
+      setTextures(list);
+      projects.forEach((p, i) => {
+        if (!hasScreenshot(p)) return;
+        screenshotTexture(p.image_url)
+          .then((tex) => alive && setTextures((prev) => prev.map((t, k) => (k === i ? tex : t))))
+          .catch(() => {});
+      });
+    });
     return () => {
       alive = false;
     };
@@ -148,8 +159,8 @@ function Spiral({ projects, sectionRef, calm }) {
     g.rotation.x = MathUtils.damp(g.rotation.x, -state.pointer.y * 0.06, 3, dt);
   });
 
-  // Wait for every image: a material compiled without its map and given one
-  // later renders as a blank white panel.
+  // Materials are built once every panel has a map (its cover): a material
+  // compiled without a map and given one later renders as a blank white panel.
   if (!projects.length || !textures) return null;
   return (
     <group ref={group}>
