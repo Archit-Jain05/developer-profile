@@ -194,6 +194,10 @@
   color: var(--base);
 }
 
+.nav__drawer-theme {
+  display: none;
+}
+
 .nav__toggle {
   display: none;
   width: 48px;
@@ -308,6 +312,16 @@
   .nav__menu.is-open li:nth-child(5) { transition-delay: 0.16s; }
   .nav__menu.is-open li:nth-child(6) { transition-delay: 0.19s; }
   .nav__menu.is-open .nav__resume { transition-delay: 0.22s; }
+
+  .nav__drawer-theme {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--sp-1) var(--sp-2);
+    font-size: var(--step-0);
+    font-weight: 500;
+    color: var(--ink);
+  }
 
   .nav__menu ul {
     flex-direction: column;

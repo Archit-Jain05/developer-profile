@@ -90,6 +90,12 @@ export default function Nav({ resumeUrl, name = "Archit Jain", githubUrl, linked
             </div>
           )}
 
+          {/* The drawer carries its own switch too (the bar one stays visible). */}
+          <div className="nav__drawer-theme">
+            <span>Theme</span>
+            <ThemeSwitch />
+          </div>
+
           {resumeUrl && (
             <a
               className="btn btn--ghost btn--sm nav__resume"

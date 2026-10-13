@@ -329,9 +329,13 @@
     grid-row: auto;
   }
 
-  .footer__col,
-  .footer__col:last-child {
+  .footer__col {
     grid-column: span 6;
+  }
+
+  /* The contact column holds an email address: give it the whole row. */
+  .footer__col:last-child {
+    grid-column: 1 / -1;
   }
 }
 
