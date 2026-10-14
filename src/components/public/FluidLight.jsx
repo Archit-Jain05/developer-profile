@@ -129,10 +129,15 @@ export default function FluidLight({ className }) {
     const uDay = gl.getUniformLocation(program, "uDay");
     const uField = gl.getUniformLocation(program, "uField");
     const uGround = gl.getUniformLocation(program, "uGround");
-    // The page colour (a 6-digit hex token), so the light's ground meets the page.
+    // The page colour, as the browser resolves it (rgb(...)), whatever shorthand
+    // the stylesheet was minified to (#fff, #ffffff, ...).
+    const probe = document.createElement("span");
+    probe.style.color = "var(--base)";
+    probe.style.display = "none";
+    document.body.appendChild(probe);
     const readGround = () => {
-      const hex = getComputedStyle(document.documentElement).getPropertyValue("--base").trim();
-      return [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
+      const rgb = getComputedStyle(probe).color.match(/[\d.]+/g);
+      return rgb && rgb.length >= 3 && rgb.slice(0, 3).every((v) => Number.isFinite(Number(v))) ? rgb.slice(0, 3).map((v) => Number(v) / 255) : [1, 1, 1];
     };
     let ground = readGround();
 
@@ -253,6 +258,7 @@ export default function FluidLight({ className }) {
       observer?.disconnect();
       resizer.disconnect();
       stopTheme();
+      probe.remove();
       window.removeEventListener("pointermove", onMove);
       document.documentElement.removeEventListener("pointerleave", onLeave);
       gl.deleteBuffer(buffer);
