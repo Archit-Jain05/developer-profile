@@ -50,7 +50,7 @@ Stated by Archit as binding across earlier sessions:
 
 - Name **Archit Jain**; the **A** logo mark doubles as the first letter of the name.
 - His own photo, background-removed and always in colour, is the face of the site.
-- Palette from his own swatch: black `#000000`, burgundy **exactly `#6D001A`** (no derived tints), white. Two themes from it: light (shown first) and night, swapped by a switch in the nav; the admin is always night.
+- Palette from his own swatch: black `#000000`, burgundy **exactly `#6D001A`** (no derived tints), white. Two themes: night (black, white, burgundy) and day (plain white, navy, blue accent), following the device's setting until a switch in the nav (or the phone menu) is used; the admin is always night.
 - 8-point spacing throughout.
 - Voice: plain, first person, specific; describes real work without hype.
 

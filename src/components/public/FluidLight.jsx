@@ -25,7 +25,7 @@ uniform sampler2D uField;
 uniform vec3 uGround;
 
 const vec3 BURGUNDY = vec3(0.4275, 0.0, 0.1020);
-const vec3 DEEP_BLUE = vec3(0.03, 0.06, 0.25);
+const vec3 DEEP_BLUE = vec3(0.05, 0.12, 0.45);
 
 float hash(vec2 p) {
   return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
@@ -72,7 +72,7 @@ void main() {
   // Night: burgundy light on black, with faint white wisps.
   vec3 night = (BURGUNDY * mass + vec3(1.0) * wisp * 0.16) * vignette;
   // Day: the same smoke as dark blue ink drifting through white.
-  vec3 day = mix(uGround, DEEP_BLUE, min(1.0, mass * 0.95 + wisp * 0.1) * vignette);
+  vec3 day = mix(uGround, DEEP_BLUE, (mass * 0.5 + wisp * 0.05) * vignette);
   vec3 colour = mix(night, day, uDay);
   colour += (hash(gl_FragCoord.xy + uTime) - 0.5) / 160.0;
 
